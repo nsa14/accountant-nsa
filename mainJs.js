@@ -5,6 +5,9 @@
     $(document).ready(function () {
         Site.run();
 
+        var desiredHeight = $("body").height() - $("top").height() - $("bot").height();
+        $(".panel").css("min-height", desiredHeight);
+
 
         let loadData = fetchAllGroupAccount();
         // console.log(loadData);
@@ -23,9 +26,9 @@
     });
 
     function fetchAllGroupAccount() {
-        let groupLocalStorage = localStorage.getItem('account_name')||[];
+        let groupLocalStorage = localStorage.getItem('account_name') || [];
         // alert(groupLocalStorage);
-        if (groupLocalStorage.length<=0){
+        if (groupLocalStorage.length <= 0) {
             alertify('گروهی برای نمایش رویداد یافت نشد', 'danger');
             return false;
 
@@ -48,8 +51,8 @@
                 <div class="counter-number-group">\
                   <span class="counter-number-related text-capitalize">' + test[i] + '</span><br>\
                   <span class="counter-number">\
-                '+checkTaraz(sumMoney)+'\
-                '+countItem(test[i])+'\
+                ' + checkTaraz(sumMoney) + '\
+                ' + countItem(test[i]) + '\
                   </span>\
                   </span>\
                 </div>\
@@ -68,7 +71,7 @@
         // $("#alertifyMessage").data("log-message", message);
         // $("#alertifyMessage").data("type", type);
         // $("#alertifyMessage").trigger("click");
-        let mainBody = '<span class="label label-outline label-'+type+'">'+message+'</span>';
+        let mainBody = '<span class="label label-outline label-' + type + '">' + message + '</span>';
         // toastr.error(message);
         // toastr.success(message);
         bootbox.dialog({
@@ -77,30 +80,38 @@
         });
     }
 
-    function checkTaraz(sumMoney){
+    function checkTaraz(sumMoney) {
         let ret = [];
-        if (sumMoney>=0){
-            ret.push('<span class="badge badge-success">تومان '+sumMoney.toLocaleString()+'</span>');
-        }else{
-            ret.push('<span class="badge badge-danger">تومان '+sumMoney.toLocaleString()+'</span>');
+        if (sumMoney >= 0) {
+            ret.push('<span class="badge badge-success">تومان ' + sumMoney.toLocaleString() + '</span>');
+        } else {
+            ret.push('<span class="badge badge-danger">تومان ' + sumMoney.toLocaleString() + '</span>');
         }
         return ret;
     }
 
-    function countItem(itemName){
+    function countItem(itemName) {
+        // console.log(itemName);
+        // return false;
         let ret = [];
-        let localData = JSON.parse(localStorage.getItem(itemName))||[];
+        let dataLocal = localStorage.getItem(itemName) || 0;
+        if (dataLocal.length <= 0) {
+            ret.push('<span class="badge badge-info">تعداد: 0</span>');
+            return ret;
+        }
+
+        let localData = JSON.parse(localStorage.getItem(itemName)) || [];
         // console.log(localData);
-        if (localData.length>=0){
-            var count = $.map(localData, function(n, i) { return i; }).length;
-            ret.push('<span class="badge badge-info">تعداد:'+count+'</span>');
-        }else{
+        if (localData.length >= 0) {
+            var count = $.map(localData, function (n, i) {
+                return i;
+            }).length;
+            ret.push('<span class="badge badge-info">تعداد:' + count + '</span>');
+        } else {
             ret.push('<span class="badge badge-info">تعداد: 0</span>');
         }
         return ret;
     }
-
-
 
 
     function onChange(event) {
@@ -110,10 +121,10 @@
         reader.readAsText(event.target.files[0]);
     }
 
-    function onReaderLoad(event){
+    function onReaderLoad(event) {
         var fileName = $("#imgupload").val();
 
-        if(fileName) { // returns true if the string is not empty
+        if (fileName) { // returns true if the string is not empty
             // alert(fileName + " was selected");
             restoreBackup(event.target.result);
         } else { // no file was selected
@@ -125,8 +136,6 @@
     }
 
 
-
-
     $(document).on('click', '.btn_restpre_backup', function () {
         $('#imgupload').trigger('click');
         document.getElementById('imgupload').addEventListener('change', onChange);
@@ -134,39 +143,67 @@
     });
 
 
-
     $(document).on('click', '#show_list_item', function () {
         let txt_group_name = $('#txt_group_name').val();
-        let loadLocal = JSON.parse(localStorage.getItem(txt_group_name))||[];
+        if (localStorage.getItem(txt_group_name).length <= 0) {
+            return false;
+        }
+        let loadLocal = JSON.parse(localStorage.getItem(txt_group_name)) || [];
 
         let final = [];
 
-        jQuery.each(loadLocal, function(index, item) {
+        jQuery.each(loadLocal, function (index, item) {
             // do something with `item` (or `this` is also `item` if you like)
             let _row = '<tr>\n' +
-                '                            <td>'+item.title+'</td>\n' +
-                '                            <td>'+item.money.toLocaleString()+'</td>\n' +
-                '                            <td>'+item.date+'</td>\n' +
-                '                            <td>'+showTypeSpan(item.type)+'</td>\n' +
-                '                            <td></td>\n' +
+                '                            <td>' + item.title + '</td>\n' +
+                '                            <td>' + item.money.toLocaleString() + '</td>\n' +
+                '                            <td>' + item.date + '</td>\n' +
+                '                            <td>' + showTypeSpan(item.type) + '</td>\n' +
+                '                            <td><button class="btn btn-pure btn-danger icon wb-trash"' +
+                ' id="btn_del_sel" data-id="' + item.id + '" data-grname="' + txt_group_name + '"></button></td>\n' +
                 '                        </tr>';
             final.push(_row);
         });
 
         // console.log(final);
 
-        $('#showGroupTitle').html(' گروه انتخابی : '+txt_group_name);
+        $('#showGroupTitle').html(' گروه انتخابی : ' + txt_group_name);
         $('#showItem').html(final);
         $('#exampleNiftyFadeScaleShowListItem').modal({
             show: 'true'
         });
     });
 
-    function showTypeSpan(type){
+
+    $(document).on('click', '#btn_del_sel', function () {
+        let itemId = $(this).data('id');
+        let groupName = $(this).data('grname');
+        btn_delete_item_sel(groupName, itemId);
+    });
+
+    function btn_delete_item_sel(groupName, itemId) {
+        console.log(groupName);
+        console.log(itemId);
+        console.log(JSON.parse(localStorage.getItem(groupName)));
+        // return false;
+        let old_data = JSON.parse(localStorage.getItem(groupName)) || [];
+        // const index = old_data.indexOf(itemId);
+        // const new_data = old_data.splice(index, 1);
+        // const new_data = arr.splice( old_data.indexOf(itemId), 1 )
+        let newData = old_data.filter(function( obj ) {
+            return obj.id !== itemId;
+        });
+        // console.log(newData);
+        // return false;
+        localStorage.setItem(groupName, JSON.stringify(newData));
+        location.reload();
+    }
+
+    function showTypeSpan(type) {
         let ret = [];
-        if (type === 'add'){
+        if (type === 'add') {
             ret.push('<span class="badge badge-success">+</span>');
-        }else{
+        } else {
             ret.push('<span class="badge badge-danger">-</span>');
         }
         return ret;
@@ -186,7 +223,7 @@
             const value = localStorage.getItem(key);
 
             // console.log the iteration key and value
-            finalBck.push({'KeyName': key , 'KeyValue':  value});
+            finalBck.push({'KeyName': key, 'KeyValue': value});
             // finalBck.push([key , value]);
             // console.log('Key: ' + key + ', Value: ' + value);
 
@@ -208,7 +245,7 @@
 
         //Convert JSON string to BLOB.
         json = [json];
-        var blob1 = new Blob(json, { type: "text/plain;charset=utf-8" });
+        var blob1 = new Blob(json, {type: "text/plain;charset=utf-8"});
 
         //Check the Browser.
         var isIE = false || !!document.documentMode;
@@ -218,10 +255,10 @@
             var url = window.URL || window.webkitURL;
             var link = url.createObjectURL(blob1);
             var a = $("<a />");
-            var currentdate  = new Date();
-            let fileDateSave = (currentdate.getDate()+ "-" + (currentdate.getMonth()+1)  + "-"+currentdate.getFullYear());
+            var currentdate = new Date();
+            let fileDateSave = (currentdate.getDate() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getFullYear());
             // return false;
-            a.attr("download", "nsa-"+fileDateSave+".json");
+            a.attr("download", "nsa-" + fileDateSave + ".json");
             a.attr("href", link);
             $("body").append(a);
             a[0].click();
@@ -230,12 +267,12 @@
     }
 
 
-    function restoreBackup(fileName){
+    function restoreBackup(fileName) {
         // let bck = '[[{"KeyName":"ssss","KeyValue":"[{\\"id\\":9,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":7,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":5,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"minus\\"},{\\"id\\":3,\\"money\\":\\"3\\",\\"title\\":\\"3\\",\\"date\\":\\"3\\",\\"type\\":\\"minus\\"},{\\"id\\":1,\\"money\\":\\"33\\",\\"title\\":\\"33\\",\\"date\\":\\"33\\",\\"type\\":\\"add\\"},{\\"id\\":2,\\"money\\":\\"44\\",\\"title\\":\\"44\\",\\"date\\":\\"44\\",\\"type\\":\\"add\\"},{\\"id\\":4,\\"money\\":\\"55\\",\\"title\\":\\"55\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":6,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"minus\\"},{\\"id\\":8,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":10,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"add\\"}]"},{"KeyName":"account_name","KeyValue":"ssss,qqqq,wwwww"},{"KeyName":"wwwww","KeyValue":"[{\\"id\\":2,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"},{\\"id\\":1,\\"money\\":\\"22\\",\\"title\\":\\"22\\",\\"date\\":\\"22\\",\\"type\\":\\"add\\"},{\\"id\\":3,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"}]"}]]';
         let sArray = JSON.parse(fileName);
 
-        $.each(sArray, function(i) {
-            $.each(sArray[i], function(key, value) {
+        $.each(sArray, function (i) {
+            $.each(sArray[i], function (key, value) {
                 // console.log(value.KeyName);
                 // console.log(value.KeyValue);
                 localStorage.setItem(value.KeyName, value.KeyValue);
@@ -265,7 +302,7 @@
 
 
         let txt_account_name = $('#txt_account_name').val();
-        if (txt_account_name.length ==0){
+        if (txt_account_name.length == 0) {
             alertify('فیلد ها رو وارد نمایید', 'danger');
             return false;
         }
@@ -299,7 +336,38 @@
         $('#txt_account_name').val('');
 
         alertify('با موفقیت ثبت شد', 'success');
+        setTimeout(function () {
+            location.reload();
+        }, 3000);
 
+    });
+
+
+    $(document).on('click', '.btn_delete_group', function () {
+        let groupNameSelected = $('#txt_group_name').val();
+        if (confirm("آیا از حذف این گروه " + groupNameSelected + "و داده های آن اطنینان دارید?")) {
+            if (groupNameSelected.length > 1) {
+                // localStorage.setItem(groupNameSelected, '');
+                localStorage.removeItem(groupNameSelected);
+
+                let groupLocalStorage = localStorage.getItem('account_name') || [];
+                if (groupLocalStorage.length <= 0) {
+                    return false;
+                }
+                var var1 = groupLocalStorage.split(",");
+                let newArray = jQuery.grep(var1, function (value) {
+                    return value != groupNameSelected;
+                });
+
+                localStorage.setItem('account_name', newArray);
+
+                location.reload();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     });
 
 
@@ -310,6 +378,11 @@
         let txt_money = $('#txt_money').val();
         let txt_title = $('#txt_title').val();
         let txt_date = $('#txt_date').val();
+
+        if (txt_money.length <= 0) {
+            alertify('فیلد ها رو کامل پر نمایید', 'danger');
+            return false;
+        }
 
 
         const oldInfo = JSON.parse(localStorage.getItem(txt_group_name) || '[]');
@@ -331,13 +404,23 @@
         oldInfo.push(newArray);
         localStorage.setItem(txt_group_name, JSON.stringify(oldInfo));
         alertify('با موفقیت ثبت شد', 'success');
-         $('#txt_money').val('');
-         $('#txt_title').val('');
-        $('#txt_date').val('');
-        setTimeout(function() {
-            location.reload();
-        }, 5000);
+        $('#txt_money').val('');
+        $('#txt_title').val('');
 
+
+    });
+
+    $(document).on('click', '.btn_refresh', function () {
+        location.reload();
+    });
+
+    $(document).on('click', '.btn_delete_data', function () {
+        if (confirm("آیا از حذف داده ها اطنینان دارید?")) {
+            localStorage.clear();
+            location.reload();
+        } else {
+            return false;
+        }
     });
 
     // btn_add
@@ -347,6 +430,11 @@
         let txt_money = $('#txt_money').val();
         let txt_title = $('#txt_title').val();
         let txt_date = $('#txt_date').val();
+
+        if (txt_money.length <= 0) {
+            alertify('فیلد ها رو کامل پر نمایید', 'danger');
+            return false;
+        }
 
 
         const oldInfo = JSON.parse(localStorage.getItem(txt_group_name) || '[]');
@@ -377,17 +465,13 @@
 
         $('#txt_money').val('');
         $('#txt_title').val('');
-        $('#txt_date').val('');
 
-        setTimeout(function() {
-            location.reload();
-        }, 5000);
 
     });
 
 
     function calculateFinalMoneyGroup(groupArraySelected) {
-        if (!localStorage.hasOwnProperty(groupArraySelected)) {
+        if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
             return 0;
         }
 
@@ -426,7 +510,6 @@
     //     console.log("value", value.money);
     // });
     // // return false;
-
 
 
     // $('#alertifyMessage').trigger("click");

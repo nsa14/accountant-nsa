@@ -1,0 +1,17 @@
+{
+    "name": "مدیریت دخل و خرج",
+    "short_name": "nsa-accountant-manager",
+    "start_url": "/index.html",
+    "background_color": "#6777ef",
+    "description": "مدیریت دخل و خرج - ناصر زارع",
+    "display": "fullscreen",
+    "theme_color": "#6777ef",
+    "icons": [
+        {
+            "src": "/assets/images_manifest/icons/apple-touch-icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

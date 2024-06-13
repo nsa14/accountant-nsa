@@ -180,43 +180,28 @@
         <!-- Navbar Collapse -->
         <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
             <!-- Navbar Toolbar -->
-            <ul class="nav navbar-toolbar">
-                <li class="hidden-float" id="toggleMenubar">
-                    <a data-toggle="menubar" href="#" role="button">
-                        <i class="icon hamburger hamburger-arrow-left">
-                            <span class="sr-only">Toggle menubar</span>
-                            <span class="hamburger-bar"></span>
-                        </i>
-                    </a>
-                </li>
-                <li class="hidden-xs" id="toggleFullscreen">
-                    <a class="icon icon-fullscreen" data-toggle="fullscreen" href="#" role="button">
-                        <span class="sr-only">Toggle fullscreen</span>
-                    </a>
-                </li>
-                <li class="hidden-float">
-                    <a class="icon wb-search" data-toggle="collapse" href="#site-navbar-search" role="button">
-                        <span class="sr-only">Toggle Search</span>
-                    </a>
-                </li>
-            </ul>
-            <!-- End Navbar Toolbar -->
+
 
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
                 <li class="dropdown">
+                    <a href="javascript:void(0)" role="button">
+                        <button type="button"
+                                class="btn_delete_data btn btn-round btn-outline btn-danger btn-sm">حذف داده ها
+                        </button>
+                    </a>
+                </li>
+                <li class="dropdown">
                     <a href="javascript:void(0)"
                        data-animation="slide-bottom" role="button">
                         <button type="button"
-                                class="btn_restpre_backup btn btn-round btn-outline btn-default btn-sm">گرفتن
+                                class="btn_restpre_backup btn btn-round btn-outline btn-default btn-sm">
                             بازیابی نسخه
                             پشتیبان
                         </button>
                     </a>
                     <input type="file" id="imgupload" accept="application/json,.json" style="display:none"/>
-                    <button id="OpenImgUpload">Image Upload</button>
-
-
+                    <button id="OpenImgUpload" style="display: none;">Image Upload</button>
                 </li>
                 <li class="dropdown">
                     <a href="javascript:void(0)"
@@ -256,12 +241,18 @@
 <!-- Page -->
 <div class="page animsition">
     <div class="page-content">
+        <button type="button" class="btn_refresh btn btn-sm btn-icon btn-inverse btn-round"
+                data-toggle="tooltip" data-original-title="بروزرسانی صفحه">
+            <i class="icon wb-refresh" aria-hidden="true"></i>
+        </button>
         <!-- Panel General Button -->
         <div class="panel">
             <div class="panel-heading">
                 <div class="col-lg-12">
                     <div class="example example-buttons">
                         <br>
+
+                        <span class="text-center alert alert-info alert-dismissible"> خوش آمدید!</span>
 
                         <button style="display: none;" class="btn btn-outline btn-default"
                                 data-target="#exampleNiftyFadeScale"
@@ -315,7 +306,6 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>
                                         <h4 class="example-title">نام گروه</h4>
                                         <input type="text" readonly id="txt_group_name" name="txt_group_name"
                                                value=""
@@ -323,6 +313,7 @@
 
                                         <h4 class="example-title">مبلغ</h4>
                                         <input type="number" pattern="[0-9]*" inputmode="numeric"
+                                               onkeypress="return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 48 && event.charCode <= 57)"
                                                class="form-control round" id="txt_money">
 
 
@@ -352,7 +343,9 @@
                                                 class="icon wb-menu" aria-hidden="true"></i>نمایش آیتم ها
                                         </button>
 
-                                        </p>
+                                        <button type="button"
+                                                class="btn_delete_group btn btn-floating btn-danger btn-sm"><i
+                                                class="icon wb-trash" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -380,7 +373,7 @@
 
 
     <!-- Modal -->
-    <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleShowListItem" aria-hidden="true"
+    <div class="modal fade modal-fill-in" id="exampleNiftyFadeScaleShowListItem" aria-hidden="true"
          aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -398,7 +391,7 @@
                             <th>مبلغ</th>
                             <th>تاریخ</th>
                             <th>نوع</th>
-                            <th>Date</th>
+                            <th>حذف</th>
                         </tr>
                         </thead>
                         <tbody id="showItem">
