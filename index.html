@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html class="no-js before-run" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="bootstrap admin template">
+    <meta name="author" content="">
+
+    <title>Accountant Nsa | مدیریت حساب</title>
+
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="assets/css/site.css">
+
+    <link rel="stylesheet" href="assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="assets/vendor/flag-icon-css/flag-icon.css">
+
+    <!-- Plugin -->
+    <link rel="stylesheet" href="assets/vendor/ladda-bootstrap/ladda.css">
+
+    <!-- Plugin -->
+    <link rel="stylesheet" href="assets/vendor/alertify-js/alertify.css">
+
+    <!-- Plugin -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap-sweetalert/sweet-alert.css">
+    <link rel="stylesheet" href="assets/vendor/toastr/toastr.css">
+
+    <!-- Plugin -->
+    <link rel="stylesheet" href="assets/vendor/datatables-fixedheader/dataTables.fixedHeader.css">
+    <link rel="stylesheet" href="assets/vendor/datatables-responsive/dataTables.responsive.css">
+
+
+    <link rel="stylesheet" href="assets/fonts/vazir/ffa/font-face.css">
+    <link rel="stylesheet" href="assets/farsi-date/persian-datepicker.css">
+
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+
+    <!-- Inline -->
+    <style>
+        .color-box {
+            width: 20px;
+            height: 40px;
+            border-radius: 4px;
+        }
+
+        .btn.btn-direction {
+            width: 174px;
+        }
+
+        .btn-pill-left,
+        .btn-pill-right {
+            width: 120px;
+        }
+
+        .text-active,
+        .active > .text,
+        .active > .auto .text {
+            display: none !important;
+        }
+
+        .active > .text-active,
+        .active > .auto .text-active {
+            display: inline-block !important;
+        }
+
+        .active .icon {
+            line-height: 1;
+        }
+
+        @media screen and (max-width: 768px) {
+            .btn-group-justified .btn {
+                min-height: 50px;
+            }
+        }
+
+        .example-modal {
+            display: block;
+            width: 100%;
+            padding: 35px 15px;
+            background-color: #f3f7f9;
+        }
+
+        .example-modal .modal {
+            position: relative;
+            top: auto;
+            right: auto;
+            bottom: auto;
+            left: auto;
+            z-index: 1;
+            display: block;
+        }
+
+        .example-modal .modal .modal-dialog {
+            width: auto;
+            max-width: 600px;
+            margin: 15px auto;
+        }
+
+        .example-modal-top .center {
+            top: 0;
+            -webkit-transform: translate(-50%, 0px);
+            -ms-transform: translate(-50%, 0px);
+            -o-transform: translate(-50%, 0px);
+            transform: translate(-50%, 0px);
+        }
+
+        .example-modal-bottom .center {
+            top: auto;
+            bottom: 0;
+            -webkit-transform: translate(-50%, 0px);
+            -ms-transform: translate(-50%, 0px);
+            -o-transform: translate(-50%, 0px);
+            transform: translate(-50%, 0px);
+        }
+
+        .example-modal-sidebar .center {
+            top: 0;
+            right: 5px;
+            left: auto;
+            -webkit-transform: none;
+            -ms-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+        .color-selector > li {
+            margin-right: 20px;
+        }
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="../../assets/vendor/html5shiv/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!--[if lt IE 10]>
+    <script src="../../assets/vendor/media-match/media.match.min.js"></script>
+    <script src="../../assets/vendor/respond/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Scripts -->
+    <script src="assets/vendor/modernizr/modernizr.js"></script>
+    <script src="assets/vendor/breakpoints/breakpoints.js"></script>
+    <script>
+        Breakpoints();
+    </script>
+</head>
+<body>
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+<nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
+
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-collapse"
+                data-toggle="collapse">
+            <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+        </button>
+
+        <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
+            <img class="navbar-brand-logo" src="assets/images/logo.png" title="Remark">
+            <span class="navbar-brand-text"> nsa</span>
+        </div>
+    </div>
+
+    <div class="navbar-container container-fluid">
+        <!-- Navbar Collapse -->
+        <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
+            <!-- Navbar Toolbar -->
+            <ul class="nav navbar-toolbar">
+                <li class="hidden-float" id="toggleMenubar">
+                    <a data-toggle="menubar" href="#" role="button">
+                        <i class="icon hamburger hamburger-arrow-left">
+                            <span class="sr-only">Toggle menubar</span>
+                            <span class="hamburger-bar"></span>
+                        </i>
+                    </a>
+                </li>
+                <li class="hidden-xs" id="toggleFullscreen">
+                    <a class="icon icon-fullscreen" data-toggle="fullscreen" href="#" role="button">
+                        <span class="sr-only">Toggle fullscreen</span>
+                    </a>
+                </li>
+                <li class="hidden-float">
+                    <a class="icon wb-search" data-toggle="collapse" href="#site-navbar-search" role="button">
+                        <span class="sr-only">Toggle Search</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- End Navbar Toolbar -->
+
+            <!-- Navbar Toolbar Right -->
+            <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+                <li class="dropdown">
+                    <a href="javascript:void(0)"
+                       data-animation="slide-bottom" role="button">
+                        <button type="button"
+                                class="btn_restpre_backup btn btn-round btn-outline btn-default btn-sm">گرفتن
+                            بازیابی نسخه
+                            پشتیبان
+                        </button>
+                    </a>
+                    <input type="file" id="imgupload" accept="application/json,.json" style="display:none"/>
+                    <button id="OpenImgUpload">Image Upload</button>
+
+
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)"
+                       data-animation="slide-bottom" role="button">
+                        <button type="button" class="btn_backup btn btn-round btn-outline btn-default btn-sm">گرفتن
+                            نسخه
+                            پشتیبان
+                        </button>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)"
+                       data-animation="slide-bottom" role="button">
+                        <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
+                                data-target="#exampleNiftyFadeScaleReport"
+                                data-toggle="modal">گزارش گیری
+                        </button>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)"
+                       data-animation="slide-bottom" role="button">
+                        <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
+                                data-target="#exampleNiftyFadeScale"
+                                data-toggle="modal">ایجاد گروه حساب
+                        </button>
+                    </a>
+                </li>
+
+
+            </ul>
+            <!-- End Navbar Toolbar Right -->
+        </div>
+        <!-- End Navbar Collapse -->
+    </div>
+</nav>
+<!-- Page -->
+<div class="page animsition">
+    <div class="page-content">
+        <!-- Panel General Button -->
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="col-lg-12">
+                    <div class="example example-buttons">
+                        <br>
+
+                        <button style="display: none;" class="btn btn-outline btn-default"
+                                data-target="#exampleNiftyFadeScale"
+                                data-toggle="modal" type="button">add group
+                        </button>
+
+
+                        <button style="display: none;" class="btn btn-outline btn-default btn_add_pay"
+                                data-target="#exampleNiftyFadeScaleAdd"
+                                data-toggle="modal" type="button">add new pay
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScale" aria-hidden="true"
+                             aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                        <h4 class="example-title">نام گروه</h4>
+                                        <input class="form-control round" type="text" id="txt_account_name"
+                                               name="txt_account_name" value="" placeholder="">
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default margin-0" data-dismiss="modal">
+                                            بستن
+                                        </button>
+                                        <button type="button" id="btn_save1" class="btn btn-primary"> ذخیره
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Modal -->
+
+
+                        <!-- Modal -->
+                        <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleAdd" aria-hidden="true"
+                             aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                        <h4 class="example-title">نام گروه</h4>
+                                        <input type="text" readonly id="txt_group_name" name="txt_group_name"
+                                               value=""
+                                               placeholder="">
+
+                                        <h4 class="example-title">مبلغ</h4>
+                                        <input type="number" pattern="[0-9]*" inputmode="numeric"
+                                               class="form-control round" id="txt_money">
+
+
+                                        <h4 class="example-title">عنوان</h4>
+                                        <input type="text" class="form-control round" id="txt_title">
+
+
+                                        <h4 class="example-title">تاریخ</h4>
+                                        <input type="datetime" class="form-control round observer-example"
+                                               id="txt_date">
+
+                                        <br>
+
+                                        <button type="button" id="btn_minus" style="float: left;"
+                                                class="btn btn-round btn-outline btn-danger btn-sm">
+                                            پرداخت <i class="icon wb-minus" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button type="button" id="btn_add" style="float: right;"
+                                                class="btn btn-round btn-outline btn-success btn-sm">
+                                            دریافت <i class="icon wb-plus" aria-hidden="true"></i>
+                                        </button>
+
+
+                                        <button type="button" id="show_list_item"
+                                                class="btn btn-primary btn-block btn-round"><i
+                                                class="icon wb-menu" aria-hidden="true"></i>نمایش آیتم ها
+                                        </button>
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Modal -->
+
+
+                        <button type="button" style="display: none;" class="btn btn-success" id="alertifyMessage"
+                                data-plugin="alertify"
+                                data-type="log" data-log-message="Hiding in 10 seconds sacdsadasd">Generate
+                        </button>
+
+
+                        <div id="main_data" class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Panel General Button -->
+
+        </div>
+    </div>
+    <!-- End Page -->
+
+
+    <!-- Modal -->
+    <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleShowListItem" aria-hidden="true"
+         aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span id="showGroupTitle"></span>
+                    <table class="table table-hover dataTable table-striped width-full" data-plugin="dataTable">
+                        <thead>
+                        <tr>
+                            <th>عنوان</th>
+                            <th>مبلغ</th>
+                            <th>تاریخ</th>
+                            <th>نوع</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="showItem">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal -->
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <span class="site-footer-legal">© 2024 Nsa</span>
+        <div class="site-footer-right">
+            Crafted with <i class="red-600 wb wb-heart"></i> by <a href="http://naser-zare.ir">naser</a>
+        </div>
+    </footer>
+</div>
+<!-- Core  -->
+<script src="assets/vendor/jquery/jquery.js"></script>
+<script src="assets/vendor/bootstrap/bootstrap.js"></script>
+<script src="assets/vendor/animsition/jquery.animsition.js"></script>
+<script src="assets/vendor/asscroll/jquery-asScroll.js"></script>
+<script src="assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+<script src="assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+<script src="assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+
+<!-- Plugins -->
+<script src="assets/vendor/switchery/switchery.min.js"></script>
+<script src="assets/vendor/intro-js/intro.js"></script>
+<script src="assets/vendor/screenfull/screenfull.js"></script>
+<script src="assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+<script src="assets/vendor/ladda-bootstrap/spin.js"></script>
+<script src="assets/vendor/ladda-bootstrap/ladda.js"></script>
+
+<script src="assets/vendor/alertify-js/alertify.js"></script>
+
+<script src="assets/vendor/bootbox/bootbox.js"></script>
+<script src="assets/vendor/bootstrap-sweetalert/sweet-alert.js"></script>
+<script src="assets/vendor/toastr/toastr.js"></script>
+
+<script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="assets/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+<script src="assets/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+<script src="assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
+<script src="assets/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+
+<!-- Scripts -->
+<script src="assets/js/core.js"></script>
+<script src="assets/js/site.js"></script>
+
+<script src="assets/js/sections/menu.js"></script>
+<script src="assets/js/sections/menubar.js"></script>
+<script src="assets/js/sections/sidebar.js"></script>
+
+<script src="assets/js/configs/config-colors.js"></script>
+<script src="assets/js/configs/config-tour.js"></script>
+
+<script src="assets/js/components/asscrollable.js"></script>
+<script src="assets/js/components/animsition.js"></script>
+<script src="assets/js/components/slidepanel.js"></script>
+<script src="assets/js/components/switchery.js"></script>
+<script src="assets/js/components/buttons.js"></script>
+<script src="assets/js/components/ladda-bootstrap.js"></script>
+
+<script src="assets/js/components/alertify-js.js"></script>
+<script src="assets/js/components/toastr.js"></script>
+<script src="assets/js/components/bootbox.js"></script>
+<script src="assets/js/components/bootstrap-sweetalert.js"></script>
+
+<script src="assets/js/components/datatables.js"></script>
+
+
+<script src="assets/farsi-date/persian-date-min.js"></script>
+<script src="assets/farsi-date/persian-datepicker.js"></script>
+<script src="mainJs.js"></script>
+
+
+</body>
+
+</html>
