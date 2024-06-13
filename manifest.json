@@ -1,10 +1,10 @@
 {
     "name": "مدیریت دخل و خرج",
     "short_name": "nsa-accountant-manager",
-    "start_url": "/index.html",
+    "start_url": "http://naser-zare.ir/accountant/index.html",
     "background_color": "#6777ef",
     "description": "مدیریت دخل و خرج - ناصر زارع",
-    "display": "fullscreen",
+    "display": "standalone",
     "theme_color": "#6777ef",
     "icons": [
         {

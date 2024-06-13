@@ -18,123 +18,6 @@
         var t = $('#exampleTableAdd').DataTable(defaults);
     });
 
-    $('.observer-example').persianDatepicker({
-        observer: true,
-        format: 'YYYY/MM/DD',
-        altField: '.observer-example-alt',
-        autoClose: true
-    });
-
-    function fetchAllGroupAccount() {
-        let groupLocalStorage = localStorage.getItem('account_name') || [];
-        // alert(groupLocalStorage);
-        if (groupLocalStorage.length <= 0) {
-            alertify('گروهی برای نمایش رویداد یافت نشد', 'danger');
-            return false;
-
-        }
-        var test = groupLocalStorage.split(",");
-        let main_data_temp = [];
-        // alert(test.length);
-        for (var i = 0; i < test.length; i++) {
-            // $.each(test, function (key, val) {
-            // alert(key + val);
-            // alert(test[i]);
-            var sumMoney = parseInt(calculateFinalMoneyGroup(test[i]));
-            // console.log('aaaa' + sumMoney);
-            let _data = '<div class="col-sm-12 item_account" data-item_name="' + test[i] + '">\
-          <!-- Widget -->\
-          <div class="widget">\
-            <div class="widget-content padding-30 bg-blue-600">\
-              <div class="widget-watermark darker font-size-60 margin-15"><i class="icon wb-clipboard" aria-hidden="true"></i></div>\
-              <div class="counter counter-md counter-inverse text-left">\
-                <div class="counter-number-group">\
-                  <span class="counter-number-related text-capitalize">' + test[i] + '</span><br>\
-                  <span class="counter-number">\
-                ' + checkTaraz(sumMoney) + '\
-                ' + countItem(test[i]) + '\
-                  </span>\
-                  </span>\
-                </div>\
-              </div>\
-            </div>\
-          </div>\
-          <!-- End Widget -->\
-        </div>';
-            main_data_temp.push(_data);
-            // });
-        }
-        return main_data_temp;
-    }
-
-    function alertify(message, type) {
-        // $("#alertifyMessage").data("log-message", message);
-        // $("#alertifyMessage").data("type", type);
-        // $("#alertifyMessage").trigger("click");
-        let mainBody = '<span class="label label-outline label-' + type + '">' + message + '</span>';
-        // toastr.error(message);
-        // toastr.success(message);
-        bootbox.dialog({
-            title: mainBody,
-            message: " ",
-        });
-    }
-
-    function checkTaraz(sumMoney) {
-        let ret = [];
-        if (sumMoney >= 0) {
-            ret.push('<span class="badge badge-success">تومان ' + sumMoney.toLocaleString() + '</span>');
-        } else {
-            ret.push('<span class="badge badge-danger">تومان ' + sumMoney.toLocaleString() + '</span>');
-        }
-        return ret;
-    }
-
-    function countItem(itemName) {
-        // console.log(itemName);
-        // return false;
-        let ret = [];
-        let dataLocal = localStorage.getItem(itemName) || 0;
-        if (dataLocal.length <= 0) {
-            ret.push('<span class="badge badge-info">تعداد: 0</span>');
-            return ret;
-        }
-
-        let localData = JSON.parse(localStorage.getItem(itemName)) || [];
-        // console.log(localData);
-        if (localData.length >= 0) {
-            var count = $.map(localData, function (n, i) {
-                return i;
-            }).length;
-            ret.push('<span class="badge badge-info">تعداد:' + count + '</span>');
-        } else {
-            ret.push('<span class="badge badge-info">تعداد: 0</span>');
-        }
-        return ret;
-    }
-
-
-    function onChange(event) {
-        // $('#imgupload').trigger('click');
-        var reader = new FileReader();
-        reader.onload = onReaderLoad;
-        reader.readAsText(event.target.files[0]);
-    }
-
-    function onReaderLoad(event) {
-        var fileName = $("#imgupload").val();
-
-        if (fileName) { // returns true if the string is not empty
-            // alert(fileName + " was selected");
-            restoreBackup(event.target.result);
-        } else { // no file was selected
-            alertify('فایلی انتخاب نشده است', 'success');
-        }
-        // console.log(event.target.result);
-        // var obj = JSON.parse(event.target.result);
-        // console.log(obj);
-    }
-
 
     $(document).on('click', '.btn_restpre_backup', function () {
         $('#imgupload').trigger('click');
@@ -181,34 +64,6 @@
         btn_delete_item_sel(groupName, itemId);
     });
 
-    function btn_delete_item_sel(groupName, itemId) {
-        console.log(groupName);
-        console.log(itemId);
-        console.log(JSON.parse(localStorage.getItem(groupName)));
-        // return false;
-        let old_data = JSON.parse(localStorage.getItem(groupName)) || [];
-        // const index = old_data.indexOf(itemId);
-        // const new_data = old_data.splice(index, 1);
-        // const new_data = arr.splice( old_data.indexOf(itemId), 1 )
-        let newData = old_data.filter(function( obj ) {
-            return obj.id !== itemId;
-        });
-        // console.log(newData);
-        // return false;
-        localStorage.setItem(groupName, JSON.stringify(newData));
-        location.reload();
-    }
-
-    function showTypeSpan(type) {
-        let ret = [];
-        if (type === 'add') {
-            ret.push('<span class="badge badge-success">+</span>');
-        } else {
-            ret.push('<span class="badge badge-danger">-</span>');
-        }
-        return ret;
-    }
-
 
     $(document).on('click', '.btn_backup', function () {
 
@@ -235,56 +90,12 @@
         // return values;
     });
 
-    function DownloadJSON(...finalbck) {
-        //Build a JSON array containing Customer records.
-        // var customers = new Array();
-        // customers.push(["Customer Id", "Name", "Country"]);
-
-        //Convert JSON Array to string.
-        var json = JSON.stringify(finalbck);
-
-        //Convert JSON string to BLOB.
-        json = [json];
-        var blob1 = new Blob(json, {type: "text/plain;charset=utf-8"});
-
-        //Check the Browser.
-        var isIE = false || !!document.documentMode;
-        if (isIE) {
-            window.navigator.msSaveBlob(blob1, "Customers.txt");
-        } else {
-            var url = window.URL || window.webkitURL;
-            var link = url.createObjectURL(blob1);
-            var a = $("<a />");
-            var currentdate = new Date();
-            let fileDateSave = (currentdate.getDate() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getFullYear());
-            // return false;
-            a.attr("download", "nsa-" + fileDateSave + ".json");
-            a.attr("href", link);
-            $("body").append(a);
-            a[0].click();
-            $("body").remove(a);
-        }
-    }
-
-
-    function restoreBackup(fileName) {
-        // let bck = '[[{"KeyName":"ssss","KeyValue":"[{\\"id\\":9,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":7,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":5,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"minus\\"},{\\"id\\":3,\\"money\\":\\"3\\",\\"title\\":\\"3\\",\\"date\\":\\"3\\",\\"type\\":\\"minus\\"},{\\"id\\":1,\\"money\\":\\"33\\",\\"title\\":\\"33\\",\\"date\\":\\"33\\",\\"type\\":\\"add\\"},{\\"id\\":2,\\"money\\":\\"44\\",\\"title\\":\\"44\\",\\"date\\":\\"44\\",\\"type\\":\\"add\\"},{\\"id\\":4,\\"money\\":\\"55\\",\\"title\\":\\"55\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":6,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"minus\\"},{\\"id\\":8,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":10,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"add\\"}]"},{"KeyName":"account_name","KeyValue":"ssss,qqqq,wwwww"},{"KeyName":"wwwww","KeyValue":"[{\\"id\\":2,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"},{\\"id\\":1,\\"money\\":\\"22\\",\\"title\\":\\"22\\",\\"date\\":\\"22\\",\\"type\\":\\"add\\"},{\\"id\\":3,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"}]"}]]';
-        let sArray = JSON.parse(fileName);
-
-        $.each(sArray, function (i) {
-            $.each(sArray[i], function (key, value) {
-                // console.log(value.KeyName);
-                // console.log(value.KeyValue);
-                localStorage.setItem(value.KeyName, value.KeyValue);
-            });
-        });
-        alertify('اطلاعات با موفقیت بازیابی شد', 'success');
-
-    }
 
     $(document).on('click', '.item_account', function () {
         let item_name = $(this).data("item_name");
         $('#txt_group_name').val(item_name);
+        $('#show_group_name').html('<span class="label label-round label-default rtl">نام گروه: '+item_name+'</span>');
+        $('#show_taraz_group').html(calculateFinalMoneyGroupTypes(item_name));
         $(".btn_add_pay").trigger("click");
         // alert(item_name);
     });
@@ -338,7 +149,7 @@
         alertify('با موفقیت ثبت شد', 'success');
         setTimeout(function () {
             location.reload();
-        }, 3000);
+        }, 1000);
 
     });
 
@@ -352,6 +163,7 @@
 
                 let groupLocalStorage = localStorage.getItem('account_name') || [];
                 if (groupLocalStorage.length <= 0) {
+                    console.log('not data');
                     return false;
                 }
                 var var1 = groupLocalStorage.split(",");
@@ -502,17 +314,254 @@
         return (parseFloat(sumAddFinal) - parseFloat(sumMinusFinal));
         // return false;
     }
+    function calculateFinalMoneyGroupTypes(groupArraySelected) {
+        if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
+            return 0;
+        }
+
+        let final112 = JSON.parse(localStorage.getItem(groupArraySelected));
+//         let final112 = JSON.parse(groupArraySelected);
+        var subAdd = [];
+        var subMinus = [];
+        // var item = final112.find(item => item.type === 'add');
+        var result_add = $.grep(final112, function (e) {
+            return e.type == 'add';
+        });
+        $.each(result_add, function (key, value) {
+            subAdd.push(parseInt(value.money));
+        });
+        var result_minus = $.grep(final112, function (e) {
+            return e.type == 'minus';
+        });
+        $.each(result_minus, function (key, value) {
+            subMinus.push(parseInt(value.money));
+        });
 
 
-    // let final11 = JSON.parse(localStorage.getItem('ssss'));
-    // $.each(final11, function(key, value){
-    //     console.log("key", key);
-    //     console.log("value", value.money);
-    // });
-    // // return false;
+        // var ArrayOfInts = subAdd.map(Number); //Output: [1,2,3]
+        let sumAddFinal = subAdd.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        let sumMinusFinal = subMinus.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+        // console.log(subMinus);
+        // return (parseFloat(sumAddFinal) +','+ parseFloat(sumMinusFinal));
+        return ('تراز '+'<span class="badge badge-success">' + (sumAddFinal.toLocaleString()) + '</span>'+'<span' +
+            ' class="badge' +
+            ' badge-danger">' + (sumMinusFinal.toLocaleString()) + '</span>'+' تومان ');
+        // return false;
+    }
+
+    function DownloadJSON(...finalbck) {
+        //Build a JSON array containing Customer records.
+        // var customers = new Array();
+        // customers.push(["Customer Id", "Name", "Country"]);
+
+        //Convert JSON Array to string.
+        var json = JSON.stringify(finalbck);
+
+        //Convert JSON string to BLOB.
+        json = [json];
+        var blob1 = new Blob(json, {type: "text/plain;charset=utf-8"});
+
+        //Check the Browser.
+        var isIE = false || !!document.documentMode;
+        if (isIE) {
+            window.navigator.msSaveBlob(blob1, "Customers.txt");
+        } else {
+            var url = window.URL || window.webkitURL;
+            var link = url.createObjectURL(blob1);
+            var a = $("<a />");
+            var currentdate = new Date();
+            let fileDateSave = (currentdate.getDate() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getFullYear());
+            // return false;
+            a.attr("download", "nsa-" + fileDateSave + ".json");
+            a.attr("href", link);
+            $("body").append(a);
+            a[0].click();
+            $("body").remove(a);
+        }
+    }
+
+    function btn_delete_item_sel(groupName, itemId) {
+        console.log(groupName);
+        console.log(itemId);
+        console.log(JSON.parse(localStorage.getItem(groupName)));
+        // return false;
+        let old_data = JSON.parse(localStorage.getItem(groupName)) || [];
+        // const index = old_data.indexOf(itemId);
+        // const new_data = old_data.splice(index, 1);
+        // const new_data = arr.splice( old_data.indexOf(itemId), 1 )
+        let newData = old_data.filter(function( obj ) {
+            return obj.id !== itemId;
+        });
+        // console.log(newData);
+        // return false;
+        localStorage.setItem(groupName, JSON.stringify(newData));
+        location.reload();
+    }
+
+    function showTypeSpan(type) {
+        let ret = [];
+        if (type === 'add') {
+            ret.push('<span class="badge badge-success">+</span>');
+        } else {
+            ret.push('<span class="badge badge-danger">-</span>');
+        }
+        return ret;
+    }
+    function restoreBackup(fileName) {
+        // let bck = '[[{"KeyName":"ssss","KeyValue":"[{\\"id\\":9,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":7,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":5,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"minus\\"},{\\"id\\":3,\\"money\\":\\"3\\",\\"title\\":\\"3\\",\\"date\\":\\"3\\",\\"type\\":\\"minus\\"},{\\"id\\":1,\\"money\\":\\"33\\",\\"title\\":\\"33\\",\\"date\\":\\"33\\",\\"type\\":\\"add\\"},{\\"id\\":2,\\"money\\":\\"44\\",\\"title\\":\\"44\\",\\"date\\":\\"44\\",\\"type\\":\\"add\\"},{\\"id\\":4,\\"money\\":\\"55\\",\\"title\\":\\"55\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":6,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"minus\\"},{\\"id\\":8,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":10,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"add\\"}]"},{"KeyName":"account_name","KeyValue":"ssss,qqqq,wwwww"},{"KeyName":"wwwww","KeyValue":"[{\\"id\\":2,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"},{\\"id\\":1,\\"money\\":\\"22\\",\\"title\\":\\"22\\",\\"date\\":\\"22\\",\\"type\\":\\"add\\"},{\\"id\\":3,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"}]"}]]';
+        let sArray = JSON.parse(fileName);
+
+        $.each(sArray, function (i) {
+            $.each(sArray[i], function (key, value) {
+                // console.log(value.KeyName);
+                // console.log(value.KeyValue);
+                localStorage.setItem(value.KeyName, value.KeyValue);
+            });
+        });
+        alertify('اطلاعات با موفقیت بازیابی شد', 'success');
+        setTimeout(function () {
+            location.reload();
+        }, 1000);
+
+    }
+
+    function fetchAllGroupAccount() {
+        let groupLocalStorage = localStorage.getItem('account_name') || [];
+        // alert(groupLocalStorage);
+        if (groupLocalStorage.length <= 0) {
+            alertify('گروهی برای نمایش رویداد یافت نشد', 'danger');
+            return false;
+
+        }
+        var test = groupLocalStorage.split(",");
+        let main_data_temp = [];
+        // alert(test.length);
+        for (var i = 0; i < test.length; i++) {
+            // $.each(test, function (key, val) {
+            // alert(key + val);
+            // alert(test[i]);
+            var sumMoney = parseInt(calculateFinalMoneyGroup(test[i]));
+            // console.log('aaaa : ' + sumMoney);
+            let _data = '<div class="col-sm-12 item_account" data-item_name="' + test[i] + '">\
+          <!-- Widget -->\
+          <div class="widget">\
+            <div class="widget-content padding-20 bg-blue-600 border-radius">\
+              <div class="widget-watermark darker font-size-60 margin-15"><i class="icon wb-clipboard" aria-hidden="true"></i></div>\
+              <div class="counter counter-md counter-inverse text-left">\
+                <div class="counter-number-group">\
+                  <span class="counter-number-related text-capitalize">' + test[i] + '</span><br>\
+                  <span class="counter-number">\
+                ' + checkTaraz(sumMoney) + '\
+                ' + countItem(test[i]) + '\
+                  </span>\
+                  </span>\
+                </div>\
+              </div>\
+            </div>\
+          </div>\
+          <!-- End Widget -->\
+        </div>';
+            main_data_temp.push(_data);
+            // });
+        }
+        return main_data_temp;
+    }
+
+    function alertify(message, type) {
+        // $("#alertifyMessage").data("log-message", message);
+        // $("#alertifyMessage").data("type", type);
+        // $("#alertifyMessage").trigger("click");
+        let mainBody = '<span style="text-align: center;" class="label label-outline label-' + type + '">' + message + '</span>';
+        // toastr.error(mainBody);
+        // toastr.success(message);
+
+        // var d =bootbox.dialog({
+        //     title: mainBody,
+        //     message: " ",
+        //     centerVertical: true,
+        // });
+
+        bootbox.alert(mainBody).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = (w-b)/2;
+                return h+"px";
+            }
+        });
+
+        //         d.find('.modal-dialog').addClass('modal-dialog-centered');
+
+        // $("#exampleSuccessMessage").data("text", message);
+        // $("#exampleSuccessMessage").data("type", type);
+        //
+        // $('#exampleSuccessMessage').trigger('click',event);
+    }
+
+    function checkTaraz(sumMoney) {
+        let ret = [];
+        if (sumMoney >= 0) {
+            ret.push('<span class="badge badge-success">تومان ' + sumMoney.toLocaleString() + '</span>');
+        } else {
+            ret.push('<span class="badge badge-danger">تومان ' + sumMoney.toLocaleString() + '</span>');
+        }
+        return ret;
+    }
+
+    function countItem(itemName) {
+        // console.log(itemName);
+        // return false;
+        let ret = [];
+        let dataLocal = localStorage.getItem(itemName) || 0;
+        if (dataLocal.length <= 0) {
+            ret.push('<span class="badge badge-info"> تعداد  0 </span>');
+            return ret;
+        }
+
+        let localData = JSON.parse(localStorage.getItem(itemName)) || [];
+        // console.log(localData);
+        if (localData.length >= 0) {
+            var count = $.map(localData, function (n, i) {
+                return i;
+            }).length;
+            ret.push('<span class="badge badge-info"> تعداد ' + count + '</span>');
+        } else {
+            ret.push('<span class="badge badge-info">تعداد: 0</span>');
+        }
+        return ret;
+    }
 
 
-    // $('#alertifyMessage').trigger("click");
+    function onChange(event) {
+        // $('#imgupload').trigger('click');
+        var reader = new FileReader();
+        reader.onload = onReaderLoad;
+        reader.readAsText(event.target.files[0]);
+    }
+
+    function onReaderLoad(event) {
+        var fileName = $("#imgupload").val();
+
+        if (fileName) { // returns true if the string is not empty
+            // alert(fileName + " was selected");
+            restoreBackup(event.target.result);
+        } else { // no file was selected
+            alertify('فایلی انتخاب نشده است', 'success');
+        }
+        // console.log(event.target.result);
+        // var obj = JSON.parse(event.target.result);
+        // console.log(obj);
+    }
+
+    $('.observer-example').persianDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        altField: '.observer-example-alt',
+        autoClose: true
+    });
+
 
 
 })(document, window, jQuery);

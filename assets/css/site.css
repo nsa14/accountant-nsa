@@ -6,6 +6,27 @@
     float: right;
 }
 
+.modal-title{
+    text-align: center!important;
+}
+.modal-dialog {
+
+}
+
+.modal-content{
+    padding: 9px!important;
+}
+.modal-body{
+    padding: 0px 10px 10px 10px!important;
+}
+.modal-header{
+    padding: 5px 10px 0px 5px!important;
+}
+
+.border-radius{
+    border-radius: 20px;
+}
+
 
 .site-navbar .navbar-header {
   color: #fff;
@@ -647,7 +668,7 @@ body {
   padding: 0 30px;
 }
 .page-content {
-  padding: 20px 30px;
+  padding: 5px 10px;
 }
 .page-content-actions {
   padding: 0 30px 20px;
@@ -9509,7 +9530,7 @@ h4.example-title {
 .example-buttons .btn-group,
 .example-buttons .btn-group-vertical {
   margin-right: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 9px;
 }
 .example-buttons .btn-group-vertical .btn,
 .example-buttons .btn-group .btn {
