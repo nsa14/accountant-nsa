@@ -1,11 +1,62 @@
-(function (document, window, $) {
+function generate_chart(title, data1N, data1V, data2N, data2V) {
+    var donut_chart = c3.generate({
+        bindto: '#exampleC3Donut',
+        data: {
+            columns: [
+                [data1N, data1V],
+                [data2N, data2V],
+            ],
+            type: 'donut'
+        },
+        color: {
+            pattern: [$.colors("primary",
+                500), $.colors("red", 400)]
+        },
+        legend: {
+            position: 'center'
+        },
+        donut: {
+            label: {
+                show: true
+            },
+            width: 50,
+            title: title,
+            onclick: function (d, i) {
+            },
+            onmouseover: function (d, i) {
+            },
+            onmouseout: function (d, i) {
+            }
+        }
+    });
+
+    Chart.resize({
+        height: $("#election-stat-chart-05").height(),
+        width: $("#election-stat-chart-05").width()
+    });
+    Chart.zoom({
+        extent: [1, 100] // enable more zooming
+    })
+    Chart.point({
+
+        r: 500
+    })
+
+}
+
+(async function (document, window, $) {
     'use strict';
 
-    var Site = window.Site;
+    let Site = window.Site;
     $(document).ready(function () {
         Site.run();
 
-        var desiredHeight = $("body").height() - $("top").height() - $("bot").height();
+        getOS();
+        let today = new Date().toLocaleDateString('fa-IR');
+        $('#dateTime').html('امروز : ' + today);
+
+        // var desiredHeight = $("body").height() - $("top").height();
+        let desiredHeight = $(".page").height();
         $(".panel").css("min-height", desiredHeight);
 
 
@@ -13,9 +64,9 @@
         // console.log(loadData);
         $('#main_data').html(loadData);
 
-        var defaults = $.components.getDefaults("dataTable");
+        let defaults = $.components.getDefaults("dataTable");
 
-        var t = $('#exampleTableAdd').DataTable(defaults);
+        let t = $('#exampleTableAdd').DataTable(defaults);
     });
 
 
@@ -43,14 +94,14 @@
                 '                            <td>' + item.date + '</td>\n' +
                 '                            <td>' + showTypeSpan(item.type) + '</td>\n' +
                 '                            <td><button class="btn btn-pure btn-danger icon wb-trash"' +
-                ' id="btn_del_sel" data-id="' + item.id + '" data-grname="' + txt_group_name + '"></button></td>\n' +
+                ' id="btn_del_sel" data-money="' + item.money + '" data-id="' + item.id + '" data-grname="' + txt_group_name + '"></button></td>\n' +
                 '                        </tr>';
             final.push(_row);
         });
 
         // console.log(final);
 
-        $('#showGroupTitle').html(' گروه انتخابی : ' + txt_group_name);
+        $('#showGroupTitle').html(' حساب انتخابی : ' + txt_group_name);
         $('#showItem').html(final);
         $('#exampleNiftyFadeScaleShowListItem').modal({
             show: 'true'
@@ -61,9 +112,46 @@
     $(document).on('click', '#btn_del_sel', function () {
         let itemId = $(this).data('id');
         let groupName = $(this).data('grname');
-        btn_delete_item_sel(groupName, itemId);
+        let money = $(this).data('money');
+        if (confirm(" آیا از حذف سطر با مبلغ : " + money + " اطمینان دارید? ")) {
+            btn_delete_item_sel(groupName, itemId);
+        } else {
+            return false;
+        }
     });
 
+
+    $(document).on('click', '#send', function () {
+        sendNotification();
+    });
+
+
+    const registration = await navigator.serviceWorker.getRegistration();
+
+    function showNotification() {
+        const title = 'What PWA Can Do Today';
+
+        if ('showNotification' in registration) {
+            registration.showNotification(title);
+        } else {
+            new Notification(title);
+        }
+    }
+
+    const sendNotification = async () => {
+        if (Notification.permission === 'granted') {
+            alert('مجوز دسترسی به نوتیفیکیشن فعال شد');
+            showNotification('asdsadsad');
+        } else {
+            if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                alert('مجوز دسترسی به نوتیفیکیشن را تایید نمودید!');
+                if (permission === 'granted') {
+                    showNotification('sddfdfsdf');
+                }
+            }
+        }
+    };
 
     $(document).on('click', '.btn_backup', function () {
 
@@ -91,12 +179,23 @@
     });
 
 
+    // $(document).on('click', '.sticky_pwa', function () {
+    //
+    //
+    // })
+
+
     $(document).on('click', '.item_account', function () {
         let item_name = $(this).data("item_name");
         $('#txt_group_name').val(item_name);
-        $('#show_group_name').html('<span class="label label-round label-default rtl">نام گروه: '+item_name+'</span>');
+        $('#show_group_name').html('<span class="label label-outline label-default rtl">نام حساب:' +
+            ' ' + item_name + '</span>');
         $('#show_taraz_group').html(calculateFinalMoneyGroupTypes(item_name));
+        let chartData = (calculateFinalMoneyGroupTypesChart(item_name));
         $(".btn_add_pay").trigger("click");
+
+        var varChartData = chartData.split(",");
+        generate_chart('نمودار دریافت و پرداخت ها', 'دریافتی ها', varChartData[0], 'پرداختی ها', varChartData[1]);
         // alert(item_name);
     });
 
@@ -114,9 +213,18 @@
 
         let txt_account_name = $('#txt_account_name').val();
         if (txt_account_name.length == 0) {
-            alertify('فیلد ها رو وارد نمایید', 'danger');
+            alertify('فیلد ها رو وارد نمایید', 'error');
             return false;
         }
+
+
+        let hasExist = localStorage.getItem('account_name');
+        if ((hasExist.indexOf(txt_account_name) >= 0)) {
+            alertify('این نام وجود دارد. لطفا نام دیگری را بنویسید', 'error');
+            return false;
+        }
+
+
         var newdata = {
             name: txt_account_name,
         };
@@ -129,7 +237,7 @@
         let count = localStorage.getItem('account_name');
 
         if (count) {   // checks if count is null, undefined, 0, false, NaN
-            console.log('poooooor hast');
+            // console.log('poooooor hast');
             a.push((localStorage.getItem('account_name')));
             // a.push(txt_account_name);
         } else {
@@ -139,24 +247,19 @@
         localStorage.setItem('account_name', (a));
 
 
-        // alert('has existed this name');
-        // }
-
-        // alert(localStorage.getItem('account_name'));
-
         $('#txt_account_name').val('');
 
         alertify('با موفقیت ثبت شد', 'success');
         setTimeout(function () {
             location.reload();
-        }, 1000);
+        }, 700);
 
     });
 
 
     $(document).on('click', '.btn_delete_group', function () {
         let groupNameSelected = $('#txt_group_name').val();
-        if (confirm("آیا از حذف این گروه " + groupNameSelected + "و داده های آن اطنینان دارید?")) {
+        if (confirm(" آیا از حذف این حساب " + groupNameSelected + " و داده های آن اطمینان دارید? ")) {
             if (groupNameSelected.length > 1) {
                 // localStorage.setItem(groupNameSelected, '');
                 localStorage.removeItem(groupNameSelected);
@@ -173,7 +276,10 @@
 
                 localStorage.setItem('account_name', newArray);
 
-                location.reload();
+                alertify('حساب حذف شد!', 'success');
+                setTimeout(function () {
+                    location.reload();
+                }, 600);
             } else {
                 return false;
             }
@@ -192,9 +298,12 @@
         let txt_date = $('#txt_date').val();
 
         if (txt_money.length <= 0) {
-            alertify('فیلد ها رو کامل پر نمایید', 'danger');
+            alertify('فیلد ها رو کامل پر نمایید', 'error');
             return false;
         }
+
+        let txt_money2 = txt_money.replace(/,/g, ''),
+            asANumber = +txt_money2;
 
 
         const oldInfo = JSON.parse(localStorage.getItem(txt_group_name) || '[]');
@@ -207,17 +316,24 @@
 
         const newArray = {
             id: lastElementId,
-            money: txt_money,
+            money: txt_money2,
             title: txt_title,
             date: txt_date,
             type: 'minus'
         };
 
         oldInfo.push(newArray);
+
         localStorage.setItem(txt_group_name, JSON.stringify(oldInfo));
+
         alertify('با موفقیت ثبت شد', 'success');
+
         $('#txt_money').val('');
         $('#txt_title').val('');
+
+        setTimeout(function () {
+            location.reload();
+        }, 800);
 
 
     });
@@ -227,7 +343,7 @@
     });
 
     $(document).on('click', '.btn_delete_data', function () {
-        if (confirm("آیا از حذف داده ها اطنینان دارید?")) {
+        if (confirm("آیا از حذف داده ها اطمینان دارید?")) {
             localStorage.clear();
             location.reload();
         } else {
@@ -243,8 +359,11 @@
         let txt_title = $('#txt_title').val();
         let txt_date = $('#txt_date').val();
 
+        let txt_money2 = txt_money.replace(/,/g, ''),
+            asANumber = +txt_money2;
+
         if (txt_money.length <= 0) {
-            alertify('فیلد ها رو کامل پر نمایید', 'danger');
+            alertify('فیلد ها رو کامل پر نمایید', 'error');
             return false;
         }
 
@@ -264,7 +383,7 @@
 // alert(lastElement);
         const newArray = {
             id: lastElementId,
-            money: txt_money,
+            money: txt_money2,
             title: txt_title,
             date: txt_date,
             type: 'add'
@@ -277,6 +396,10 @@
 
         $('#txt_money').val('');
         $('#txt_title').val('');
+
+        setTimeout(function () {
+            location.reload();
+        }, 800);
 
 
     });
@@ -314,6 +437,7 @@
         return (parseFloat(sumAddFinal) - parseFloat(sumMinusFinal));
         // return false;
     }
+
     function calculateFinalMoneyGroupTypes(groupArraySelected) {
         if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
             return 0;
@@ -344,10 +468,40 @@
 
         // console.log(subMinus);
         // return (parseFloat(sumAddFinal) +','+ parseFloat(sumMinusFinal));
-        return ('تراز '+'<span class="badge badge-success">' + (sumAddFinal.toLocaleString()) + '</span>'+'<span' +
+        return ('تراز ' + '<span class="badge badge-success">' + (sumAddFinal.toLocaleString()) + '</span> ' + ' <span' +
             ' class="badge' +
-            ' badge-danger">' + (sumMinusFinal.toLocaleString()) + '</span>'+' تومان ');
+            ' badge-danger">' + (sumMinusFinal.toLocaleString()) + '</span>' + '  تومان ');
         // return false;
+    }
+
+    function calculateFinalMoneyGroupTypesChart(groupArraySelected) {
+        if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
+            return 0;
+        }
+
+        let final112 = JSON.parse(localStorage.getItem(groupArraySelected));
+//         let final112 = JSON.parse(groupArraySelected);
+        var subAdd = [];
+        var subMinus = [];
+        // var item = final112.find(item => item.type === 'add');
+        var result_add = $.grep(final112, function (e) {
+            return e.type == 'add';
+        });
+        $.each(result_add, function (key, value) {
+            subAdd.push(parseInt(value.money));
+        });
+        var result_minus = $.grep(final112, function (e) {
+            return e.type == 'minus';
+        });
+        $.each(result_minus, function (key, value) {
+            subMinus.push(parseInt(value.money));
+        });
+
+
+        let sumAddFinal = subAdd.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        let sumMinusFinal = subMinus.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+        return (sumAddFinal + ',' + sumMinusFinal);
     }
 
     function DownloadJSON(...finalbck) {
@@ -390,7 +544,7 @@
         // const index = old_data.indexOf(itemId);
         // const new_data = old_data.splice(index, 1);
         // const new_data = arr.splice( old_data.indexOf(itemId), 1 )
-        let newData = old_data.filter(function( obj ) {
+        let newData = old_data.filter(function (obj) {
             return obj.id !== itemId;
         });
         // console.log(newData);
@@ -402,12 +556,14 @@
     function showTypeSpan(type) {
         let ret = [];
         if (type === 'add') {
-            ret.push('<span class="badge badge-success">+</span>');
+            // <span className="label label-table label-success">Active</span>
+            ret.push('<span class="label label-table label-success"> A </span>');
         } else {
-            ret.push('<span class="badge badge-danger">-</span>');
+            ret.push('<span class="label label-table label-danger"> M </span>');
         }
         return ret;
     }
+
     function restoreBackup(fileName) {
         // let bck = '[[{"KeyName":"ssss","KeyValue":"[{\\"id\\":9,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":7,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":5,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"minus\\"},{\\"id\\":3,\\"money\\":\\"3\\",\\"title\\":\\"3\\",\\"date\\":\\"3\\",\\"type\\":\\"minus\\"},{\\"id\\":1,\\"money\\":\\"33\\",\\"title\\":\\"33\\",\\"date\\":\\"33\\",\\"type\\":\\"add\\"},{\\"id\\":2,\\"money\\":\\"44\\",\\"title\\":\\"44\\",\\"date\\":\\"44\\",\\"type\\":\\"add\\"},{\\"id\\":4,\\"money\\":\\"55\\",\\"title\\":\\"55\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":6,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"minus\\"},{\\"id\\":8,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":10,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"add\\"}]"},{"KeyName":"account_name","KeyValue":"ssss,qqqq,wwwww"},{"KeyName":"wwwww","KeyValue":"[{\\"id\\":2,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"},{\\"id\\":1,\\"money\\":\\"22\\",\\"title\\":\\"22\\",\\"date\\":\\"22\\",\\"type\\":\\"add\\"},{\\"id\\":3,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"}]"}]]';
         let sArray = JSON.parse(fileName);
@@ -430,7 +586,7 @@
         let groupLocalStorage = localStorage.getItem('account_name') || [];
         // alert(groupLocalStorage);
         if (groupLocalStorage.length <= 0) {
-            alertify('گروهی برای نمایش رویداد یافت نشد', 'danger');
+            alertify('حسابی برای نمایش رویداد یافت نشد', 'error');
             return false;
 
         }
@@ -443,11 +599,14 @@
             // alert(test[i]);
             var sumMoney = parseInt(calculateFinalMoneyGroup(test[i]));
             // console.log('aaaa : ' + sumMoney);
-            let _data = '<div class="col-sm-12 item_account" data-item_name="' + test[i] + '">\
+
+            let _data = '<div class="col-sm-12 item_account animation-slide-top" data-plugin="appear" data-animate="slide-top" data-item_name="' + test[i] + '">\
           <!-- Widget -->\
           <div class="widget">\
-            <div class="widget-content padding-20 bg-blue-600 border-radius">\
-              <div class="widget-watermark darker font-size-60 margin-15"><i class="icon wb-clipboard" aria-hidden="true"></i></div>\
+            <div class="widget-content padding-20 bg-blue-700 border-radius">\
+              <div class="widget-watermark darker font-size-60 margin-15"><i id="icon-animation" class="icon\
+               wb-clipboard flip-vertical-left"\
+               aria-hidden="true"></i></div>\
               <div class="counter counter-md counter-inverse text-left">\
                 <div class="counter-number-group">\
                   <span class="counter-number-related text-capitalize">' + test[i] + '</span><br>\
@@ -472,7 +631,7 @@
         // $("#alertifyMessage").data("log-message", message);
         // $("#alertifyMessage").data("type", type);
         // $("#alertifyMessage").trigger("click");
-        let mainBody = '<span style="text-align: center;" class="label label-outline label-' + type + '">' + message + '</span>';
+        // let mainBody = '<span style="text-align: center;" class="label label-outline label-' + type + '">' + message + '</span>';
         // toastr.error(mainBody);
         // toastr.success(message);
 
@@ -482,30 +641,36 @@
         //     centerVertical: true,
         // });
 
-        bootbox.alert(mainBody).find('.modal-content').css({
-            'margin-top': function (){
-                var w = $( window ).height();
-                var b = $(".modal-dialog").height();
-                // should not be (w-h)/2
-                var h = (w-b)/2;
-                return h+"px";
-            }
+
+        // $("#exampleBasic").data("title", {mainBody});
+        // $("#exampleBasic").trigger("click");
+
+        swal({
+            title: message,
+            text: "",
+            html: true, // add this if you want to show HTML
+            type: type // type can be error/warning/success
         });
 
-        //         d.find('.modal-dialog').addClass('modal-dialog-centered');
 
-        // $("#exampleSuccessMessage").data("text", message);
-        // $("#exampleSuccessMessage").data("type", type);
-        //
-        // $('#exampleSuccessMessage').trigger('click',event);
+        // bootbox.alert(mainBody).find('.modal-content').css({
+        //     'margin-top': function (){
+        //         var w = $( window ).height();
+        //         var b = $(".modal-dialog").height();
+        //         // should not be (w-h)/2
+        //         var h = (w-b)/2;
+        //         return h+"px";
+        //     }
+        // });
+
     }
 
     function checkTaraz(sumMoney) {
         let ret = [];
         if (sumMoney >= 0) {
-            ret.push('<span class="badge badge-success">تومان ' + sumMoney.toLocaleString() + '</span>');
+            ret.push('<span class="badge badge-success"> تراز: ' + sumMoney.toLocaleString() + ' تومان  </span> ');
         } else {
-            ret.push('<span class="badge badge-danger">تومان ' + sumMoney.toLocaleString() + '</span>');
+            ret.push('<span class="badge badge-danger"> تراز: ' + sumMoney.toLocaleString() + ' تومان  </span> ');
         }
         return ret;
     }
@@ -516,7 +681,7 @@
         let ret = [];
         let dataLocal = localStorage.getItem(itemName) || 0;
         if (dataLocal.length <= 0) {
-            ret.push('<span class="badge badge-info"> تعداد  0 </span>');
+            ret.push('<span class="badge badge-dark"> تعداد  0 </span>');
             return ret;
         }
 
@@ -526,9 +691,9 @@
             var count = $.map(localData, function (n, i) {
                 return i;
             }).length;
-            ret.push('<span class="badge badge-info"> تعداد ' + count + '</span>');
+            ret.push('<span class="badge badge-dark"> تعداد ' + count + '</span>');
         } else {
-            ret.push('<span class="badge badge-info">تعداد: 0</span>');
+            ret.push('<span class="badge badge-dark">تعداد: 0</span>');
         }
         return ret;
     }
@@ -562,6 +727,112 @@
         autoClose: true
     });
 
+    $('#txt_money').keyup(function (event) {
+        // skip for arrow keys
+        if (event.which >= 37 && event.which <= 40) return;
+
+        // format number
+        $(this).val(function (index, value) {
+            return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        });
+
+    });
+
+    function btn_close() {
+        $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
+            show: 'false'
+        });
+    }
 
 
 })(document, window, jQuery);
+
+
+(function () {
+    var filtering = $('#exampleFootableFiltering');
+    filtering.footable().on('footable_filtering', function (e) {
+        var selected = $('#filteringStatus').find(':selected').val();
+        e.filter += (e.filter && e.filter.length > 0) ? ' ' +
+            selected : selected;
+        e.clear = !e.filter;
+    });
+
+    // Filter status
+    $('#filteringStatus').change(function (e) {
+        e.preventDefault();
+        filtering.trigger('footable_filter', {
+            filter: $(this).val()
+        });
+    });
+
+    // Search input
+    $('#filteringSearch').on('input', function (e) {
+        e.preventDefault();
+        filtering.trigger('footable_filter', {
+            filter: $(this).val()
+        });
+    });
+})();
+
+
+function getOS() {
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log("This is running as standalone.");
+        // alert("This is running as standalone.");
+        $('.btn_close').trigger('click');
+        // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
+        //     show: 'false'
+        // });
+    } else {
+        $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
+            show: 'true'
+        });
+
+        // var uA = navigator.userAgent || navigator.vendor || window.opera;
+        // if ((/iPad|iPhone|iPod/.test(uA) && !window.MSStream) || (uA.includes('Mac') && 'ontouchend' in document)){
+        //     // $('#sticky').trigger('click');
+        //     // return ('ios');
+        //     // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
+        //     //     show: 'true'
+        //     // });
+        // }
+        //
+        // var i, os = ['Windows', 'Android', 'Unix', 'Mac', 'Linux', 'BlackBerry'];
+        // for (i = 0; i < os.length; i++) if (new RegExp(os[i],'i').test(uA)){
+        //     // return os[i]
+        //     if (os[i] == 'Android'){
+        //         // $('#sticky').trigger('click');
+        //     }
+        // }
+    }
+
+}
+
+// var mouseY = 0;
+// var startMouseY = 0;
+// $('body').on('mousedown', function (ev) {
+//     mouseY = ev.pageY;
+//     startMouseY = mouseY;
+//     $(document).mousemove(function (e) {
+//         if (e.pageY > mouseY) {
+//             var d = e.pageY - startMouseY;
+//             console.log("d: " + d);
+//             if (d >= 200)
+//                 location.reload();
+//             $('body').css('margin-top', d/4 + 'px');
+//         }
+//         else
+//             $(document).unbind("mousemove");
+//
+//
+//     });
+// });
+// $('body').on('mouseup', function () {
+//     $('body').css('margin-top', '0px');
+//     $(document).unbind("mousemove");
+// });
+// $('body').on('mouseleave', function () {
+//     $('body').css('margin-top', '0px');
+//     $(document).unbind("mousemove");
+// });

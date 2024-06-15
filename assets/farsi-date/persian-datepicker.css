@@ -104,6 +104,7 @@
     display: none; }
 
 .datepicker-plot-area {
+    font-family: vazir, "Roboto", sans-serif;
     box-sizing: border-box;
     overflow: hidden;
     min-height: 70px;
@@ -112,7 +113,7 @@
     min-width: 200px;
     padding: 3px;
     position: absolute;
-    font: 12px tahoma;
+    font-size: 12px;
     border: 1px solid #ccc;
     background-color: #fff; }
 .datepicker-plot-area.datepicker-state-only-time {
