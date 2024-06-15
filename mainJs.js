@@ -129,25 +129,31 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     const registration = await navigator.serviceWorker.getRegistration();
 
     function showNotification() {
-        const title = 'What PWA Can Do Today';
+        const title = 'سلام دوست عزیز';
 
         if ('showNotification' in registration) {
-            registration.showNotification(title);
+            // registration.showNotification(title);
+            setTimeout(function () {
+                registration.showNotification(title);
+            }, 5000);
         } else {
-            new Notification(title);
+            // new Notification(title);
+            setTimeout(function () {
+                new Notification(title);
+            }, 5000);
         }
     }
 
     const sendNotification = async () => {
         if (Notification.permission === 'granted') {
             alert('مجوز دسترسی به نوتیفیکیشن فعال شد');
-            showNotification('asdsadsad');
+            showNotification('تست می باشد این متن');
         } else {
             if (Notification.permission !== 'denied') {
                 const permission = await Notification.requestPermission();
-                alert('مجوز دسترسی به نوتیفیکیشن را تایید نمودید!');
+                alert('قبلا مجوز دسترسی به نوتیفیکیشن را تایید نموده اید!');
                 if (permission === 'granted') {
-                    showNotification('sddfdfsdf');
+                    showNotification('تست می باشد');
                 }
             }
         }

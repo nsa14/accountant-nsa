@@ -283,8 +283,8 @@
                         <br>
 
 
-                        <button class="btn btn-lg" id="send">click</button>
-                        <input name="notification" id="notification" value="asdsadsad">
+                        <button class="btn btn-xs btn-default" id="send">فعال سازی نوتیفیکیشن</button>
+<!--                        <input name="notification" id="notification" value="asdsadsad">-->
 
 
                         <button class="sticky_pwa btn btn-warning btn-outline" style="display: none;" id="sticky"
@@ -446,7 +446,7 @@
             <!-- End Panel General Button -->
 
 
-            <div class="wrapper_anim">
+            <div class="wrapper_anim" style="opacity: 0.06;">
                 <svg id="text-anim">
                     <text x="50%" y="50%" dy=".35em" text-anchor="middle">
                         PWA
@@ -660,15 +660,18 @@
 
 
 <script src="mainJs.js"></script>
-<script src="app.js"></script>
+<!--<script src="app.js"></script>-->
 
-<!--<script type="text/javascript">-->
-<!--    navigator.serviceWorker.register('http://naser-zare.ir/accountant/sw.js').then(function (registration) {-->
-<!--        console.log('ServiceWorker registration successful with scope: ', registration.scope);-->
-<!--    }, function (err) {-->
-<!--        console.log('ServiceWorker registration failed: ', err);-->
-<!--    });-->
-<!--</script>-->
+<script type="text/javascript">
+    navigator.serviceWorker.register('app.js').then(function (registration) {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function (err) {
+        console.log('ServiceWorker registration failed: ', err);
+    });
+</script>
+<script>
+    // navigator.serviceWorker.register("app.js");
+</script>
 
 </body>
 
