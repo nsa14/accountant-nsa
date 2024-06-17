@@ -81,6 +81,33 @@
     }
 }
 
+.popover-install-pwa{
+    position:fixed;;
+    background-color: #cbcaca;
+    opacity: 0.93;
+    width: 100%;
+    height: 60vh;
+    bottom: 0;
+    left: 0;
+    z-index: 99999998;
+    display: none;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    justify-content: center!important;
+    border-radius: 26px 26px 0px 0px;
+    -webkit-border-radius: 26px 26px 0px 0px;
+    -moz-border-radius: 26px 26px 0px 0px;
+    border: 2px solid #b0acaca1;
+    border-bottom: 0;
+}
+.close-popover-install-pwa{
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 30px;
+    list-style: none;
+}
+
 
 
 .wrapper_anim{
@@ -90,6 +117,7 @@ svg#text-anim {
     font-family: initial;
     width: 100%; height: 100%;
     opacity: 1;
+    font-weight:900;
 }
 svg#text-anim text {
     animation: stroke 10s infinite alternate;
@@ -150,6 +178,158 @@ svg#text-anim text {
         transform: rotateY(-180deg);
     }
 }
+
+
+
+
+/* Define styles for the spinner container */
+.spinner-container {
+    position: absolute;
+    background-color: #000;
+    opacity: 0.9;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    display: block;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+#loader-spinner{
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+    margin-top: 50% !important;
+}
+/*<div class="custom-loader"></div>*/
+.custom-loader {
+    /*position: fixed;*/
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    border:16px solid;
+    border-color:#E4E4ED;
+    border-right-color: #7AA3F4;
+    animation:s2 1s infinite linear;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+}
+@keyframes s2 {to{transform: rotate(1turn)}}
+/* HTML: <div class="loader22"></div> */
+.loader22 {
+    width: 100px;
+    height: 40px;
+    --g: radial-gradient(farthest-side,#0000 calc(95% - 3px),#fff calc(100% - 3px) 98%,#0000 101%) no-repeat;
+    background: var(--g), var(--g), var(--g);
+    background-size: 30px 30px;
+    animation: l9 1s infinite alternate;
+}
+@keyframes l9 {
+    0% {
+        background-position: 0 50%, 50% 50%, 100% 50%;
+    }
+    20% {
+        background-position: 0 0, 50% 50%, 100% 50%;
+    }
+    40% {
+        background-position: 0 100%, 50% 0, 100% 50%;
+    }
+    60% {
+        background-position: 0 50%, 50% 100%, 100% 0;
+    }
+    80% {
+        background-position: 0 50%, 50% 50%, 100% 100%;
+    }
+    100% {
+        background-position: 0 50%, 50% 50%, 100% 50%;
+    }
+}
+
+
+
+
+
+/* Icon 1 */
+
+.animated-icon1,
+.animated-icon2,
+.animated-icon3 {
+    width: 30px;
+    height: 20px;
+    position: relative;
+    margin: 0px;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: .5s ease-in-out;
+    -moz-transition: .5s ease-in-out;
+    -o-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+    cursor: pointer;
+}
+
+.animated-icon1 span,
+.animated-icon2 span,
+.animated-icon3 span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    border-radius: 9px;
+    opacity: 1;
+    left: 0;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: .25s ease-in-out;
+    -moz-transition: .25s ease-in-out;
+    -o-transition: .25s ease-in-out;
+    transition: .25s ease-in-out;
+}
+
+.animated-icon1 span {
+    background: #fff;
+}
+
+
+.animated-icon1 span:nth-child(1) {
+    top: 0px;
+}
+
+.animated-icon1 span:nth-child(2) {
+    top: 10px;
+}
+
+.animated-icon1 span:nth-child(3) {
+    top: 20px;
+}
+
+.animated-icon1.open span:nth-child(1) {
+    top: 11px;
+    -webkit-transform: rotate(135deg);
+    -moz-transform: rotate(135deg);
+    -o-transform: rotate(135deg);
+    transform: rotate(135deg);
+}
+
+.animated-icon1.open span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+}
+
+.animated-icon1.open span:nth-child(3) {
+    top: 11px;
+    -webkit-transform: rotate(-135deg);
+    -moz-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
+
 
 
 .site-navbar .navbar-header {

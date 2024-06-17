@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-    <meta name="description" content="bootstrap admin template">
+    <meta name="description" content="bootstrap">
     <meta name="author" content="">
 
     <title>Accountant Nsa | مدیریت حساب</title>
@@ -13,8 +13,8 @@
     <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-    <meta name="apple-mobile-web-app-status-bar" content="#db4938"/>
-    <meta name="theme-color" content="#db4938"/>
+    <meta name="apple-mobile-web-app-status-bar" content="#fff"/>
+    <meta name="theme-color" content="#fff"/>
     <link rel="manifest" href="manifest.json">
 
     <!-- Stylesheets -->
@@ -177,7 +177,13 @@
 
 </head>
 <body>
-<div class="loader loader-ellipsis" data-type="ellipsis"></div>
+<!--<div id="loading" style="display: block;">-->
+<!--    <div class="loader loader-ellipsis" data-type="ellipsis"></div>-->
+<!--</div>-->
+<div class="spinner-container" style="display: none;">
+<!--    <div class="custom-loader"></div>-->
+    <div id="loader-spinner" class="loader"></div>
+</div>
 
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
@@ -186,9 +192,11 @@
 <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
 
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-collapse"
+        <button type="button" class="navbar-toggle first-button navbar-toggler collapsed"
+                data-target="#site-navbar-collapse"
                 data-toggle="collapse">
-            <i class="icon wb-menu" aria-hidden="true"></i>
+<!--            <i class="icon wb-menu" aria-hidden="true"></i>-->
+            <div class="animated-icon1"><span></span><span></span><span></span></div>
         </button>
 
         <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
@@ -197,6 +205,18 @@
             </a>
             <span class="navbar-brand-text"> nsa</span>
         </div>
+
+<!--        <button type="button" id="ref" class="btn btn-lg btn-default">-->
+<!--            <i class="icon wb-refresh" aria-hidden="true"></i>-->
+<!--        </button>-->
+        <div style="float: left; padding: 18px 18px;">
+            <button type="button" id="btn_refresh" class="btn_refresh btn btn-sm btn-icon btn-inverse btn-round"
+                    style="font-size: 15px!important;">
+                <i class="icon wb-refresh" aria-hidden="true"></i>
+            </button>
+        </div>
+
+
     </div>
 
     <div class="navbar-container container-fluid">
@@ -209,6 +229,11 @@
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
                 <li class="dropdown">
                     <a href="javascript:void(0)" role="button">
+                        <button class="btn btn-xs btn-default" id="send">فعال سازی نوتیفیکیشن</button>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" role="button">
                         <button type="button"
                                 class="btn_delete_data btn btn-round btn-outline btn-danger btn-sm">حذف داده ها
                         </button>
@@ -218,7 +243,7 @@
                     <a href="javascript:void(0)"
                        data-animation="slide-bottom" role="button">
                         <button type="button"
-                                class="btn_restpre_backup btn btn-round btn-outline btn-default btn-sm">
+                                class="btn_restore_backup btn btn-round btn-outline btn-default btn-sm">
                             بازیابی نسخه
                             پشتیبان
                         </button>
@@ -262,18 +287,17 @@
     </div>
 </nav>
 <!-- Page -->
-<div class="page animsition">
+<div class="page animation">
     <div class="page-content">
-        <div style="float: left">
-            <button type="button" class="btn_refresh btn btn-sm btn-icon btn-inverse btn-round"
-                    data-toggle="tooltip" data-original-title="بروزرسانی صفحه">
-                <i class="icon wb-refresh" aria-hidden="true"></i>
-            </button>
-        </div>
+<!--        <div style="float: left; padding: 10px 0 0 0;">-->
+<!--            <button type="button" id="btn_refresh" class="btn_refresh btn btn-lg btn-icon btn-inverse btn-round">-->
+<!--                <i class="icon wb-refresh" aria-hidden="true"></i>-->
+<!--            </button>-->
+<!--        </div>-->
 
-        <div class="h6" style="float: right">
-            <span class="btn btn-round btn-outline btn-default btn-xs" id="dateTime"></span>
-            به وب اپ مدیریت دخل و خرچ خوش آمدید(ٰنسخه 0.1)
+        <div class="h6" style="text-align: center">
+            <span style="float: left" class="btn btn-round btn-outline btn-default btn-xs" id="dateTime"></span>
+            <span style="float: right"> به وب اپ مدیریت دخل و خرچ خوش آمدید(ٰنسخه 0.1)</span>
         </div>
         <!-- Panel General Button -->
         <div class="panel">
@@ -281,10 +305,6 @@
                 <div class="col-lg-12">
                     <div class="example example-buttons">
                         <br>
-
-
-                        <button class="btn btn-xs btn-default" id="send">فعال سازی نوتیفیکیشن</button>
-<!--                        <input name="notification" id="notification" value="asdsadsad">-->
 
 
                         <button class="sticky_pwa btn btn-warning btn-outline" style="display: none;" id="sticky"
@@ -446,12 +466,20 @@
             <!-- End Panel General Button -->
 
 
-            <div class="wrapper_anim" style="opacity: 0.06;">
+            <div class="wrapper_anim" style="opacity: 0.6;">
                 <svg id="text-anim">
                     <text x="50%" y="50%" dy=".35em" text-anchor="middle">
                         PWA
                     </text>
                 </svg>
+            </div>
+
+
+            <div class="popover-install-pwa">
+                <button type="button" class="btn btn-round close-popover-install-pwa">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive">
             </div>
 
         </div>
@@ -595,7 +623,7 @@
 
 
     <!-- Footer -->
-    <footer class="site-footer" style="position:sticky; bottom: 0; background-color: #eceff0">
+    <footer class="site-footer" style="height: 70px;position:sticky; bottom: 0; background-color: #eceff0">
         <span class="site-footer-legal">© 2024 Nsa</span>
         <div class="site-footer-right">
             طراح و برنامه نویس <i class="red-600 wb wb-heart"></i> <a href="http://naser-zare.ir">ناصرزارع</a>

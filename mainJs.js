@@ -70,7 +70,20 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     });
 
 
-    $(document).on('click', '.btn_restpre_backup', function () {
+
+    // $(document).on('click', '.page-content', function (){
+    //     $('.collapse').toggle().css('height', '100px');
+    //     // $('#site-navbar-collapse').css('height', '1px');
+    //     // $('#site-navbar-collapse').removeClass().addClass('navbar-collapse navbar-collapse-toolbar collapse in');
+    // });
+
+    document.querySelector('.first-button').addEventListener('click', function () {
+
+        document.querySelector('.animated-icon1').classList.toggle('open');
+    });
+
+
+    $(document).on('click', '.btn_restore_backup', function () {
         $('#imgupload').trigger('click');
         document.getElementById('imgupload').addEventListener('change', onChange);
 
@@ -124,7 +137,6 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     $(document).on('click', '#send', function () {
         sendNotification();
     });
-
 
     const registration = await navigator.serviceWorker.getRegistration();
 
@@ -183,12 +195,6 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         DownloadJSON(finalBck);
         // return values;
     });
-
-
-    // $(document).on('click', '.sticky_pwa', function () {
-    //
-    //
-    // })
 
 
     $(document).on('click', '.item_account', function () {
@@ -258,7 +264,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         alertify('با موفقیت ثبت شد', 'success');
         setTimeout(function () {
             location.reload();
-        }, 700);
+        }, 500);
 
     });
 
@@ -344,9 +350,9 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
 
     });
 
-    $(document).on('click', '.btn_refresh', function () {
-        location.reload();
-    });
+    // $(document).on('click', '.btn_refresh', function () {
+    //     location.reload();
+    // });
 
     $(document).on('click', '.btn_delete_data', function () {
         if (confirm("آیا از حذف داده ها اطمینان دارید?")) {
@@ -786,14 +792,15 @@ function getOS() {
     if (window.matchMedia('(display-mode: standalone)').matches) {
         console.log("This is running as standalone.");
         // alert("This is running as standalone.");
-        $('.btn_close').trigger('click');
+        // $('.btn_close').trigger('click');
         // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
         //     show: 'false'
         // });
     } else {
-        $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
-            show: 'true'
-        });
+        // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
+        //     show: 'true'
+        // });
+        $('.popover-install-pwa').css('display', 'flex').fadeIn();
 
         // var uA = navigator.userAgent || navigator.vendor || window.opera;
         // if ((/iPad|iPhone|iPod/.test(uA) && !window.MSStream) || (uA.includes('Mac') && 'ontouchend' in document)){
@@ -842,3 +849,68 @@ function getOS() {
 //     $('body').css('margin-top', '0px');
 //     $(document).unbind("mousemove");
 // });
+
+
+
+(function ($) {
+
+    // setInterval(showNotification, 9000);
+
+    $.fn.refresh_pwa = function() {
+        window.location.reload();
+        // $(".loader22").css("display","block");
+        // alert('loading ...');
+    };
+
+}(jQuery));
+
+
+window.onclick = function(event) {
+        $(document).on('click', '.close-popover-install-pwa', function () {
+            $(".popover-install-pwa").css("display","none").fadeOut();
+        });
+    // alert(event.target.id);
+    if (event.target.id ==='btn_refresh'){
+        // $("#loading").show();
+        $(".spinner-container").css("display","block");
+        // alert('loading ...');
+        $().refresh_pwa();
+    }
+
+    if (event.target.id ==='ref'){
+        // $("#loading").show();
+        $(".spinner-container").css("display","block");
+        // alert('loading ...');
+        window.location.reload();
+    }
+}
+
+
+function doMagic() {
+    async function showNotification2() {
+        const title = 'سلام دوست عزیز';
+
+        const registration = await navigator.serviceWorker.getRegistration();
+
+        if ('showNotification' in registration) {
+            await registration.showNotification(title);
+        } else {
+            // new Notification(title);
+            new Notification(title);
+        }
+    }
+     function sendNotification() {
+        if (Notification.permission === 'granted') {
+            showNotification2();
+        }
+    }
+
+    var magic = function() {
+        // alert('test');
+        sendNotification();
+    };
+    setInterval(magic, 8000);
+    magic();
+}
+
+// doMagic();

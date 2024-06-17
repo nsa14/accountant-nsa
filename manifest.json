@@ -1,11 +1,11 @@
 {
     "name": "nsa-accountant-manager",
     "short_name": "وب اپ مدیریت دخل و خرج",
-    "start_url": "http://naser-zare.ir/accountant/index.html",
-    "background_color": "#62a8ea",
+    "start_url": "https://naser-zare.ir/accountant/index.html",
+    "background_color": "#fff",
     "description": "مدیریت دخل و خرج - ناصر زارع",
     "display": "standalone",
-    "theme_color": "#62a8ea",
+    "theme_color": "#fff",
     "icons": [
         {
             "src": "/assets/images_manifest/icons/apple-touch-icon.png",
