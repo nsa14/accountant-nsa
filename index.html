@@ -12,6 +12,11 @@
 
     <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
     <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <!-- place this in a head section -->
+    <link rel="apple-touch-icon" href="assets/images_manifest/icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images_manifest/icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images_manifest/icons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="assets/images_manifest/icons/apple-touch-icon.png">
 
     <meta name="apple-mobile-web-app-status-bar" content="#fff"/>
     <meta name="theme-color" content="#fff"/>
@@ -476,7 +481,8 @@
 
 
             <div class="popover-install-pwa">
-                <button type="button" class="btn btn-round close-popover-install-pwa">
+                <button type="button" class="btn btn-round
+                 close-popover-install-pwa">
                     <span aria-hidden="true">×</span>
                 </button>
                 <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive">
@@ -699,6 +705,18 @@
 </script>
 <script>
     // navigator.serviceWorker.register("app.js");
+    // Detects if device is on iOS
+    const isIos = () => {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        return /iphone|ipad|ipod/.test( userAgent );
+    }
+    // Detects if device is in standalone mode
+    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+    // Checks if should display install popup notification:
+    if (isIos() && !isInStandaloneMode()) {
+        this.setState({ showInstallMessage: true });
+    }
 </script>
 
 </body>
