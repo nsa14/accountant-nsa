@@ -60,9 +60,10 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         $(".panel").css("min-height", desiredHeight);
 
 
-        let loadData = fetchAllGroupAccount();
+        // let loadData = fetchAllGroupAccount();
         // console.log(loadData);
-        $('#main_data').html(loadData);
+        // local storage load data
+        // $('#main_data').html(loadData);
 
         let defaults = $.components.getDefaults("dataTable");
 
@@ -727,7 +728,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         let ret = [];
         let dataLocal = localStorage.getItem(itemName) || 0;
         if (dataLocal.length <= 0) {
-            ret.push('<span class="badge badge-dark"> تعداد  0 </span>');
+            ret.push('<span class="badge badge-dark"> تعداد: 0</span>');
             return ret;
         }
 
@@ -826,77 +827,8 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
 })(document, window, jQuery);
 
 
-async function sendAjaxDataForm2Server(data) {
-    let responseGet;
-    let ajaxRequest = $.ajax({
-        url: "database.php",
-        type: "post",
-        data: data
-    });
-
-    /*  Request can be aborted by ajaxRequest.abort() */
-    await ajaxRequest.done(function (response, textStatus, jqXHR) {
-        responseGet = JSON.parse(response);
-        // responseGet = JSON.parse((response));
-        // if (responseGet.status){
-        //     alertify(responseGet.message, 'success');
-        // }else{
-        //     alertify(responseGet.message, 'error', false);
-        // }
-    });
-
-    /* On failure of request this function will be called  */
-    ajaxRequest.fail(function () {
-
-    });
-
-
-    console.log(' tt : ' + JSON.stringify(responseGet));
-
-    // return ajaxRequest.promise();
-
-    return JSON.stringify(responseGet);
-}
 
 (function () {
-
-    $(document).on('click', '#btn_save1', function () {
-        let txt_account_name = $('#txt_account_name').val();
-        // if (txt_account_name.length == 0) {
-        //     alertify('فیلد ها رو وارد نمایید', 'error', false);
-        //     return false;
-        // }
-        let currentUser = JSON.parse(localStorage.getItem("nsa_register")) || [];
-        let data = {
-            switch_form: 'add_account',
-            txt_account_name: txt_account_name,
-            current_user_phone: currentUser.phone
-        };
-        // console.log(data);
-        if (data.txt_account_name.length == 0) {
-            alert('فیلد ها رو وارد نمایید');
-            return false;
-        }
-
-
-        (async () => {
-            let finalResult = JSON.parse(await sendAjaxDataForm2Server(data));
-            console.log(' log is : ' + finalResult);
-
-            // if (finalResult.status) {
-            //     alertify(finalResult.message, 'success', false);
-            // } else {
-            //     alertify(finalResult.message, 'error', false);
-            // }
-
-        })()
-
-
-        $('#txt_account_name').val('');
-
-        // alertify('با موفقیت ثبت شد', 'success');
-    });
-
 
     var filtering = $('#exampleFootableFiltering');
     filtering.footable().on('footable_filtering', function (e) {
@@ -934,10 +866,11 @@ function getOS() {
         //     show: 'false'
         // });
     } else {
+        // $('.popover-install-pwa').css('display', 'flex').fadeIn();
+
         // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
         //     show: 'true'
         // });
-        $('.popover-install-pwa').css('display', 'flex').fadeIn();
 
         // var uA = navigator.userAgent || navigator.vendor || window.opera;
         // if ((/iPad|iPhone|iPod/.test(uA) && !window.MSStream) || (uA.includes('Mac') && 'ontouchend' in document)){
