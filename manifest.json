@@ -8,7 +8,7 @@
     "theme_color": "#fff",
     "icons": [
         {
-            "src": "/assets/images_manifest/icons/apple-touch-icon.png",
+            "src": "/accountant/assets/images_manifest/icons/apple-touch-icon.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"

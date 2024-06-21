@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
     <meta name="description" content="bootstrap">
     <meta name="author" content="">
@@ -180,32 +180,13 @@
     <!--        });-->
     <!--    </script>-->
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJ1VQw42Jw9gHo8dE5rftaMxjKZi1zEMY",
-            authDomain: "accountant-b7eaf.firebaseapp.com",
-            projectId: "accountant-b7eaf",
-            storageBucket: "accountant-b7eaf.appspot.com",
-            messagingSenderId: "1016982651796",
-            appId: "1:1016982651796:web:fe9833246dc682b3ee8581"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-    </script>
 </head>
 <body>
 <!--<div id="loading" style="display: block;">-->
 <!--    <div class="loader loader-ellipsis" data-type="ellipsis"></div>-->
 <!--</div>-->
 <div class="spinner-container" style="display: none;">
-<!--    <div class="custom-loader"></div>-->
+    <!--    <div class="custom-loader"></div>-->
     <div id="loader-spinner" class="loader"></div>
 </div>
 
@@ -219,7 +200,7 @@
         <button type="button" class="navbar-toggle first-button navbar-toggler collapsed"
                 data-target="#site-navbar-collapse"
                 data-toggle="collapse">
-<!--            <i class="icon wb-menu" aria-hidden="true"></i>-->
+            <!--            <i class="icon wb-menu" aria-hidden="true"></i>-->
             <div class="animated-icon1"><span></span><span></span><span></span></div>
         </button>
 
@@ -230,9 +211,9 @@
             <span class="navbar-brand-text"> nsa</span>
         </div>
 
-<!--        <button type="button" id="ref" class="btn btn-lg btn-default">-->
-<!--            <i class="icon wb-refresh" aria-hidden="true"></i>-->
-<!--        </button>-->
+        <!--        <button type="button" id="ref" class="btn btn-lg btn-default">-->
+        <!--            <i class="icon wb-refresh" aria-hidden="true"></i>-->
+        <!--        </button>-->
         <div style="float: left; padding: 18px 18px;">
             <button type="button" id="btn_refresh" class="btn_refresh btn btn-sm btn-icon btn-inverse btn-round"
                     style="font-size: 15px!important;">
@@ -251,9 +232,18 @@
 
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+                <!--                <li class="dropdown">-->
+                <!--                    <a href="javascript:void(0)" role="button">-->
+                <!--                        <button class="btn btn-xs btn-default" id="send">فعال سازی نوتیفیکیشن</button>-->
+                <!--                    </a>-->
+                <!--                </li>-->
                 <li class="dropdown">
                     <a href="javascript:void(0)" role="button">
-                        <button class="btn btn-xs btn-default" id="send">فعال سازی نوتیفیکیشن</button>
+                        <button type="button"
+                                class="btn btn-round btn-outline btn-default btn-sm"
+                                data-target="#exampleNiftyFadeScaleNotif"
+                                data-toggle="modal">پیام نوتیفیکیشن
+                        </button>
                     </a>
                 </li>
                 <li class="dropdown">
@@ -302,6 +292,15 @@
                         </button>
                     </a>
                 </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" role="button">
+                        <button type="button"
+                                class="btn btn-round btn-outline btn-default btn-sm"
+                                data-target="#exampleNiftyFadeScaleRegister"
+                                data-toggle="modal">Register
+                        </button>
+                    </a>
+                </li>
 
 
             </ul>
@@ -313,15 +312,15 @@
 <!-- Page -->
 <div class="page animation">
     <div class="page-content">
-<!--        <div style="float: left; padding: 10px 0 0 0;">-->
-<!--            <button type="button" id="btn_refresh" class="btn_refresh btn btn-lg btn-icon btn-inverse btn-round">-->
-<!--                <i class="icon wb-refresh" aria-hidden="true"></i>-->
-<!--            </button>-->
-<!--        </div>-->
+        <!--        <div style="float: left; padding: 10px 0 0 0;">-->
+        <!--            <button type="button" id="btn_refresh" class="btn_refresh btn btn-lg btn-icon btn-inverse btn-round">-->
+        <!--                <i class="icon wb-refresh" aria-hidden="true"></i>-->
+        <!--            </button>-->
+        <!--        </div>-->
 
         <div class="h6" style="text-align: center">
             <span style="float: left" class="btn btn-round btn-outline btn-default btn-xs" id="dateTime"></span>
-            <span style="float: right"> به وب اپ مدیریت دخل و خرچ خوش آمدید(ٰنسخه 0.1)</span>
+            <span style="direction:rtl;float: right"><span id="showusername"></span>, به وب اپ مدیریت دخل و خرچ خوش آمدید(ٰنسخه 0.1)</span>
         </div>
         <!-- Panel General Button -->
         <div class="panel">
@@ -352,7 +351,7 @@
                                 data-toggle="modal" type="button">add new pay
                         </button>
 
-                        <!-- Modal -->
+                        <!-- Modal add new group -->
                         <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScale" aria-hidden="true"
                              aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
                             <div class="modal-dialog">
@@ -646,6 +645,80 @@
     </div>
     <!-- End Modal -->
 
+    <!-- Modal add message notifocation-->
+    <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleNotif" aria-hidden="true"
+         aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
+                            data-dismiss="modal" aria-label="Close">
+                        بستن
+                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="example-title">متن پیام</h4>
+                    <input class="form-control round" type="text" id="txt_notif"
+                           name="txt_notif" value="" placeholder="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default margin-0" data-dismiss="modal">
+                        بستن
+                    </button>
+                    <button type="button" id="btn_save_notif" class="btn btn-primary"> ذخیره
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal -->
+
+
+    <!-- Modal add register form -->
+    <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleRegister" aria-hidden="true"
+         aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2></h2>
+                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
+                            data-dismiss="modal" aria-label="Close">
+                        بستن
+                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form_register">
+                        <input name="switch_form" type="hidden" value="register">
+                        <h4 class="example-title">نام مستعاری را وارد نمایید </h4>
+                        <input class="form-control round" type="text" id="txt_username"
+                               name="txt_username" value="" placeholder="">
+                        <h4 class="example-title">(*) شماره موبایل خود را وارد نمایید </h4>
+                        <input class="form-control round" type="number" id="txt_phone"
+                               name="txt_phone" value="" placeholder="">
+                        <h4 class="example-title">نام مستعاری را وارد نمایید </h4>
+                        <input class="form-control round" type="text" id="txt_password"
+                               name="txt_password" value="" placeholder="">
+                        <br>
+                        <button type="submit" class="btn btn-primary"> ذخیره
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default margin-0" data-dismiss="modal">
+                        بستن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal -->
+
 
     <!-- Footer -->
     <footer class="site-footer" style="height: 70px;position:sticky; bottom: 0; background-color: #eceff0">
@@ -655,6 +728,7 @@
         </div>
     </footer>
 </div>
+
 <!-- Core  -->
 <script src="assets/vendor/jquery/jquery.js"></script>
 <script src="assets/vendor/bootstrap/bootstrap.js"></script>
@@ -665,9 +739,11 @@
 <script src="assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
 
 <!-- Plugins -->
+<script src="assets/vendor/switchery/switchery.min.js"></script>
 <script src="assets/vendor/intro-js/intro.js"></script>
 <script src="assets/vendor/screenfull/screenfull.js"></script>
 <script src="assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+<script src="assets/vendor/matchheight/jquery.matchHeight-min.js"></script>
 
 <script src="assets/vendor/ladda-bootstrap/spin.js"></script>
 <script src="assets/vendor/ladda-bootstrap/ladda.js"></script>
@@ -699,6 +775,7 @@
 <script src="assets/js/components/animsition.js"></script>
 <script src="assets/js/components/slidepanel.js"></script>
 <script src="assets/js/components/switchery.js"></script>
+<script src="assets/js/components/matchheight.js"></script>
 <script src="assets/js/components/buttons.js"></script>
 <script src="assets/js/components/ladda-bootstrap.js"></script>
 
@@ -721,22 +798,47 @@
     }, function (err) {
         console.log('ServiceWorker registration failed: ', err);
     });
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") {
+            navigator.serviceWorker.ready.then(async registration => {
+                await registration.showNotification("به من سر بزن!", {
+                    body: `کلیک کن! خوشحال میشم باز به من سر بزنی`,
+                    silent: true,
+                    tag: "come-back", // required if silent is set to "true"
+                });
+                registration.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.parent.focus();
+                });
+            });
+        } else {
+            navigator.serviceWorker.ready.then(registration => {
+                registration.getNotifications({
+                    tag: 'come-back'
+                }).then((notifications) => {
+                    notifications.forEach(n => {
+                        n.close();
+                    })
+                });
+            })
+        }
+    });
 </script>
-<script>
-    // navigator.serviceWorker.register("app.js");
-    // Detects if device is on iOS
-    const isIos = () => {
-        const userAgent = window.navigator.userAgent.toLowerCase();
-        return /iphone|ipad|ipod/.test( userAgent );
-    }
-    // Detects if device is in standalone mode
-    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+<!--<script>-->
+<!--    // navigator.serviceWorker.register("app.js");-->
+<!--    // Detects if device is on iOS-->
+<!--    const isIos = () => {-->
+<!--        const userAgent = window.navigator.userAgent.toLowerCase();-->
+<!--        return /iphone|ipad|ipod/.test(userAgent);-->
+<!--    }-->
+<!--    // Detects if device is in standalone mode-->
+<!--    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);-->
 
-    // Checks if should display install popup notification:
-    if (isIos() && !isInStandaloneMode()) {
-        this.setState({ showInstallMessage: true });
-    }
-</script>
+<!--    // Checks if should display install popup notification:-->
+<!--    if (isIos() && !isInStandaloneMode()) {-->
+<!--        this.setState({showInstallMessage: true});-->
+<!--    }-->
+<!--</script>-->
 
 </body>
 

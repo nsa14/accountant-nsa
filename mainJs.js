@@ -45,10 +45,10 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
 }
 
 (async function (document, window, $) {
-    'use strict';
+    // 'use strict';
 
-    let Site = window.Site;
-    $(document).ready(function () {
+    // let Site = window.Site;
+    $(document).ready(function ($) {
         Site.run();
 
         getOS();
@@ -67,8 +67,9 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         let defaults = $.components.getDefaults("dataTable");
 
         let t = $('#exampleTableAdd').DataTable(defaults);
-    });
 
+
+    });
 
 
     // $(document).on('click', '.page-content', function (){
@@ -171,6 +172,14 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         }
     };
 
+
+    $(document).on('click', '#btn_save_notif', function () {
+        var txt_notif = $('#txt_notif').val();
+        localStorage.setItem('nsa_notification', txt_notif);
+        alertify('به درستی ثبت شد', 'success');
+
+    });
+
     $(document).on('click', '.btn_backup', function () {
 
         let finalBck = [];
@@ -211,60 +220,91 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         // alert(item_name);
     });
 
+
+    $("#form_register").submit(function (event) {
+        /* Stop form from submitting normally */
+        event.preventDefault();
+
+        /* Get from elements values */
+        let values = $(this).serializeArray();
+        let data = {};
+        $(values).each(function (index, obj) {
+            data[obj.name] = obj.value;
+        });
+
+        if (data.txt_phone.length <= 10) {
+            alert('شماره موبایل صحیح را وارد نمایید', 'error');
+            return false;
+        }
+
+        // let finalResult222 = (sendAjaxDataForm2Server(data));
+
+        (async () => {
+            let finalResult = JSON.parse(await sendAjaxDataForm2Server(data));
+            if (finalResult.status) {
+                let registrar = {username: data.txt_username, phone: data.txt_phone};
+                localStorage.setItem("nsa_register", JSON.stringify(registrar));
+                alertify(finalResult.message, 'success');
+            } else {
+                alertify(finalResult.message, 'error', false);
+            }
+
+        })()
+
+    });
+
     // save1
-    $(document).on('click', '#btn_save1', function () {
+    $(document).on('click', '#btn_save11111', function () {
 
         // alertify();
         // alert('111');
         // return false;
 
-        if (!localStorage.hasOwnProperty('account_name')) {
-            localStorage.setItem("account_name", '');
-        }
+        // if (!localStorage.hasOwnProperty('account_name')) {
+        //     localStorage.setItem("account_name", '');
+        // }
+        //
+        //
+        // let txt_account_name = $('#txt_account_name').val();
+        // if (txt_account_name.length == 0) {
+        //     alertify('فیلد ها رو وارد نمایید', 'error', false);
+        //     return false;
+        // }
+        //
+        //
+        // let hasExist = localStorage.getItem('account_name');
+        // if ((hasExist.indexOf(txt_account_name) >= 0)) {
+        //     alertify('این نام وجود دارد. لطفا نام دیگری را بنویسید', 'error', false);
+        //     return false;
+        // }
+        //
+        //
+        // var newdata = {
+        //     name: txt_account_name,
+        // };
+        // //   if (!localStorage.hasOwnProperty(txt_account_name)) {
+        // //     localStorage.setItem("account_name",'');
+        // //     alert('successfully');
+        // // }else{
+        // // const olddata = JSON.parse(localStorage.getItem("account_name"));
+        // var a = [];
+        // let count = localStorage.getItem('account_name');
+        //
+        // if (count) {   // checks if count is null, undefined, 0, false, NaN
+        //     // console.log('poooooor hast');
+        //     a.push((localStorage.getItem('account_name')));
+        //     // a.push(txt_account_name);
+        // } else {
+        //     // console.log('null hast');
+        // }
+        // a.push(txt_account_name);
+        // localStorage.setItem('account_name', (a));
+        //
+        //
+        // $('#txt_account_name').val('');
+        //
+        // alertify('با موفقیت ثبت شد', 'success');
 
-
-        let txt_account_name = $('#txt_account_name').val();
-        if (txt_account_name.length == 0) {
-            alertify('فیلد ها رو وارد نمایید', 'error');
-            return false;
-        }
-
-
-        let hasExist = localStorage.getItem('account_name');
-        if ((hasExist.indexOf(txt_account_name) >= 0)) {
-            alertify('این نام وجود دارد. لطفا نام دیگری را بنویسید', 'error');
-            return false;
-        }
-
-
-        var newdata = {
-            name: txt_account_name,
-        };
-        //   if (!localStorage.hasOwnProperty(txt_account_name)) {
-        //     localStorage.setItem("account_name",'');
-        //     alert('successfully');
-        // }else{
-        // const olddata = JSON.parse(localStorage.getItem("account_name"));
-        var a = [];
-        let count = localStorage.getItem('account_name');
-
-        if (count) {   // checks if count is null, undefined, 0, false, NaN
-            // console.log('poooooor hast');
-            a.push((localStorage.getItem('account_name')));
-            // a.push(txt_account_name);
-        } else {
-            // console.log('null hast');
-        }
-        a.push(txt_account_name);
-        localStorage.setItem('account_name', (a));
-
-
-        $('#txt_account_name').val('');
-
-        alertify('با موفقیت ثبت شد', 'success');
-        setTimeout(function () {
-            location.reload();
-        }, 500);
 
     });
 
@@ -289,9 +329,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
                 localStorage.setItem('account_name', newArray);
 
                 alertify('حساب حذف شد!', 'success');
-                setTimeout(function () {
-                    location.reload();
-                }, 600);
+
             } else {
                 return false;
             }
@@ -310,7 +348,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         let txt_date = $('#txt_date').val();
 
         if (txt_money.length <= 0) {
-            alertify('فیلد ها رو کامل پر نمایید', 'error');
+            alertify('فیلد ها رو کامل پر نمایید', 'error', false);
             return false;
         }
 
@@ -343,10 +381,6 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         $('#txt_money').val('');
         $('#txt_title').val('');
 
-        setTimeout(function () {
-            location.reload();
-        }, 800);
-
 
     });
 
@@ -375,7 +409,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
             asANumber = +txt_money2;
 
         if (txt_money.length <= 0) {
-            alertify('فیلد ها رو کامل پر نمایید', 'error');
+            alertify('فیلد ها رو کامل پر نمایید', 'error', false);
             return false;
         }
 
@@ -408,10 +442,6 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
 
         $('#txt_money').val('');
         $('#txt_title').val('');
-
-        setTimeout(function () {
-            location.reload();
-        }, 800);
 
 
     });
@@ -588,9 +618,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
             });
         });
         alertify('اطلاعات با موفقیت بازیابی شد', 'success');
-        setTimeout(function () {
-            location.reload();
-        }, 1000);
+
 
     }
 
@@ -598,7 +626,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         let groupLocalStorage = localStorage.getItem('account_name') || [];
         // alert(groupLocalStorage);
         if (groupLocalStorage.length <= 0) {
-            alertify('حسابی برای نمایش رویداد یافت نشد', 'error');
+            alertify('حسابی برای نمایش رویداد یافت نشد', 'error', false);
             return false;
 
         }
@@ -639,7 +667,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         return main_data_temp;
     }
 
-    function alertify(message, type) {
+    function alertify(message, type, refresh = true) {
         // $("#alertifyMessage").data("log-message", message);
         // $("#alertifyMessage").data("type", type);
         // $("#alertifyMessage").trigger("click");
@@ -663,6 +691,12 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
             html: true, // add this if you want to show HTML
             type: type // type can be error/warning/success
         });
+
+        if (refresh) {
+            setTimeout(function () {
+                location.reload();
+            }, 1200);
+        }
 
 
         // bootbox.alert(mainBody).find('.modal-content').css({
@@ -756,11 +790,114 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         });
     }
 
+    async function sendAjaxDataForm2Server(data) {
+        let responseGet;
+        let ajaxRequest = $.ajax({
+            url: "database.php",
+            type: "post",
+            data: data
+        });
+
+        /*  Request can be aborted by ajaxRequest.abort() */
+        await ajaxRequest.done(function (response, textStatus, jqXHR) {
+            responseGet = JSON.parse(response);
+            // responseGet = JSON.parse((response));
+            // if (responseGet.status){
+            //     alertify(responseGet.message, 'success');
+            // }else{
+            //     alertify(responseGet.message, 'error', false);
+            // }
+        });
+
+        /* On failure of request this function will be called  */
+        ajaxRequest.fail(function () {
+            alertify('error fetch', 'error', false);
+        });
+
+
+        console.log(' tt : ' + JSON.stringify(responseGet));
+
+        // return ajaxRequest.promise();
+
+        return JSON.stringify(responseGet);
+    }
+
 
 })(document, window, jQuery);
 
 
+async function sendAjaxDataForm2Server(data) {
+    let responseGet;
+    let ajaxRequest = $.ajax({
+        url: "database.php",
+        type: "post",
+        data: data
+    });
+
+    /*  Request can be aborted by ajaxRequest.abort() */
+    await ajaxRequest.done(function (response, textStatus, jqXHR) {
+        responseGet = JSON.parse(response);
+        // responseGet = JSON.parse((response));
+        // if (responseGet.status){
+        //     alertify(responseGet.message, 'success');
+        // }else{
+        //     alertify(responseGet.message, 'error', false);
+        // }
+    });
+
+    /* On failure of request this function will be called  */
+    ajaxRequest.fail(function () {
+
+    });
+
+
+    console.log(' tt : ' + JSON.stringify(responseGet));
+
+    // return ajaxRequest.promise();
+
+    return JSON.stringify(responseGet);
+}
+
 (function () {
+
+    $(document).on('click', '#btn_save1', function () {
+        let txt_account_name = $('#txt_account_name').val();
+        // if (txt_account_name.length == 0) {
+        //     alertify('فیلد ها رو وارد نمایید', 'error', false);
+        //     return false;
+        // }
+        let currentUser = JSON.parse(localStorage.getItem("nsa_register")) || [];
+        let data = {
+            switch_form: 'add_account',
+            txt_account_name: txt_account_name,
+            current_user_phone: currentUser.phone
+        };
+        // console.log(data);
+        if (data.txt_account_name.length == 0) {
+            alert('فیلد ها رو وارد نمایید');
+            return false;
+        }
+
+
+        (async () => {
+            let finalResult = JSON.parse(await sendAjaxDataForm2Server(data));
+            console.log(' log is : ' + finalResult);
+
+            // if (finalResult.status) {
+            //     alertify(finalResult.message, 'success', false);
+            // } else {
+            //     alertify(finalResult.message, 'error', false);
+            // }
+
+        })()
+
+
+        $('#txt_account_name').val('');
+
+        // alertify('با موفقیت ثبت شد', 'success');
+    });
+
+
     var filtering = $('#exampleFootableFiltering');
     filtering.footable().on('footable_filtering', function (e) {
         var selected = $('#filteringStatus').find(':selected').val();
@@ -851,12 +988,11 @@ function getOS() {
 // });
 
 
-
 (function ($) {
 
     // setInterval(showNotification, 9000);
 
-    $.fn.refresh_pwa = function() {
+    $.fn.refresh_pwa = function () {
         window.location.reload();
         // $(".loader22").css("display","block");
         // alert('loading ...');
@@ -865,21 +1001,21 @@ function getOS() {
 }(jQuery));
 
 
-window.onclick = function(event) {
-        $(document).on('click', '.close-popover-install-pwa', function () {
-            $(".popover-install-pwa").css("display","none").fadeOut();
-        });
+window.onclick = function (event) {
+    $(document).on('click', '.close-popover-install-pwa', function () {
+        $(".popover-install-pwa").css("display", "none").fadeOut();
+    });
     // alert(event.target.id);
-    if (event.target.id ==='btn_refresh'){
+    if (event.target.id === 'btn_refresh') {
         // $("#loading").show();
-        $(".spinner-container").css("display","block");
+        $(".spinner-container").css("display", "block");
         // alert('loading ...');
         $().refresh_pwa();
     }
 
-    if (event.target.id ==='ref'){
+    if (event.target.id === 'ref') {
         // $("#loading").show();
-        $(".spinner-container").css("display","block");
+        $(".spinner-container").css("display", "block");
         // alert('loading ...');
         window.location.reload();
     }
@@ -887,30 +1023,59 @@ window.onclick = function(event) {
 
 
 function doMagic() {
-    async function showNotification2() {
-        const title = 'سلام دوست عزیز';
+
+    showUserName();
+
+    function showUserName() {
+        if (localStorage.getItem("nsa_register") !== null) {
+            let userName = JSON.parse(localStorage.getItem("nsa_register"));
+            $('#showusername').html((userName.username));
+        } else {
+        }
+
+    }
+
+    async function showNotification2(title) {
+        // const title = 'سلام دوست عزیز';
 
         const registration = await navigator.serviceWorker.getRegistration();
 
         if ('showNotification' in registration) {
-            await registration.showNotification(title);
+            await registration.showNotification("پیغام جدید", {
+                body: title,
+            });
         } else {
             // new Notification(title);
-            new Notification(title);
+            new Notification("پیغام جدید", {
+                body: title,
+            });
         }
+        localStorage.removeItem('nsa_notification');
     }
-     function sendNotification() {
+
+    function sendNotification(title) {
         if (Notification.permission === 'granted') {
-            showNotification2();
+            showNotification2(title);
         }
     }
 
-    var magic = function() {
+    var magic = function () {
         // alert('test');
-        sendNotification();
+        if (!localStorage.hasOwnProperty('nsa_notification')) {
+            return false;
+        }
+        if (localStorage.getItem('nsa_notification').length <= 0) {
+            return false;
+        }
+        let loadLocal = localStorage.getItem('nsa_notification');
+        // alert('title : '+loadLocal);
+        sendNotification(loadLocal);
     };
-    setInterval(magic, 8000);
+
+    setInterval(magic, 10000);
     magic();
 }
 
-// doMagic();
+doMagic();
+
+
