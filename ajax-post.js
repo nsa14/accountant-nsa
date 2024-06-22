@@ -1,27 +1,12 @@
-// (function ($) {
-$(window).load(function () {
-    show_account();
-});
-// })(jQuery);
+(function ($) {
+    $(window).load(function () {
+        show_account();
+    });
+})(jQuery);
 
 
 // ---------------------------------------------
 
-
-function alertify(message, type, refresh = true) {
-    swal({
-        title: message,
-        text: "",
-        html: true, // add this if you want to show HTML
-        type: type // type can be error/warning/success
-    });
-
-    if (refresh) {
-        setTimeout(function () {
-            location.reload();
-        }, 1200);
-    }
-}
 
 let btn_insert_account = document.getElementById("btn_save1");
 btn_insert_account.addEventListener("click", () => {
@@ -55,6 +40,7 @@ btn_insert_account.addEventListener("click", () => {
 
 });
 
+
 function show_account() {
     let userName;
     if (localStorage.getItem("nsa_register") !== null) {
@@ -70,10 +56,12 @@ function show_account() {
     (async () => {
         let finalResult = JSON.parse(await postAjax(data));
         if (finalResult.status) {
-            console.log(finalResult.message.account_item);
+            console.log('********** ' + JSON.stringify(finalResult.message));
+            console.log('**** ' + (finalResult.message));
             // drawListItem(finalResult.message);
         } else {
-            console.log(finalResult.message);
+            console.log('error ********** ' + JSON.stringify(finalResult.message));
+            console.log('error **** ' + (finalResult.message));
         }
 
     })()
@@ -82,16 +70,18 @@ function show_account() {
 function countItem(dataLength) {
     let ret = [];
     if (parseInt(dataLength) >= 0) {
-        ret.push('<span class="badge badge-dark"> تعداد ' + count + '</span>');
+        ret.push('<span class="badge badge-dark"> تعداد ' + dataLength + '</span>');
     } else {
         ret.push('<span class="badge badge-dark">تعداد: 0</span>');
     }
     return ret;
 }
 
-function drawListItem(data){
+function drawListItem(dataMain) {
     let main_data_temp = [];
-    alert(data.account_item);
+    // alert(data.account_item);
+    let data = dataMain.account_item;
+    let accountSubCount = dataMain.account_item_value_count;
     // alert(data.length);
     for (var i = 0; i < data.length; i++) {
         // var sumMoney = parseInt(calculateFinalMoneyGroup(test[i]));
@@ -107,6 +97,7 @@ function drawListItem(data){
                 <div class="counter-number-group">\
                   <span class="counter-number-related text-capitalize">' + data[i]['account_name'] + '</span><br>\
                   <span class="counter-number">\
+                ' + countItem(accountSubCount) + '\
                   </span>\
                   </span>\
                 </div>\
@@ -121,6 +112,21 @@ function drawListItem(data){
     $('#main_data').html(main_data_temp);
 }
 
+function alertify(message, type, refresh = true) {
+    swal({
+        title: message,
+        text: "",
+        html: true, // add this if you want to show HTML
+        type: type // type can be error/warning/success
+    });
+
+    if (refresh) {
+        setTimeout(function () {
+            location.reload();
+        }, 1200);
+    }
+}
+
 async function postAjax(data) {
     let results;
 
@@ -129,7 +135,8 @@ async function postAjax(data) {
         method: "POST",
         data: data,
         success: function (dataReturn) {
-            // console.log('result server is : '+JSON.stringify(dataReturn));
+            console.log('result server is 1 : ' + JSON.stringify(dataReturn));
+            console.log('result server is 2 : ' + (dataReturn));
             results = JSON.parse(dataReturn);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

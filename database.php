@@ -9,11 +9,16 @@ set_time_limit(1000);
 
 
 global $var, $conn, $servername, $username, $password;
+
 $servername = "localhost";
 if ($_SERVER['HTTP_HOST'] == '127.0.0.1:8000' || $_SERVER['HTTP_HOST'] == 'localhost:8888') {
     $dbName = 'naserzar_accountant2024';
     $username = "root";
     $password = "root";
+} elseif ($_SERVER['HTTP_HOST'] == 'localhost') {
+    $dbName = 'naserzar_accountant2024';
+    $username = "root";
+    $password = "";
 } else {
     $dbName = 'naserzar_accountant2024';
     $username = "naserzar_accountant123";
@@ -24,9 +29,9 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//        echo "Connected successfully";
+//    echo "Connected successfully";
 } catch (PDOException $e) {
-    echo 'error connected';
+//    echo 'error connected';
     return false;
 //    echo "Connection failed: " . $e->getMessage();
 }
@@ -77,7 +82,7 @@ function show_all_account($dataServer)
     $user = $sthandler->fetch(PDO::FETCH_ASSOC);
 //    return $user['id'];
 //    insert new user
-    $sql = "SELECT * FROM account WHERE user_id=" . $user['id'];
+    $sql = "SELECT * FROM account WHERE user_id=".$user['id']." AND status=0";
     $res = $conn->query($sql);
 
     $subItemValueCount = 0;
@@ -86,16 +91,28 @@ function show_all_account($dataServer)
 
         foreach ($userAccount as $itemSub) {
             $obj = $itemSub;
-            foreach ($obj as $key => $value) {
+//            $finalResult['status'] = true;
+//            $finalResult['message'] = 'G:'.$obj->account_value;
+
+            if(in_array('id', $obj->account_value)) {
+//            if ($obj->account_value !== '[]'){
+                foreach ($obj as $key => $value) {
 //                echo 'Your key is: '.$key.' and the value of the key is:'.$value;
-                $subItemValueCount++;
+                    $subItemValueCount++;
+//                    $finalResult['message'] = $subItemValueCount;
+                }
+            }else{
+                $subItemValueCount = 0;
+//                $finalResult['message'] = '0';
             }
         }
+//        return $finalResult;
+
 
 
 //        return ($subItemValueCount);
         $finalResult['status'] = true;
-        $finalResult['message'] = ['account_item'=>$userAccount, 'account_item_value_count'=>$subItemValueCount];
+        $finalResult['message'] = ['account_item' => $userAccount, 'account_item_value_count' => $subItemValueCount];
 //        $finalResult['messageCount'] = $userAccount;
     } else {
         $finalResult['status'] = false;
