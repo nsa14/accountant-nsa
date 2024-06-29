@@ -398,54 +398,54 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         }
     });
 
-    // btn_add
-    $(document).on('click', '#btn_add', function () {
-
-        let txt_group_name = $('#txt_group_name').val();
-        let txt_money = $('#txt_money').val();
-        let txt_title = $('#txt_title').val();
-        let txt_date = $('#txt_date').val();
-
-        let txt_money2 = txt_money.replace(/,/g, ''),
-            asANumber = +txt_money2;
-
-        if (txt_money.length <= 0) {
-            alertify('فیلد ها رو کامل پر نمایید', 'error', false);
-            return false;
-        }
-
-
-        const oldInfo = JSON.parse(localStorage.getItem(txt_group_name) || '[]');
-
-        if (oldInfo.length > 0) {
-            var lastElementId = oldInfo.reverse()[0].id + 1;
-        } else {
-            var lastElementId = 1;
-        }
-
-        // console.log(lastElementId); //845
-        // return false;
-
-        // var lastElement = oldInfo.at(-1).id || 1;
-// alert(lastElement);
-        const newArray = {
-            id: lastElementId,
-            money: txt_money2,
-            title: txt_title,
-            date: txt_date,
-            type: 'add'
-        };
-
-        oldInfo.push(newArray);
-        localStorage.setItem(txt_group_name, JSON.stringify(oldInfo));
-        // console.log(oldInfo.reverse()[0].id); //845
-        alertify('با موفقیت ثبت شد', 'success');
-
-        $('#txt_money').val('');
-        $('#txt_title').val('');
-
-
-    });
+//     // btn_add
+//     $(document).on('click', '#btn_add', function () {
+//
+//         let txt_group_name = $('#txt_group_name').val();
+//         let txt_money = $('#txt_money').val();
+//         let txt_title = $('#txt_title').val();
+//         let txt_date = $('#txt_date').val();
+//
+//         let txt_money2 = txt_money.replace(/,/g, ''),
+//             asANumber = +txt_money2;
+//
+//         if (txt_money.length <= 0) {
+//             alertify('فیلد ها رو کامل پر نمایید', 'error', false);
+//             return false;
+//         }
+//
+//
+//         const oldInfo = JSON.parse(localStorage.getItem(txt_group_name) || '[]');
+//
+//         if (oldInfo.length > 0) {
+//             var lastElementId = oldInfo.reverse()[0].id + 1;
+//         } else {
+//             var lastElementId = 1;
+//         }
+//
+//         // console.log(lastElementId); //845
+//         // return false;
+//
+//         // var lastElement = oldInfo.at(-1).id || 1;
+// // alert(lastElement);
+//         const newArray = {
+//             id: lastElementId,
+//             money: txt_money2,
+//             title: txt_title,
+//             date: txt_date,
+//             type: 'add'
+//         };
+//
+//         oldInfo.push(newArray);
+//         localStorage.setItem(txt_group_name, JSON.stringify(oldInfo));
+//         // console.log(oldInfo.reverse()[0].id); //845
+//         alertify('با موفقیت ثبت شد', 'success');
+//
+//         $('#txt_money').val('');
+//         $('#txt_title').val('');
+//
+//
+//     });
 
 
     function calculateFinalMoneyGroup(groupArraySelected) {

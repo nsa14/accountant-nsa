@@ -1,4 +1,30 @@
 <?php
+
+$sum = array();
+$data = '[{"id":1,"money":"11111","title":"GGG","date":"۱۴۰۳/۰۴/۰۳","type":"minus"},{"id":3,"money":"147","title":"AAA","date":"۱۴۰۳/۰۴/۰۳","type":"minus"},{"id":2,"money":"3243243","title":"fffff","date":"۱۴۰۳/۰۴/۰۳","type":"add"}]';
+$data = json_decode($data);
+foreach ($data as $item) {
+//    echo($item->money).'<br>';
+    if ($item->type == 'add') {
+        $sum['add'][] = $item->money;
+//        $sum[]['add'] = $item->money;
+    } else if ($item->type == 'minus') {
+//        $sum[]['minus'] = $item->money;
+        $sum['minus'][] = '-' . $item->money;
+    }
+}
+
+$data = array_map(function ($element) {
+    return $element;
+}, $sum);
+
+//print_r($data);
+//echo '<br>';
+//$sumAdd = (array_sum(array_values($sum['add'])));
+//$sumMinus = (array_sum(array_values($sum['minus'])));
+//echo $sumAdd + $sumMinus;
+
+
 // database named “naserzar_accountant2024”.
 //User: naserzar_accountant123
 //pass db : F2b(u(Z$)AoE
@@ -67,7 +93,8 @@ switch ($_REQUEST['switch_form']) {
 
 function show_all_account($dataServer)
 {
-    global $conn;
+    global $conn, $sumMoney, $sumAdd, $sumMinus;;
+    $sumMoney = array();
     $formData = json_decode($dataServer);
 //    check exist phone
     $sthandler = $conn->prepare("SELECT * FROM users WHERE phone = :phone");
@@ -82,37 +109,51 @@ function show_all_account($dataServer)
     $user = $sthandler->fetch(PDO::FETCH_ASSOC);
 //    return $user['id'];
 //    insert new user
-    $sql = "SELECT * FROM account WHERE user_id=".$user['id']." AND status=0";
+    $sql = "SELECT * FROM account WHERE user_id=" . $user['id'] . " AND status=0";
     $res = $conn->query($sql);
 
-    $subItemValueCount = 0;
+
     if ($res) {
         $userAccount = $res->fetchAll(PDO::FETCH_OBJ);
 
         foreach ($userAccount as $itemSub) {
             $obj = $itemSub;
 //            $finalResult['status'] = true;
-//            $finalResult['message'] = 'G:'.$obj->account_value;
-
-            if(in_array('id', $obj->account_value)) {
-//            if ($obj->account_value !== '[]'){
-                foreach ($obj as $key => $value) {
-//                echo 'Your key is: '.$key.' and the value of the key is:'.$value;
-                    $subItemValueCount++;
-//                    $finalResult['message'] = $subItemValueCount;
+//            if ($obj->account_value)
+            $arraySubAccountValue = json_decode($obj->account_value);
+            foreach ($arraySubAccountValue as $item) {
+                if ($item->type == 'add') {
+                    $sumMoney['add'][] = $item->money;
+                } else if ($item->type == 'minus') {
+                    $sumMoney['minus'][] = '-' . $item->money;
                 }
-            }else{
-                $subItemValueCount = 0;
-//                $finalResult['message'] = '0';
             }
+            $sumAdd = (array_sum(array_values(@$sumMoney['add'])));
+            if (!empty($sumMoney['minus'])) {
+                $sumMinus = (array_sum(array_values(@$sumMoney['minus'])));
+            }
+            $sumMoneyFinal = $sumAdd + $sumMinus;
+
+//            if(count($arraySubAccountValue) >0) {
+////            if ($obj->account_value !== '[]'){
+//                foreach ($obj as $key => $value) {
+////                echo 'Your key is: '.$key.' and the value of the key is:'.$value;
+//                    $subItemValueCount++;
+////                    $finalResult['message'] = $subItemValueCount;
+//                }
+//            }else{
+//                $subItemValueCount = 0;
+////                $finalResult['message'] = '0';
+//            }
         }
 //        return $finalResult;
 
 
-
 //        return ($subItemValueCount);
         $finalResult['status'] = true;
-        $finalResult['message'] = ['account_item' => $userAccount, 'account_item_value_count' => $subItemValueCount];
+        $finalResult['message'] = ['account_item' => $userAccount,
+            'account_item_value_count' => count($arraySubAccountValue),
+            'account_sum_money' => $sumMoneyFinal];
 //        $finalResult['messageCount'] = $userAccount;
     } else {
         $finalResult['status'] = false;

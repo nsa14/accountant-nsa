@@ -295,9 +295,10 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)" role="button">
                         <button type="button"
+                                id="btn_register"
                                 class="btn btn-round btn-outline btn-default btn-sm"
                                 data-target="#exampleNiftyFadeScaleRegister"
-                                data-toggle="modal">Register
+                                data-toggle="modal"> ثبت نام
                         </button>
                     </a>
                 </li>
@@ -329,28 +330,6 @@
                     <div class="example example-buttons">
                         <br>
 
-
-                        <button class="sticky_pwa btn btn-warning btn-outline" style="display: none;" id="sticky"
-                                data-plugin="toastr"
-                                data-type="warning"
-                                data-time-out="4000"
-                                data-message="میتوانید نسخه وب اپلیکیشن را از آموزش زیر در گوشی خود فعال نمایید"
-                                data-time-out="0"
-                                href="javascript:void(0)" role="button">Sticky
-                        </button>
-
-
-                        <button style="display: none;" class="btn btn-outline btn-default"
-                                data-target="#exampleNiftyFadeScale"
-                                data-toggle="modal" type="button">add group
-                        </button>
-
-
-                        <button style="display: none;" class="btn btn-outline btn-default btn_add_pay"
-                                data-target="#exampleNiftyFadeScaleAdd"
-                                data-toggle="modal" type="button">add new pay
-                        </button>
-
                         <!-- Modal add new group -->
                         <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScale" aria-hidden="true"
                              aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
@@ -381,7 +360,6 @@
                             </div>
                         </div>
                         <!-- End Modal -->
-
 
                         <!-- Modal -->
                         <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleAdd" aria-hidden="true"
@@ -467,18 +445,6 @@
                         <!-- End Modal -->
 
 
-                        <button type="button" style="display: none;" class="btn btn-success" id="alertifyMessage"
-                                data-plugin="alertify"
-                                data-type="log" data-log-message="Hiding in 10 seconds sacdsadasd">Generate
-                        </button>
-
-                        <button type="button" style="display: none;" class="btn btn-outline btn-default"
-                                id="exampleSuccessMessage"
-                                data-plugin="sweetalert" data-title="Good job!" data-text="You clicked the button!"
-                                data-type="success">Success message
-                        </button>
-
-
                         <div id="main_data" class="row">
 
                         </div>
@@ -488,7 +454,6 @@
             </div>
             <!-- End Panel General Button -->
 
-
             <div class="wrapper_anim" style="opacity: 0.6;">
                 <svg id="text-anim">
                     <text x="50%" y="50%" dy=".35em" text-anchor="middle">
@@ -496,7 +461,6 @@
                     </text>
                 </svg>
             </div>
-
 
             <div class="popover-install-pwa">
                 <button type="button" class="btn btn-round
@@ -676,7 +640,6 @@
     </div>
     <!-- End Modal -->
 
-
     <!-- Modal add register form -->
     <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleRegister" aria-hidden="true"
          aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
@@ -718,7 +681,6 @@
         </div>
     </div>
     <!-- End Modal -->
-
 
     <!-- Footer -->
     <footer class="site-footer" style="height: 70px;position:sticky; bottom: 0; background-color: #eceff0">
@@ -840,6 +802,32 @@
 <!--        this.setState({showInstallMessage: true});-->
 <!--    }-->
 <!--</script>-->
+
+<button class="sticky_pwa btn btn-warning btn-outline" style="display: none;" id="sticky"
+        data-plugin="toastr"
+        data-type="warning"
+        data-time-out="4000"
+        data-message="میتوانید نسخه وب اپلیکیشن را از آموزش زیر در گوشی خود فعال نمایید"
+        data-time-out="0"
+        href="javascript:void(0)" role="button">Sticky
+</button>
+<button type="button" style="display: none;" class="btn btn-success" id="alertifyMessage"
+        data-plugin="alertify"
+        data-type="log" data-log-message="Hiding in 10 seconds sacdsadasd">Generate
+</button>
+<button type="button" style="display: none;" class="btn btn-outline btn-default"
+        id="exampleSuccessMessage"
+        data-plugin="sweetalert" data-title="Good job!" data-text="You clicked the button!"
+        data-type="success">Success message
+</button>
+<button style="display: none;" class="btn btn-outline btn-default"
+        data-target="#exampleNiftyFadeScale"
+        data-toggle="modal" type="button">add group
+</button>
+<button style="display: none;" class="btn btn-outline btn-default btn_add_pay"
+        data-target="#exampleNiftyFadeScaleAdd"
+        data-toggle="modal" type="button">add new pay
+</button>
 
 </body>
 

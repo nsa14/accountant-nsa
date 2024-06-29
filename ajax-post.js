@@ -40,13 +40,54 @@ btn_insert_account.addEventListener("click", () => {
 
 });
 
+let btn_insert_account_item = document.getElementById("btn_add");
+btn_insert_account_item.addEventListener("click", () => {
+    let txt_account_name = $('#txt_account_name').val();
+    // if (txt_account_name.length == 0) {
+    //     alertify('فیلد ها رو وارد نمایید', 'error', false);
+    //     return false;
+    // }
+
+    checkRegister();
+
+    let data = {
+        'switch_form': 'add_account',
+        'txt_account_name': txt_account_name,
+        'current_user_phone': currentUser.phone
+    };
+    // console.log('data send is : '+JSON.stringify(data));
+    if (data.txt_account_name.length == 0) {
+        alert('فیلد ها رو وارد نمایید');
+        return false;
+    }
+
+    (async () => {
+        let finalResult = JSON.parse(await postAjax(data));
+        if (finalResult.status) {
+            alertify(finalResult.message, 'success');
+        } else {
+            alertify(finalResult.message, 'error', false);
+        }
+
+    })()
+    $('#txt_account_name').val('');
+
+});
+
 
 function show_account() {
     let userName;
     if (localStorage.getItem("nsa_register") !== null) {
         userName = JSON.parse(localStorage.getItem("nsa_register"));
         // $('#showusername').html((userName.phone));
+        $('#btn_register').css('display', 'none');
     } else {
+        $('#main_data').html('<div class="alert alert-danger text-center alert-dismissible" role="alert">\n' +
+            '   لطفا ابتدا ثبت نام نمایید \n' +
+            ' </div>');
+        let registrar = {username: data.txt_username, phone: data.txt_phone};
+        localStorage.setItem("nsa_register", JSON.stringify(registrar));
+
         return false;
     }
     let data = {
@@ -56,15 +97,23 @@ function show_account() {
     (async () => {
         let finalResult = JSON.parse(await postAjax(data));
         if (finalResult.status) {
-            console.log('********** ' + JSON.stringify(finalResult.message));
-            console.log('**** ' + (finalResult.message));
-            // drawListItem(finalResult.message);
+            // console.log('********** ' + JSON.stringify(finalResult.message));
+            // console.log('**** ' +  JSON.stringify(finalResult));
+            drawListItem(finalResult.message);
         } else {
             console.log('error ********** ' + JSON.stringify(finalResult.message));
             console.log('error **** ' + (finalResult.message));
         }
 
     })()
+}
+
+function checkRegister(){
+    let currentUser = JSON.parse(localStorage.getItem("nsa_register")) || [];
+    if (currentUser.phone.length <=10){
+        alertify('ابتدا ثبت نام نمایید', 'error', false);
+        return false;
+    }
 }
 
 function countItem(dataLength) {
@@ -77,13 +126,24 @@ function countItem(dataLength) {
     return ret;
 }
 
+function countMoney(sumMoney) {
+    let ret = [];
+    if (parseFloat(sumMoney) >= 0) {
+        ret.push('<span class="badge badge-success"> تراز: ' + sumMoney.toLocaleString() + ' تومان  </span> ');
+    } else {
+        ret.push('<span class="badge badge-danger"> تراز: ' + sumMoney.toLocaleString() + ' تومان  </span> ');
+    }
+    return ret;
+}
+
 function drawListItem(dataMain) {
     let main_data_temp = [];
     // alert(data.account_item);
     let data = dataMain.account_item;
     let accountSubCount = dataMain.account_item_value_count;
+    let accountSumMoney = dataMain.account_sum_money;
     // alert(data.length);
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         // var sumMoney = parseInt(calculateFinalMoneyGroup(test[i]));
         let _data = '<div class="col-sm-12 item_account animation-slide-top" data-plugin="appear"' +
             ' data-animate="slide-top" data-item_name_id="' + data[i]['id'] + '">\
@@ -97,6 +157,7 @@ function drawListItem(dataMain) {
                 <div class="counter-number-group">\
                   <span class="counter-number-related text-capitalize">' + data[i]['account_name'] + '</span><br>\
                   <span class="counter-number">\
+                ' + countMoney(accountSumMoney) + '\
                 ' + countItem(accountSubCount) + '\
                   </span>\
                   </span>\
@@ -135,8 +196,8 @@ async function postAjax(data) {
         method: "POST",
         data: data,
         success: function (dataReturn) {
-            console.log('result server is 1 : ' + JSON.stringify(dataReturn));
-            console.log('result server is 2 : ' + (dataReturn));
+            console.log('result postAjax : ' + (dataReturn));
+            // console.log('result server is 2 : ' + (dataReturn));
             results = JSON.parse(dataReturn);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

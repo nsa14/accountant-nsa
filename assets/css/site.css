@@ -1857,7 +1857,7 @@ body.layout-full {
 }
 .after-run .site-menubar-unfold .page,
 .after-run .site-menubar-unfold .site-footer {
-  margin-left: 260px;
+  margin-left: 0;
 }
 @media (min-width: 768px) {
   .after-run .site-menubar-unfold .site-navbar .navbar-header {
