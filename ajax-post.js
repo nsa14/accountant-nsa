@@ -5,7 +5,7 @@
 })(jQuery);
 
 
-// ---------------------------------------------
+// ------------------- ELEMENT ID --------------------------
 
 
 let btn_insert_account = document.getElementById("btn_save1");
@@ -74,6 +74,52 @@ btn_insert_account_item.addEventListener("click", () => {
 
 });
 
+$("#form_register").submit(function (event) {
+    /* Stop form from submitting normally */
+    event.preventDefault();
+
+    /* Get from elements values */
+    let values = $(this).serializeArray();
+    let data = {};
+    $(values).each(function (index, obj) {
+        data[obj.name] = obj.value;
+    });
+
+    if (data.txt_phone.length <= 10) {
+        alert('شماره موبایل صحیح را وارد نمایید', 'error');
+        return false;
+    }
+
+    // let finalResult222 = (sendAjaxDataForm2Server(data));
+
+    (async () => {
+        let finalResult = JSON.parse(await postAjax(data));
+
+        if (finalResult.status) {
+            if (finalResult.data === 'duplicated') {
+                alertify(finalResult.message, 'warning', false);
+            } else {
+                let registrar = {username: data.txt_username, phone: data.txt_phone};
+                localStorage.setItem("nsa_register", JSON.stringify(registrar));
+                alertify(finalResult.message, 'success');
+            }
+
+        } else {
+            alertify(finalResult.message, 'error', false);
+        }
+
+    })()
+
+});
+
+
+$(document).on('click', '.btn_login_modal', function () {
+    alert(22);
+});
+
+
+// --------------------------- FUNCTIONS ------------------
+
 
 function show_account() {
     let userName;
@@ -104,13 +150,12 @@ function show_account() {
             console.log('error ********** ' + JSON.stringify(finalResult.message));
             console.log('error **** ' + (finalResult.message));
         }
-
     })()
 }
 
-function checkRegister(){
+function checkRegister() {
     let currentUser = JSON.parse(localStorage.getItem("nsa_register")) || [];
-    if (currentUser.phone.length <=10){
+    if (currentUser.phone.length <= 10) {
         alertify('ابتدا ثبت نام نمایید', 'error', false);
         return false;
     }

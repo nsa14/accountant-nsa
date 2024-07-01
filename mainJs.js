@@ -222,37 +222,37 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     });
 
 
-    $("#form_register").submit(function (event) {
-        /* Stop form from submitting normally */
-        event.preventDefault();
-
-        /* Get from elements values */
-        let values = $(this).serializeArray();
-        let data = {};
-        $(values).each(function (index, obj) {
-            data[obj.name] = obj.value;
-        });
-
-        if (data.txt_phone.length <= 10) {
-            alert('شماره موبایل صحیح را وارد نمایید', 'error');
-            return false;
-        }
-
-        // let finalResult222 = (sendAjaxDataForm2Server(data));
-
-        (async () => {
-            let finalResult = JSON.parse(await sendAjaxDataForm2Server(data));
-            if (finalResult.status) {
-                let registrar = {username: data.txt_username, phone: data.txt_phone};
-                localStorage.setItem("nsa_register", JSON.stringify(registrar));
-                alertify(finalResult.message, 'success');
-            } else {
-                alertify(finalResult.message, 'error', false);
-            }
-
-        })()
-
-    });
+    // $("#form_register").submit(function (event) {
+    //     /* Stop form from submitting normally */
+    //     event.preventDefault();
+    //
+    //     /* Get from elements values */
+    //     let values = $(this).serializeArray();
+    //     let data = {};
+    //     $(values).each(function (index, obj) {
+    //         data[obj.name] = obj.value;
+    //     });
+    //
+    //     if (data.txt_phone.length <= 10) {
+    //         alert('شماره موبایل صحیح را وارد نمایید', 'error');
+    //         return false;
+    //     }
+    //
+    //     // let finalResult222 = (sendAjaxDataForm2Server(data));
+    //
+    //     (async () => {
+    //         let finalResult = JSON.parse(await sendAjaxDataForm2Server(data));
+    //         if (finalResult.status) {
+    //             let registrar = {username: data.txt_username, phone: data.txt_phone};
+    //             localStorage.setItem("nsa_register", JSON.stringify(registrar));
+    //             alertify(finalResult.message, 'success');
+    //         } else {
+    //             alertify(finalResult.message, 'error', false);
+    //         }
+    //
+    //     })()
+    //
+    // });
 
     // save1
     $(document).on('click', '#btn_save11111', function () {

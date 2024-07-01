@@ -178,8 +178,9 @@ function insert_user($dataServer)
     $sthandler->execute();
 
     if ($sthandler->rowCount() > 0) {
-        $finalResult['status'] = false;
-        $finalResult['message'] = ' این شماره از قبل ثبت نام نموده است.';
+        $finalResult['status'] = true;
+        $finalResult['data'] = 'duplicated';
+        $finalResult['message'] = ' این شماره از قبل ثبت نام نموده است. روی گزینه "ورود" کلیک نمایید';
         return $finalResult;
     }
 //    insert new user

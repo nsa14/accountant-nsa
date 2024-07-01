@@ -215,10 +215,10 @@
         <!--            <i class="icon wb-refresh" aria-hidden="true"></i>-->
         <!--        </button>-->
         <div style="float: left; padding: 18px 18px;">
-            <button type="button" id="btn_refresh" class="btn_refresh btn btn-sm btn-icon btn-inverse btn-round"
-                    style="font-size: 15px!important;">
-                <i class="icon wb-refresh" aria-hidden="true"></i>
-            </button>
+                <button type="button"  id="btn_refresh" class="btn_refresh btn btn-sm btn-icon btn-inverse btn-round"
+                        style="font-size: 0.98em!important;">بروزرسانی
+                    <i class="icon wb-refresh" aria-hidden="true"></i>
+                </button>
         </div>
 
 
@@ -657,18 +657,20 @@
                 </div>
                 <div class="modal-body">
                     <form id="form_register">
-                        <input name="switch_form" type="hidden" value="register">
+                        <input name="switch_form" type="hidden" value="register" required>
                         <h4 class="example-title">نام </h4>
-                        <input class="form-control round" type="text" id="txt_username"
+                        <input class="form-control round" type="text" id="txt_username" required
                                name="txt_username" value="" placeholder="">
                         <h4 class="example-title">(*) شماره موبایل </h4>
-                        <input class="form-control round" type="number" id="txt_phone"
+                        <input class="form-control round" type="number" id="txt_phone" required
                                name="txt_phone" value="" placeholder="">
                         <h4 class="example-title"> رمز عبور </h4>
-                        <input class="form-control round" type="text" id="txt_password"
+                        <input class="form-control round" type="text" id="txt_password" required
                                name="txt_password" value="" placeholder="">
                         <br>
-                        <button type="submit" class="btn btn-primary"> ذخیره
+                        <button type="submit" class="btn btn-success"> ثبت نام
+                        </button>
+                        <button type="button" class="btn btn-primary btn_login_modal">  ورود
                         </button>
                     </form>
                 </div>
