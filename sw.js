@@ -7,6 +7,24 @@ const preLoad = function () {
 
 self.addEventListener("install", function (event) {
     event.waitUntil(preLoad());
+    (async () => {
+        await aaaavvvvv('dDdDdDdDdDdDdD');
+    })()
+});
+
+self.addEventListener('activate', (event) => {
+    (async () => {
+        await aaaavvvvv('dDdDdDdDdDdDdD');
+    })()
+});
+
+self.addEventListener("fetch", function (event) {
+    event.respondWith(checkResponse(event.request).catch(function () {
+        return returnFromCache(event.request);
+    }));
+    if(!event.request.url.startsWith('http')){
+        event.waitUntil(addToCache(event.request));
+    }
 });
 
 const filesToCache = [
@@ -46,11 +64,23 @@ const returnFromCache = function (request) {
     });
 };
 
-self.addEventListener("fetch", function (event) {
-    event.respondWith(checkResponse(event.request).catch(function () {
-        return returnFromCache(event.request);
-    }));
-    if(!event.request.url.startsWith('http')){
-        event.waitUntil(addToCache(event.request));
+
+async function aaaavvvvv(title) {
+    navigator.serviceWorker.ready.then(async registration => {
+        await registration.showNotification(title, {
+            body: title
+        });
+    });
+
+
+    const registration = await navigator.serviceWorker.getRegistration();
+    if ('showNotification' in registration) {
+        await registration.showNotification(title, {
+            body: title,
+        });
+    } else {
+        new Notification(title, {
+            body: title,
+        });
     }
-});
+}

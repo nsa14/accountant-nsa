@@ -1,53 +1,53 @@
-function generate_chart(title, data1N, data1V, data2N, data2V) {
-    var donut_chart = c3.generate({
-        bindto: '#exampleC3Donut',
-        data: {
-            columns: [
-                [data1N, data1V],
-                [data2N, data2V],
-            ],
-            type: 'donut'
-        },
-        color: {
-            pattern: [$.colors("primary",
-                500), $.colors("red", 400)]
-        },
-        legend: {
-            position: 'center'
-        },
-        donut: {
-            label: {
-                show: true
-            },
-            width: 50,
-            title: title,
-            onclick: function (d, i) {
-            },
-            onmouseover: function (d, i) {
-            },
-            onmouseout: function (d, i) {
-            }
-        }
-    });
-
-    Chart.resize({
-        height: $("#election-stat-chart-05").height(),
-        width: $("#election-stat-chart-05").width()
-    });
-    Chart.zoom({
-        extent: [1, 100] // enable more zooming
-    })
-    Chart.point({
-
-        r: 500
-    })
-
-}
-
+// function generate_chart(title, data1N, data1V, data2N, data2V) {
+//     var donut_chart = c3.generate({
+//         bindto: '#exampleC3Donut',
+//         data: {
+//             columns: [
+//                 [data1N, data1V],
+//                 [data2N, data2V],
+//             ],
+//             type: 'donut'
+//         },
+//         color: {
+//             pattern: [$.colors("primary",
+//                 500), $.colors("red", 400)]
+//         },
+//         legend: {
+//             position: 'center'
+//         },
+//         donut: {
+//             label: {
+//                 show: true
+//             },
+//             width: 50,
+//             title: title,
+//             onclick: function (d, i) {
+//             },
+//             onmouseover: function (d, i) {
+//             },
+//             onmouseout: function (d, i) {
+//             }
+//         }
+//     });
+//
+//     Chart.resize({
+//         height: $("#election-stat-chart-05").height(),
+//         width: $("#election-stat-chart-05").width()
+//     });
+//     Chart.zoom({
+//         extent: [1, 100] // enable more zooming
+//     })
+//     Chart.point({
+//
+//         r: 500
+//     })
+//
+// }
+localStorage.setItem("clickCounter", "0");
 (async function (document, window, $) {
-    // 'use strict';
+    'use strict';
 
-    // let Site = window.Site;
+    let Site = window.Site;
     $(document).ready(function ($) {
         Site.run();
 
@@ -59,16 +59,8 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         let desiredHeight = $(".page").height();
         $(".panel").css("min-height", desiredHeight);
 
-
-        // let loadData = fetchAllGroupAccount();
-        // console.log(loadData);
-        // local storage load data
-        // $('#main_data').html(loadData);
-
         let defaults = $.components.getDefaults("dataTable");
-
         let t = $('#exampleTableAdd').DataTable(defaults);
-
 
     });
 
@@ -92,64 +84,79 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     });
 
 
-    $(document).on('click', '#show_list_item', function () {
-        let txt_group_name = $('#txt_group_name').val();
-        if (localStorage.getItem(txt_group_name).length <= 0) {
-            return false;
-        }
-        let loadLocal = JSON.parse(localStorage.getItem(txt_group_name)) || [];
+    // $(document).on('click', '#show_list_item', function () {
+    //     let txt_group_name = $('#txt_group_name').val();
+    //     if (localStorage.getItem(txt_group_name).length <= 0) {
+    //         return false;
+    //     }
+    //     let loadLocal = JSON.parse(localStorage.getItem(txt_group_name)) || [];
+    //
+    //     let final = [];
+    //
+    //     jQuery.each(loadLocal, function (index, item) {
+    //         // do something with `item` (or `this` is also `item` if you like)
+    //         let _row = '<tr>\n' +
+    //             '                            <td>' + item.title + '</td>\n' +
+    //             '                            <td>' + item.money.toLocaleString() + '</td>\n' +
+    //             '                            <td>' + item.date + '</td>\n' +
+    //             '                            <td>' + showTypeSpan(item.type) + '</td>\n' +
+    //             '                            <td><button class="btn btn-pure btn-danger icon wb-trash"' +
+    //             ' id="btn_del_sel" data-money="' + item.money + '" data-id="' + item.id + '" data-grname="' + txt_group_name + '"></button></td>\n' +
+    //             '                        </tr>';
+    //         final.push(_row);
+    //     });
+    //
+    //     // console.log(final);
+    //
+    //     $('#showGroupTitle').html(' حساب انتخابی : ' + txt_group_name);
+    //     $('#showItem').html(final);
+    //     $('#exampleNiftyFadeScaleShowListItem').modal({
+    //         show: 'true'
+    //     });
+    // });
 
-        let final = [];
 
-        jQuery.each(loadLocal, function (index, item) {
-            // do something with `item` (or `this` is also `item` if you like)
-            let _row = '<tr>\n' +
-                '                            <td>' + item.title + '</td>\n' +
-                '                            <td>' + item.money.toLocaleString() + '</td>\n' +
-                '                            <td>' + item.date + '</td>\n' +
-                '                            <td>' + showTypeSpan(item.type) + '</td>\n' +
-                '                            <td><button class="btn btn-pure btn-danger icon wb-trash"' +
-                ' id="btn_del_sel" data-money="' + item.money + '" data-id="' + item.id + '" data-grname="' + txt_group_name + '"></button></td>\n' +
-                '                        </tr>';
-            final.push(_row);
-        });
-
-        // console.log(final);
-
-        $('#showGroupTitle').html(' حساب انتخابی : ' + txt_group_name);
-        $('#showItem').html(final);
-        $('#exampleNiftyFadeScaleShowListItem').modal({
-            show: 'true'
-        });
-    });
-
-
-    $(document).on('click', '#btn_del_sel', function () {
-        let itemId = $(this).data('id');
-        let groupName = $(this).data('grname');
-        let money = $(this).data('money');
-        if (confirm(" آیا از حذف سطر با مبلغ : " + money + " اطمینان دارید? ")) {
-            btn_delete_item_sel(groupName, itemId);
-        } else {
-            return false;
-        }
-    });
+    // $(document).on('click', '#btn_del_sel', function () {
+    //     let itemId = $(this).data('id');
+    //     let groupName = $(this).data('grname');
+    //     let money = $(this).data('money');
+    //     if (confirm(" آیا از حذف سطر با مبلغ : " + money + " اطمینان دارید? ")) {
+    //         btn_delete_item_sel(groupName, itemId);
+    //     } else {
+    //         return false;
+    //     }
+    // });
 
 
     $(document).on('click', '#send', function () {
         sendNotification();
     });
 
+    const sendNotification = async () => {
+        if (Notification.permission === 'granted') {
+            // alert(' نوتیفیکیشن فعال شد');
+            showNotification('نوتیفیکیشن با موفقیت فعال شد ');
+            localStorage.setItem('nsa_notification_status', 'enabled');
+
+        } else {
+            if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                alert('قبلا نوتیفیکیشن را فعال نموده اید!');
+                // if (permission === 'granted') {
+                //     showNotification('تست می باشد');
+                // }
+            }
+        }
+    };
+
     const registration = await navigator.serviceWorker.getRegistration();
 
-    function showNotification() {
-        const title = 'سلام دوست عزیز';
-
+    function showNotification(title) {
         if ('showNotification' in registration) {
             // registration.showNotification(title);
             setTimeout(function () {
                 registration.showNotification(title);
-            }, 5000);
+            }, 1000);
         } else {
             // new Notification(title);
             setTimeout(function () {
@@ -157,21 +164,6 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
             }, 5000);
         }
     }
-
-    const sendNotification = async () => {
-        if (Notification.permission === 'granted') {
-            alert('مجوز دسترسی به نوتیفیکیشن فعال شد');
-            showNotification('تست می باشد این متن');
-        } else {
-            if (Notification.permission !== 'denied') {
-                const permission = await Notification.requestPermission();
-                alert('قبلا مجوز دسترسی به نوتیفیکیشن را تایید نموده اید!');
-                if (permission === 'granted') {
-                    showNotification('تست می باشد');
-                }
-            }
-        }
-    };
 
 
     $(document).on('click', '#btn_save_notif', function () {
@@ -207,19 +199,19 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     });
 
 
-    $(document).on('click', '.item_account', function () {
-        let item_name = $(this).data("item_name");
-        $('#txt_group_name').val(item_name);
-        $('#show_group_name').html('<span class="label label-outline label-default rtl">نام حساب:' +
-            ' ' + item_name + '</span>');
-        $('#show_taraz_group').html(calculateFinalMoneyGroupTypes(item_name));
-        let chartData = (calculateFinalMoneyGroupTypesChart(item_name));
-        $(".btn_add_pay").trigger("click");
-
-        var varChartData = chartData.split(",");
-        generate_chart('نمودار دریافت و پرداخت ها', 'دریافتی ها', varChartData[0], 'پرداختی ها', varChartData[1]);
-        // alert(item_name);
-    });
+    // $(document).on('click', '.item_account', function () {
+    //     // let item_name = $(this).data("item_name");
+    //     // $('#txt_group_name').val(item_name);
+    //     // $('#show_group_name').html('<span class="label label-outline label-default rtl">نام حساب:' +
+    //     //     ' ' + item_name + '</span>');
+    //     // $('#show_taraz_group').html(calculateFinalMoneyGroupTypes(item_name));
+    //     // let chartData = (calculateFinalMoneyGroupTypesChart(item_name));
+    //     // $(".btn_add_pay").trigger("click");
+    //
+    //     // var varChartData = chartData.split(",");
+    //     // generate_chart('نمودار دریافت و پرداخت ها', 'دریافتی ها', varChartData[0], 'پرداختی ها', varChartData[1]);
+    //     // alert(item_name);
+    // });
 
 
     // $("#form_register").submit(function (event) {
@@ -310,92 +302,118 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     });
 
 
-    $(document).on('click', '.btn_delete_group', function () {
-        let groupNameSelected = $('#txt_group_name').val();
-        if (confirm(" آیا از حذف این حساب " + groupNameSelected + " و داده های آن اطمینان دارید? ")) {
-            if (groupNameSelected.length > 1) {
-                // localStorage.setItem(groupNameSelected, '');
-                localStorage.removeItem(groupNameSelected);
-
-                let groupLocalStorage = localStorage.getItem('account_name') || [];
-                if (groupLocalStorage.length <= 0) {
-                    console.log('not data');
-                    return false;
-                }
-                var var1 = groupLocalStorage.split(",");
-                let newArray = jQuery.grep(var1, function (value) {
-                    return value != groupNameSelected;
-                });
-
-                localStorage.setItem('account_name', newArray);
-
-                alertify('حساب حذف شد!', 'success');
-
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    });
+    // $(document).on('click', '.btn_delete_group', function () {
+    //     let groupNameSelected = $('#txt_group_name').val();
+    //     if (confirm(" آیا از حذف این حساب " + groupNameSelected + " و داده های آن اطمینان دارید? ")) {
+    //         if (groupNameSelected.length > 1) {
+    //             // localStorage.setItem(groupNameSelected, '');
+    //             localStorage.removeItem(groupNameSelected);
+    //
+    //             let groupLocalStorage = localStorage.getItem('account_name') || [];
+    //             if (groupLocalStorage.length <= 0) {
+    //                 console.log('not data');
+    //                 return false;
+    //             }
+    //             var var1 = groupLocalStorage.split(",");
+    //             let newArray = jQuery.grep(var1, function (value) {
+    //                 return value != groupNameSelected;
+    //             });
+    //
+    //             localStorage.setItem('account_name', newArray);
+    //
+    //             alertify('حساب حذف شد!', 'success');
+    //
+    //         } else {
+    //             return false;
+    //         }
+    //     } else {
+    //         return false;
+    //     }
+    // });
 
 
     // btn_minus
-    $(document).on('click', '#btn_minus', function () {
-
-        let txt_group_name = $('#txt_group_name').val();
-        let txt_money = $('#txt_money').val();
-        let txt_title = $('#txt_title').val();
-        let txt_date = $('#txt_date').val();
-
-        if (txt_money.length <= 0) {
-            alertify('فیلد ها رو کامل پر نمایید', 'error', false);
-            return false;
-        }
-
-        let txt_money2 = txt_money.replace(/,/g, ''),
-            asANumber = +txt_money2;
-
-
-        const oldInfo = JSON.parse(localStorage.getItem(txt_group_name) || '[]');
-
-        if (oldInfo.length > 0) {
-            var lastElementId = oldInfo.reverse()[0].id + 1;
-        } else {
-            var lastElementId = 1;
-        }
-
-        const newArray = {
-            id: lastElementId,
-            money: txt_money2,
-            title: txt_title,
-            date: txt_date,
-            type: 'minus'
-        };
-
-        oldInfo.push(newArray);
-
-        localStorage.setItem(txt_group_name, JSON.stringify(oldInfo));
-
-        alertify('با موفقیت ثبت شد', 'success');
-
-        $('#txt_money').val('');
-        $('#txt_title').val('');
-
-
-    });
+    // $(document).on('click', '#btn_minus', function () {
+    //
+    //     let txt_group_name = $('#txt_group_name').val();
+    //     let txt_money = $('#txt_money').val();
+    //     let txt_title = $('#txt_title').val();
+    //     let txt_date = $('#txt_date').val();
+    //
+    //     if (txt_money.length <= 0) {
+    //         alertify('فیلد ها رو کامل پر نمایید', 'error', false);
+    //         return false;
+    //     }
+    //
+    //     let txt_money2 = txt_money.replace(/,/g, ''),
+    //         asANumber = +txt_money2;
+    //
+    //
+    //     const oldInfo = JSON.parse(localStorage.getItem(txt_group_name) || '[]');
+    //
+    //     if (oldInfo.length > 0) {
+    //         var lastElementId = oldInfo.reverse()[0].id + 1;
+    //     } else {
+    //         var lastElementId = 1;
+    //     }
+    //
+    //     const newArray = {
+    //         id: lastElementId,
+    //         money: txt_money2,
+    //         title: txt_title,
+    //         date: txt_date,
+    //         type: 'minus'
+    //     };
+    //
+    //     oldInfo.push(newArray);
+    //
+    //     localStorage.setItem(txt_group_name, JSON.stringify(oldInfo));
+    //
+    //     alertify('با موفقیت ثبت شد', 'success');
+    //
+    //     $('#txt_money').val('');
+    //     $('#txt_title').val('');
+    //
+    //
+    // });
 
     // $(document).on('click', '.btn_refresh', function () {
     //     location.reload();
     // });
 
     $(document).on('click', '.btn_delete_data', function () {
-        if (confirm("آیا از حذف داده ها اطمینان دارید?")) {
+        if (confirm("آیا از خارج شدن اکانت خود اطمینان دارید?")) {
             localStorage.clear();
             location.reload();
         } else {
             return false;
         }
+    });
+
+    $(document).on('click', '#tap10Bar', function () {
+
+        //Check to see if the localstorage variable exists. If it does not, this is the first time coming to the page, and we need to initalize it to 0
+        if (localStorage.getItem("clickCounter") === null) {
+            // Store
+            localStorage.setItem("clickCounter", "0");
+        }
+
+        // Get the value from local storage
+        var value = parseInt(localStorage.getItem("clickCounter"));
+
+        // Incrememtnt the count by 1
+        var newValue = value + 1
+        if (newValue > 10) {
+            // alert('okay');
+
+            $('#exampleNiftyNotification').modal({
+                show: 'true'
+            });
+        }
+
+        //Write the value back to local storage
+        localStorage.setItem("clickCounter", newValue);
+
     });
 
 //     // btn_add
@@ -481,71 +499,71 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         // return false;
     }
 
-    function calculateFinalMoneyGroupTypes(groupArraySelected) {
-        if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
-            return 0;
-        }
+//     function calculateFinalMoneyGroupTypes(groupArraySelected) {
+//         if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
+//             return 0;
+//         }
+//
+//         let final112 = JSON.parse(localStorage.getItem(groupArraySelected));
+// //         let final112 = JSON.parse(groupArraySelected);
+//         var subAdd = [];
+//         var subMinus = [];
+//         // var item = final112.find(item => item.type === 'add');
+//         var result_add = $.grep(final112, function (e) {
+//             return e.type == 'add';
+//         });
+//         $.each(result_add, function (key, value) {
+//             subAdd.push(parseInt(value.money));
+//         });
+//         var result_minus = $.grep(final112, function (e) {
+//             return e.type == 'minus';
+//         });
+//         $.each(result_minus, function (key, value) {
+//             subMinus.push(parseInt(value.money));
+//         });
+//
+//
+//         // var ArrayOfInts = subAdd.map(Number); //Output: [1,2,3]
+//         let sumAddFinal = subAdd.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+//         let sumMinusFinal = subMinus.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+//
+//         // console.log(subMinus);
+//         // return (parseFloat(sumAddFinal) +','+ parseFloat(sumMinusFinal));
+//         return ('تراز ' + '<span class="badge badge-success">' + (sumAddFinal.toLocaleString()) + '</span> ' + ' <span' +
+//             ' class="badge' +
+//             ' badge-danger">' + (sumMinusFinal.toLocaleString()) + '</span>' + '  تومان ');
+//         // return false;
+//     }
 
-        let final112 = JSON.parse(localStorage.getItem(groupArraySelected));
-//         let final112 = JSON.parse(groupArraySelected);
-        var subAdd = [];
-        var subMinus = [];
-        // var item = final112.find(item => item.type === 'add');
-        var result_add = $.grep(final112, function (e) {
-            return e.type == 'add';
-        });
-        $.each(result_add, function (key, value) {
-            subAdd.push(parseInt(value.money));
-        });
-        var result_minus = $.grep(final112, function (e) {
-            return e.type == 'minus';
-        });
-        $.each(result_minus, function (key, value) {
-            subMinus.push(parseInt(value.money));
-        });
-
-
-        // var ArrayOfInts = subAdd.map(Number); //Output: [1,2,3]
-        let sumAddFinal = subAdd.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-        let sumMinusFinal = subMinus.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-        // console.log(subMinus);
-        // return (parseFloat(sumAddFinal) +','+ parseFloat(sumMinusFinal));
-        return ('تراز ' + '<span class="badge badge-success">' + (sumAddFinal.toLocaleString()) + '</span> ' + ' <span' +
-            ' class="badge' +
-            ' badge-danger">' + (sumMinusFinal.toLocaleString()) + '</span>' + '  تومان ');
-        // return false;
-    }
-
-    function calculateFinalMoneyGroupTypesChart(groupArraySelected) {
-        if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
-            return 0;
-        }
-
-        let final112 = JSON.parse(localStorage.getItem(groupArraySelected));
-//         let final112 = JSON.parse(groupArraySelected);
-        var subAdd = [];
-        var subMinus = [];
-        // var item = final112.find(item => item.type === 'add');
-        var result_add = $.grep(final112, function (e) {
-            return e.type == 'add';
-        });
-        $.each(result_add, function (key, value) {
-            subAdd.push(parseInt(value.money));
-        });
-        var result_minus = $.grep(final112, function (e) {
-            return e.type == 'minus';
-        });
-        $.each(result_minus, function (key, value) {
-            subMinus.push(parseInt(value.money));
-        });
-
-
-        let sumAddFinal = subAdd.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-        let sumMinusFinal = subMinus.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-
-        return (sumAddFinal + ',' + sumMinusFinal);
-    }
+//     function calculateFinalMoneyGroupTypesChart(groupArraySelected) {
+//         if (!localStorage.hasOwnProperty(groupArraySelected) || localStorage.getItem(groupArraySelected).length <= 0) {
+//             return 0;
+//         }
+//
+//         let final112 = JSON.parse(localStorage.getItem(groupArraySelected));
+// //         let final112 = JSON.parse(groupArraySelected);
+//         var subAdd = [];
+//         var subMinus = [];
+//         // var item = final112.find(item => item.type === 'add');
+//         var result_add = $.grep(final112, function (e) {
+//             return e.type == 'add';
+//         });
+//         $.each(result_add, function (key, value) {
+//             subAdd.push(parseInt(value.money));
+//         });
+//         var result_minus = $.grep(final112, function (e) {
+//             return e.type == 'minus';
+//         });
+//         $.each(result_minus, function (key, value) {
+//             subMinus.push(parseInt(value.money));
+//         });
+//
+//
+//         let sumAddFinal = subAdd.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+//         let sumMinusFinal = subMinus.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+//
+//         return (sumAddFinal + ',' + sumMinusFinal);
+//     }
 
     function DownloadJSON(...finalbck) {
         //Build a JSON array containing Customer records.
@@ -596,16 +614,16 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         location.reload();
     }
 
-    function showTypeSpan(type) {
-        let ret = [];
-        if (type === 'add') {
-            // <span className="label label-table label-success">Active</span>
-            ret.push('<span class="label label-table label-success"> A </span>');
-        } else {
-            ret.push('<span class="label label-table label-danger"> M </span>');
-        }
-        return ret;
-    }
+    // function showTypeSpan(type) {
+    //     let ret = [];
+    //     if (type === 'add') {
+    //         // <span className="label label-table label-success">Active</span>
+    //         ret.push('<span class="label label-table label-success"> A </span>');
+    //     } else {
+    //         ret.push('<span class="label label-table label-danger"> M </span>');
+    //     }
+    //     return ret;
+    // }
 
     function restoreBackup(fileName) {
         // let bck = '[[{"KeyName":"ssss","KeyValue":"[{\\"id\\":9,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":7,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":5,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"minus\\"},{\\"id\\":3,\\"money\\":\\"3\\",\\"title\\":\\"3\\",\\"date\\":\\"3\\",\\"type\\":\\"minus\\"},{\\"id\\":1,\\"money\\":\\"33\\",\\"title\\":\\"33\\",\\"date\\":\\"33\\",\\"type\\":\\"add\\"},{\\"id\\":2,\\"money\\":\\"44\\",\\"title\\":\\"44\\",\\"date\\":\\"44\\",\\"type\\":\\"add\\"},{\\"id\\":4,\\"money\\":\\"55\\",\\"title\\":\\"55\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":6,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"minus\\"},{\\"id\\":8,\\"money\\":\\"500\\",\\"title\\":\\"minus 500\\",\\"date\\":\\"55\\",\\"type\\":\\"add\\"},{\\"id\\":10,\\"money\\":\\"120000\\",\\"title\\":\\"500 minus\\",\\"date\\":\\"500\\",\\"type\\":\\"add\\"}]"},{"KeyName":"account_name","KeyValue":"ssss,qqqq,wwwww"},{"KeyName":"wwwww","KeyValue":"[{\\"id\\":2,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"},{\\"id\\":1,\\"money\\":\\"22\\",\\"title\\":\\"22\\",\\"date\\":\\"22\\",\\"type\\":\\"add\\"},{\\"id\\":3,\\"money\\":\\"2\\",\\"title\\":\\"2\\",\\"date\\":\\"2\\",\\"type\\":\\"add\\"}]"}]]';
@@ -816,7 +834,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
         });
 
 
-        console.log(' tt : ' + JSON.stringify(responseGet));
+        // console.log(' tt : ' + JSON.stringify(responseGet));
 
         // return ajaxRequest.promise();
 
@@ -825,7 +843,6 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
 
 
 })(document, window, jQuery);
-
 
 
 (function () {
@@ -866,7 +883,7 @@ function getOS() {
         //     show: 'false'
         // });
     } else {
-        // $('.popover-install-pwa').css('display', 'flex').fadeIn();
+        $('.popover-install-pwa').css('display', 'flex').fadeIn();
 
         // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
         //     show: 'true'
@@ -946,12 +963,9 @@ window.onclick = function (event) {
         $().refresh_pwa();
     }
 
-    if (event.target.id === 'ref') {
-        // $("#loading").show();
-        $(".spinner-container").css("display", "block");
-        // alert('loading ...');
-        window.location.reload();
-    }
+    // if (event.target.id === 'tap10Bar') {
+    //
+    // }
 }
 
 
@@ -963,7 +977,13 @@ function doMagic() {
         if (localStorage.getItem("nsa_register") !== null) {
             let userName = JSON.parse(localStorage.getItem("nsa_register"));
             $('#showusername').html((userName.username));
+        }
+
+        let nsa_notification_status = localStorage.getItem('nsa_notification_status') || '';
+        if (nsa_notification_status === 'enabled') {
+            $('#send').css('display', 'none');
         } else {
+            $('#send').css('display', 'block');
         }
 
     }
@@ -1010,5 +1030,6 @@ function doMagic() {
 }
 
 doMagic();
+
 
 

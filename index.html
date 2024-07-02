@@ -185,9 +185,9 @@
 <!--<div id="loading" style="display: block;">-->
 <!--    <div class="loader loader-ellipsis" data-type="ellipsis"></div>-->
 <!--</div>-->
-<div class="spinner-container" style="display: none;">
+<div class="spinner-container" style="display: none; z-index: 99999999999!important;">
     <!--    <div class="custom-loader"></div>-->
-    <div id="loader-spinner" class="loader"></div>
+    <div id="loader-spinner" style="z-index: 999999999999999!important;" class="loader"></div>
 </div>
 
 <!--[if lt IE 8]>
@@ -232,61 +232,62 @@
 
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-                <!--                <li class="dropdown">-->
-                <!--                    <a href="javascript:void(0)" role="button">-->
-                <!--                        <button class="btn btn-xs btn-default" id="send">فعال سازی نوتیفیکیشن</button>-->
-                <!--                    </a>-->
-                <!--                </li>-->
                 <li class="dropdown">
                     <a href="javascript:void(0)" role="button">
-                        <button type="button"
-                                class="btn btn-round btn-outline btn-default btn-sm"
-                                data-target="#exampleNiftyFadeScaleNotif"
-                                data-toggle="modal">پیام نوتیفیکیشن
-                        </button>
+                        <button class="btn btn-sm btn-round btn-outline btn-default" id="send">فعال سازی
+                            نوتیفیکیشن</button>
                     </a>
                 </li>
                 <li class="dropdown">
                     <a href="javascript:void(0)" role="button">
-                        <button type="button"
-                                class="btn_delete_data btn btn-round btn-outline btn-danger btn-sm">حذف داده ها
+                        <button type="button" id="btn_exit"
+                                class="btn_delete_data btn btn-round btn-outline btn-danger btn-sm"> خروج
                         </button>
                     </a>
                 </li>
+<!--                <li class="dropdown">-->
+<!--                    <a href="javascript:void(0)" role="button">-->
+<!--                        <button type="button"-->
+<!--                                class="btn btn-round btn-outline btn-default btn-sm"-->
+<!--                                data-target="#exampleNiftyFadeScaleNotif"-->
+<!--                                data-toggle="modal">پیام نوتیفیکیشن-->
+<!--                        </button>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="dropdown">-->
+<!--                    <a href="javascript:void(0)"-->
+<!--                       data-animation="slide-bottom" role="button">-->
+<!--                        <button type="button"-->
+<!--                                class="btn_restore_backup btn btn-round btn-outline btn-default btn-sm">-->
+<!--                            بازیابی نسخه-->
+<!--                            پشتیبان-->
+<!--                        </button>-->
+<!--                    </a>-->
+<!--                    <input type="file" id="imgupload" accept="*.json" style="display:none"/>-->
+<!--                    <button id="OpenImgUpload" style="display: none;">Image Upload</button>-->
+<!--                </li>-->
+<!--                <li class="dropdown">-->
+<!--                    <a href="javascript:void(0)"-->
+<!--                       data-animation="slide-bottom" role="button">-->
+<!--                        <button type="button" class="btn_backup btn btn-round btn-outline btn-default btn-sm">گرفتن-->
+<!--                            نسخه-->
+<!--                            پشتیبان-->
+<!--                        </button>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="dropdown">-->
+<!--                    <a href="javascript:void(0)"-->
+<!--                       data-animation="slide-bottom" role="button">-->
+<!--                        <button type="button" class="btn btn-round btn-outline btn-default btn-sm"-->
+<!--                                data-target="#exampleNiftyFadeScaleReport"-->
+<!--                                data-toggle="modal">گزارش گیری-->
+<!--                        </button>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="dropdown">
                     <a href="javascript:void(0)"
                        data-animation="slide-bottom" role="button">
-                        <button type="button"
-                                class="btn_restore_backup btn btn-round btn-outline btn-default btn-sm">
-                            بازیابی نسخه
-                            پشتیبان
-                        </button>
-                    </a>
-                    <input type="file" id="imgupload" accept="*.json" style="display:none"/>
-                    <button id="OpenImgUpload" style="display: none;">Image Upload</button>
-                </li>
-                <li class="dropdown">
-                    <a href="javascript:void(0)"
-                       data-animation="slide-bottom" role="button">
-                        <button type="button" class="btn_backup btn btn-round btn-outline btn-default btn-sm">گرفتن
-                            نسخه
-                            پشتیبان
-                        </button>
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="javascript:void(0)"
-                       data-animation="slide-bottom" role="button">
-                        <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
-                                data-target="#exampleNiftyFadeScaleReport"
-                                data-toggle="modal">گزارش گیری
-                        </button>
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="javascript:void(0)"
-                       data-animation="slide-bottom" role="button">
-                        <button type="button" class="btn btn-round btn-outline btn-success btn-sm"
+                        <button type="button" id="btn_add_account" class="btn btn-round btn-outline btn-success btn-sm"
                                 data-target="#exampleNiftyFadeScale"
                                 data-toggle="modal">ایجاد حساب
                         </button>
@@ -321,11 +322,11 @@
 
         <div class="h6" style="text-align: center">
             <span style="float: left" class="btn btn-round btn-outline btn-default btn-xs" id="dateTime"></span>
-            <span style="direction:rtl;float: right"><span id="showusername"></span>, به وب اپ مدیریت دخل و خرچ خوش آمدید(ٰنسخه 0.1)</span>
+            <span style="direction:rtl;float: right"><span id="showusername"></span> وب اپ مدیریت دخل و خرچ(ٰنسخه 0.1)</span>
         </div>
         <!-- Panel General Button -->
         <div class="panel">
-            <div class="panel-heading">
+            <div class="panel-heading" style="padding: 0px 20px 0px 20px;">
                 <div class="col-lg-12">
                     <div class="example example-buttons">
                         <br>
@@ -345,15 +346,15 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <h4 class="example-title">نام گروه</h4>
+                                        <h4 class="example-title">نام حساب</h4>
                                         <input class="form-control round" type="text" id="txt_account_name"
                                                name="txt_account_name" value="" placeholder="">
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default margin-0" data-dismiss="modal">
-                                            بستن
-                                        </button>
-                                        <button type="button" id="btn_save1" class="btn btn-primary"> ذخیره
+<!--                                        <button type="button" class="btn btn-default margin-0" data-dismiss="modal">-->
+<!--                                            بستن-->
+<!--                                        </button>-->
+                                        <button type="button" id="btn_save1" class="btn btn-success"> ذخیره
                                         </button>
                                     </div>
                                 </div>
@@ -388,8 +389,8 @@
 
                                         <hr>
 
-                                        <input type="text" style="display: none;" readonly id="txt_group_name"
-                                               name="txt_group_name"
+                                        <input type="text" style="display: none;" readonly id="txt_account_id"
+                                               name="txt_account_id"
                                                value=""
                                                placeholder="">
 
@@ -409,12 +410,13 @@
 
                                         <br>
 
-                                        <button type="button" id="btn_minus" style="float: left;"
+                                        <button type="button" id="btn_minus" data-type="minus_account_type" style="float: left;"
                                                 class="btn btn-round btn-outline btn-danger btn-md">
                                             پرداخت <i class="icon wb-minus" aria-hidden="true"></i>
                                         </button>
 
-                                        <button type="button" id="btn_add" style="float: right;"
+                                        <button type="button" id="btn_add" data-type="add_account_type" style="float:
+                                        right;"
                                                 class="btn btn-round btn-outline btn-success btn-md">
                                             دریافت <i class="icon wb-plus" aria-hidden="true"></i>
                                         </button>
@@ -430,9 +432,10 @@
                                                         class="icon wb-trash" aria-hidden="true"></i></button>
                                             </div>
                                             <div class="col-xs-10">
-                                                <button type="button" id="show_list_item"
-                                                        class="btn btn-primary btn-block btn-round">نمایش آیتم ها<i
+                                                <button type="button" id="show_list_item" data-style="zoom-in" data-plugin="ladda"
+                                                        class="btn btn-primary btn-block btn-round ladda-button">نمایش آیتم ها<i
                                                         class="icon wb-menu" aria-hidden="true"></i>
+                                                    <span class="ladda-spinner"></span><div class="ladda-progress" style="width: 0px;"></div>
                                                 </button>
                                             </div>
                                         </div>
@@ -662,16 +665,58 @@
                         <input class="form-control round" type="text" id="txt_username" required
                                name="txt_username" value="" placeholder="">
                         <h4 class="example-title">(*) شماره موبایل </h4>
-                        <input class="form-control round" type="number" id="txt_phone" required
+                        <input class="form-control round" type="text" pattern="[0-9]*" id="txt_phone" required
                                name="txt_phone" value="" placeholder="">
-                        <h4 class="example-title"> رمز عبور </h4>
+                        <h4 class="example-title">(*) رمز عبور </h4>
                         <input class="form-control round" type="text" id="txt_password" required
                                name="txt_password" value="" placeholder="">
                         <br>
                         <button type="submit" class="btn btn-success"> ثبت نام
                         </button>
-                        <button type="button" class="btn btn-primary btn_login_modal">  ورود
+                        <button style="float: right;" type="button" class="btn btn-primary btn_login_modal">  ورود
                         </button>
+                    </form>
+                </div>
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-default margin-0" data-dismiss="modal">-->
+<!--                        بستن-->
+<!--                    </button>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+    <!-- End Modal -->
+
+    <!-- Modal add Notification form -->
+    <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyNotification" aria-hidden="true"
+         aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2></h2>
+                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
+                            data-dismiss="modal" aria-label="Close">
+                        بستن
+                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form_notification">
+                        <input name="switch_form" type="hidden" value="insert_notification" required>
+                        <h4 class="example-title">عنوان نوتیفیکیشن </h4>
+                        <input class="form-control round" type="text" id="txt_notification_title" required
+                               name="txt_notification_title" value="پیغام جدید" placeholder="">
+                        <h4 class="example-title">متن نوتیفیکیشن </h4>
+                        <input class="form-control round" type="text" id="txt_notification_message" required
+                               name="txt_notification_message" value="" placeholder="">
+                        <br>
+                        <button type="submit" class="btn btn-success"> ثبت نوتیفیکیشن جدید
+                        </button>
+                        <div id="show_notification_list">
+
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -686,7 +731,7 @@
 
     <!-- Footer -->
     <footer class="site-footer" style="height: 70px;position:sticky; bottom: 0; background-color: #eceff0">
-        <span class="site-footer-legal">© 2024 Nsa</span>
+        <span class="site-footer-legal" id="tap10Bar">© 2024 Nsa</span>
         <div class="site-footer-right">
             طراح و برنامه نویس <i class="red-600 wb wb-heart"></i> <a href="http://naser-zare.ir">ناصرزارع</a>
         </div>
@@ -739,8 +784,8 @@
 <script src="assets/js/components/animsition.js"></script>
 <script src="assets/js/components/slidepanel.js"></script>
 <script src="assets/js/components/switchery.js"></script>
-<script src="assets/js/components/matchheight.js"></script>
-<script src="assets/js/components/buttons.js"></script>
+<!--<script src="assets/js/components/matchheight.js"></script>-->
+<!--<script src="assets/js/components/buttons.js"></script>-->
 <script src="assets/js/components/ladda-bootstrap.js"></script>
 
 <script src="assets/js/components/alertify-js.js"></script>
@@ -758,37 +803,61 @@
 <!--<script src="app.js"></script>-->
 
 <script type="text/javascript">
-    navigator.serviceWorker.register('app.js').then(function (registration) {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+    }
+
+    navigator.serviceWorker.register('sw.js').then(function (registration) {
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
     }, function (err) {
         console.log('ServiceWorker registration failed: ', err);
     });
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") {
-            navigator.serviceWorker.ready.then(async registration => {
-                await registration.showNotification("به من سر بزن!", {
-                    body: `کلیک کن! خوشحال میشم باز به من سر بزنی`,
-                    silent: true,
-                    tag: "come-back", // required if silent is set to "true"
-                });
-                registration.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.parent.focus();
-                });
-            });
-        } else {
-            navigator.serviceWorker.ready.then(registration => {
-                registration.getNotifications({
-                    tag: 'come-back'
-                }).then((notifications) => {
-                    notifications.forEach(n => {
-                        n.close();
-                    })
-                });
-            })
-        }
-    });
+
+
+    // document.addEventListener("visibilitychange", () => {
+    //     if (document.visibilityState === "hidden") {
+    //         navigator.serviceWorker.ready.then(async registration => {
+    //             // await registration.showNotification("به من سر بزن!", {
+    //             //     body: `کلیک کن! خوشحال میشم باز به من سر بزنی`,
+    //             //     silent: true,
+    //             //     tag: "come-back", // required if silent is set to "true"
+    //             // });
+    //             let data = {
+    //                 'switch_form': 'checkPushNotification',
+    //             };
+    //                 let finalResult = JSON.parse(await postAjax(data));
+    //                 // console.log(' MMM : '+ finalResult.message);
+    //                 if (finalResult.status) {
+    //                     await registration.showNotification(finalResult.title, {
+    //                         body: finalResult.message,
+    //                         silent: true,
+    //                         tag: "come-back", // required if silent is set to "true"
+    //                     });
+    //                 }
+    //
+    //
+    //             registration.addEventListener('click', (e) => {
+    //                 e.preventDefault();
+    //                 window.parent.focus();
+    //             });
+    //         });
+    //     } else {
+    //         navigator.serviceWorker.ready.then(registration => {
+    //             registration.getNotifications({
+    //                 tag: 'come-back'
+    //             }).then((notifications) => {
+    //                 notifications.forEach(n => {
+    //                     n.close();
+    //                 })
+    //             });
+    //         })
+    //     }
+    // });
+
+
 </script>
+
+
 <!--<script>-->
 <!--    // navigator.serviceWorker.register("app.js");-->
 <!--    // Detects if device is on iOS-->
