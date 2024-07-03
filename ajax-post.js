@@ -375,7 +375,7 @@ function show_account() {
             // return false;
             // console.log('**** ' +  JSON.stringify(finalResult));
             // console.log('**** ' +  JSON.stringify(finalResult));
-            if (parseInt(finalResult.existCount) <= 0 || finalResult.message.account_item.length <=0) {
+            if (parseInt(finalResult.existCount) <= 0 || finalResult.listItems[0].listSubAccount.length <=0) {
                 $('#main_data').html('<div data-target="#exampleNiftyFadeScale" data-toggle="modal" class="alert' +
                     ' alert-warning text-center' +
                     ' alert-dismissible" role="alert">\n' +
@@ -581,7 +581,7 @@ function alertify(message, type, refresh = true) {
     if (refresh) {
         setTimeout(function () {
             location.reload();
-        }, 1200);
+        }, 1000);
     }
 }
 
