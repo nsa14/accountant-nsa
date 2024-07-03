@@ -146,7 +146,7 @@ switch (@$_REQUEST['switch_form']) {
 function show_all_account($dataServer)
 {
     global $conn, $sumMoney, $sumAdd, $sumMinus;;
-    $sumMoney = array();
+
     $formData = json_decode($dataServer);
 
     $sthandler = $conn->prepare("SELECT * FROM account WHERE user_id = :user_id AND status=1");
@@ -172,7 +172,7 @@ function show_all_account($dataServer)
 //        $finalResult['message'] = $userAccount;
 //        return $finalResult;
 
-        $index = 1;
+        $index = 0;
         foreach ($userAccount as $key => $itemSub) {
             $obj = $itemSub;
 //            $finalResult['status'] = true;
@@ -184,9 +184,10 @@ function show_all_account($dataServer)
 //            $finalResult['message'] = 'NN:' . count($arraySubAccountValue);
 //            return $finalResult;
 
-
+            $sumMoney = array();
             if (is_countable($arraySubAccountValue)) {
                 $countArraySubAccountValue = count($arraySubAccountValue);
+
                 foreach ($arraySubAccountValue as $item) {
                     if ($item->type == 'add') {
                         $sumMoney['add'][] = $item->money;
@@ -194,17 +195,24 @@ function show_all_account($dataServer)
                         $sumMoney['minus'][] = '-' . $item->money;
                     }
                 }
-                $sumAdd = (array_sum(array_values(@$sumMoney['add'])));
-                if (!empty($sumMoney['minus'])) {
-                    $sumMinus = (array_sum(array_values(@$sumMoney['minus'])));
-                }
-                $sumMoneyFinal = $sumAdd + $sumMinus;
-            } else {
-                $countArraySubAccountValue = 0;
-                $sumAdd = 0;
-                $sumMinus = 0;
-                $sumMoneyFinal = 0;
             }
+//            else {
+//                $countArraySubAccountValue = 0;
+//                $sumAdd = 0;
+//                $sumMinus = 0;
+//                $sumMoneyFinal = 0;
+//            }
+
+            $sumAdd = 0;
+            $sumMinus = 0;
+            if (!empty($sumMoney['add'])) {
+                $sumAdd = (array_sum(array_values(@$sumMoney['add'])));
+            }
+//                $sumAdd = (array_sum(array_values(@$sumMoney['add'])));
+            if (!empty($sumMoney['minus'])) {
+                $sumMinus = (array_sum(array_values(@$sumMoney['minus'])));
+            }
+            $sumMoneyFinal = $sumAdd + $sumMinus;
 
 
 //            $finalResult['account_item_value_count'] = $countArraySubAccountValue;
@@ -215,19 +223,27 @@ function show_all_account($dataServer)
 ////                'account_sum_minus' => $sumMinus,
 ////                'account_sum_money' => $sumMoneyFinal
 //            ];
-            $finalResult['existCount'] = $index;
-            $finalResult['message'][] = [
-//                'account_item' => $userAccount,
-                'account_item_value_count' => $countArraySubAccountValue,
+
+//            $finalResult['message'] = [
+////                'account_item' => $userAccount,
+//                'account_item_value_count' => $countArraySubAccountValue,
+//                'account_sum_add' => $sumAdd,
+//                'account_sum_minus' => $sumMinus,
+//                'account_sum_money' => $sumMoneyFinal
+//            ];
+            $finalResult['listItems'][] = ['listSubAccount' => $itemSub, 'account_item_value_count' =>
+                $countArraySubAccountValue,
                 'account_sum_add' => $sumAdd,
                 'account_sum_minus' => $sumMinus,
                 'account_sum_money' => $sumMoneyFinal
+                //                'addddddddddddddddddd' => @$sumMoney['add'],
+//                'minussssssssssssssss' => @$sumMoney['minus'],
             ];
-            $finalResult['message'][] = ['account_item' => $itemSub];
 
             $index++;
         }
         $finalResult['status'] = true;
+        $finalResult['existCount'] = $index;
 //        return $finalResult;
 //        $finalResult['messageCount'] = $userAccount;
     } else {

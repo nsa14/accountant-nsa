@@ -133,20 +133,32 @@ localStorage.setItem("clickCounter", "0");
     });
 
     const sendNotification = async () => {
-        if (Notification.permission === 'granted') {
-            // alert(' نوتیفیکیشن فعال شد');
-            showNotification('نوتیفیکیشن با موفقیت فعال شد ');
-            localStorage.setItem('nsa_notification_status', 'enabled');
-
-        } else {
-            if (Notification.permission !== 'denied') {
-                const permission = await Notification.requestPermission();
-                alert('قبلا نوتیفیکیشن را فعال نموده اید!');
-                // if (permission === 'granted') {
-                //     showNotification('تست می باشد');
-                // }
-            }
+        if (window.Notification) {
+            await Notification.requestPermission((status) => {
+                // alert('Status of the request:'+ status);
+                if (status === 'granted') {
+                    showNotification('نوتیفیکیشن با موفقیت فعال شد ');
+                    localStorage.setItem('nsa_notification_status', 'enabled');
+                    $('#send').css('display','none').slideUp('slow');
+                }
+            });
         }
+
+        // if (Notification.permission === 'granted') {
+        //     // alert(' نوتیفیکیشن فعال شد');
+        //     showNotification('نوتیفیکیشن با موفقیت فعال شد ');
+        //     localStorage.setItem('nsa_notification_status', 'enabled');
+        //
+        // } else {
+        //     if (Notification.permission !== 'denied') {
+        //         const permission = await Notification.requestPermission();
+        //         alert('قبلا نوتیفیکیشن را فعال نموده اید!');
+        //         $('#send').css('display', 'none');
+        //         // if (permission === 'granted') {
+        //         //     showNotification('تست می باشد');
+        //         // }
+        //     }
+        // }
     };
 
     const registration = await navigator.serviceWorker.getRegistration();

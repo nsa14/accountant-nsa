@@ -2,18 +2,10 @@
     $(window).load(function () {
         show_account();
         // 10 secaound check push notification from database server
-        // setInterval(function () {
-        //     checkPushNotification();
-        // }, 10000);
-        // checkPushNotification();
-
-// or via destructuring
-        const {permission} = Notification;
-        if (permission === 'granted') {
-            // permission is granted here
-            localStorage.setItem('nsa_notification_status', 'enabled');
-        }
-
+        setInterval(function () {
+            checkPushNotification();
+        }, 20000);
+        checkPushNotification();
     });
 })(jQuery);
 
@@ -80,7 +72,7 @@ btn_insert_account_item.addEventListener("click", (e) => {
     (async () => {
         let finalResult = JSON.parse(await postAjax(data));
         if (finalResult.status) {
-            alertify(finalResult.message, 'success', false);
+            alertify(finalResult.message, 'success');
         } else {
             alertify(finalResult.message, 'error', false);
         }
@@ -119,7 +111,7 @@ btn_insert_account_item_minus.addEventListener("click", (e) => {
     (async () => {
         let finalResult = JSON.parse(await postAjax(data));
         if (finalResult.status) {
-            alertify(finalResult.message, 'success', false);
+            alertify(finalResult.message, 'success');
         } else {
             alertify(finalResult.message, 'error', false);
         }
@@ -380,17 +372,17 @@ function show_account() {
         let finalResult = JSON.parse(await postAjax(data));
         if (finalResult.status) {
             // console.log('**********AA: ' + JSON.stringify(finalResult.message));
-            console.log('********** AA : ' + JSON.stringify(finalResult));
             // return false;
-            // console.log('**** ' +  JSON.stringify(finalResult.message.account_item));
-            if (finalResult.existCount <= 0) {
+            // console.log('**** ' +  JSON.stringify(finalResult));
+            // console.log('**** ' +  JSON.stringify(finalResult));
+            if (parseInt(finalResult.existCount) <= 0 || finalResult.message.account_item.length <=0) {
                 $('#main_data').html('<div data-target="#exampleNiftyFadeScale" data-toggle="modal" class="alert' +
                     ' alert-warning text-center' +
                     ' alert-dismissible" role="alert">\n' +
                     '   هنوز حسابی تعریف نکرده اید! \n' +
                     ' </div>');
             } else {
-                drawListItem(finalResult);
+                drawListItem(finalResult.listItems);
             }
         } else {
             console.log('error ********** ' + JSON.stringify(finalResult));
@@ -412,9 +404,9 @@ function showTypeSpan(type) {
     let ret = [];
     if (type === 'add') {
         // <span className="label label-table label-success">Active</span>
-        ret.push('<span class="label label-table label-success"> A </span>');
-    } else {
-        ret.push('<span class="label label-table label-danger"> M </span>');
+        ret.push('<span class="label label-table label-success">دریافت</span>');
+    } else if (type === 'minus') {
+        ret.push('<span class="label label-table label-danger">پرداخت</span>');
     }
     return ret;
 }
@@ -496,16 +488,14 @@ function checkPushNotification() {
         let finalResult = JSON.parse(await postAjax(data));
         // console.log(' MMM : '+ finalResult.message);
         if (finalResult.status) {
-            await showPushNotification(finalResult.title, finalResult.message);
-            // if (finalResult.key1) {
-            //     // await showPushNotification(finalResult.title, finalResult.message);
-            //     alertify('if ' + finalResult.message, 'success', false);
-            // } else {
-            //     // await showPushNotification(finalResult.title, finalResult.message);
-            //     alertify('else ' + finalResult.message, 'error', false);
-            // }
-        } else {
-            // alertify(finalResult.message, 'error', false);
+            try{
+                await showPushNotification(finalResult.title, finalResult.message);
+            }
+            catch(err){
+                // handle rejection
+                console.error(err)
+            }
+
         }
 
     })()
@@ -531,51 +521,53 @@ function countMoney(sumMoney) {
 function drawListItem(dataMain) {
     let main_data_temp = [];
     // alert(data.account_item);
-    let data = JSON.parse(dataMain);
-    // console.log(' ////////// '+data);
-    let accountSubCount = dataMain.account_item_value_count;
-    let accountSumMoney = dataMain.account_sum_money;
-    let sum_add_type = dataMain.account_sum_add;
-    let sum_minus_type = dataMain.account_sum_minus;
-    // alert(data.length);
+    let ListItems = (dataMain);
+    // // console.log(' ////drawListItem////// ' + ListItems);
+    // let accountSubCount = dataMain.account_item_value_count;
+    // let accountSumMoney = dataMain.account_sum_money;
+    // let sum_add_type = dataMain.account_sum_add;
+    // let sum_minus_type = dataMain.account_sum_minus;
+    // // alert(data.length);
 
-    var dataa = $.parseJSON(dataMain);
+    // console.log(' ::each 1:: ' + JSON.stringify(ListItems[0]));
+    // return false;
 
-    $(dataa).each(function(i,val)
-    {
-        $.each(val,function(key,val)
-        {
-            console.log(key + " : " + val);
-        });
+
+    $(ListItems).each(function (i, val) {
+        // console.log(' ::each 1:: ' + JSON.stringify(val));
+        // console.log(' ::each 2:: ' + JSON.stringify(val.listSubAccount));
+        let _data = '<div class="col-sm-12 item_account animation-slide-top" data-plugin="appear"' +
+            ' data-animate="slide-top" data-sum_add_type="'+val.account_sum_add+'" data-sum_minus_type="'+val.account_sum_minus+'" data-item_name="' + val.listSubAccount.account_name + '"' +
+            ' data-item_name_id="' + val.listSubAccount.id + '">\
+      <!-- Widget -->\
+      <div class="widget">\
+        <div class="widget-content padding-20 bg-blue-700 border-radius">\
+          <div class="widget-watermark darker font-size-60 margin-15"><i id="icon-animation" class="icon\
+           wb-clipboard flip-vertical-left"\
+           aria-hidden="true"></i></div>\
+          <div class="counter counter-md counter-inverse text-left">\
+            <div class="counter-number-group">\
+              <span class="counter-number-related text-capitalize">' + val.listSubAccount.account_name + '</span><br>\
+                  </span>\
+                  <span class="counter-number">\
+                ' + countMoney(val.account_sum_money) + '\
+                ' + countItem(val.account_item_value_count) + '\
+                  </span>\
+                </div>\
+              </div>\
+            </div>\
+          </div>\
+          <!-- End Widget -->\
+        </div>';
+        main_data_temp.push(_data);
+        // $.each(val.listSubAccount, function (key, value) {
+        //     var key = Object.keys(val)[0];  // get the key name
+        //     var value = val[key];   // from the key name you can get the value
+        // });
     });
 
 
-
-
-
-    // for (let i = 0; i < data.length; i++) {
-    //     let _data = '<div class="col-sm-12 item_account animation-slide-top" data-plugin="appear"' +
-    //         ' data-animate="slide-top" data-sum_add_type="' + sum_add_type + '" data-sum_minus_type="' + sum_minus_type + '" data-item_name="' + data[i]['account_name'] + '" data-item_name_id="' + data[i]['id'] + '">\
-    //       <!-- Widget -->\
-    //       <div class="widget">\
-    //         <div class="widget-content padding-20 bg-blue-700 border-radius">\
-    //           <div class="widget-watermark darker font-size-60 margin-15"><i id="icon-animation" class="icon\
-    //            wb-clipboard flip-vertical-left"\
-    //            aria-hidden="true"></i></div>\
-    //           <div class="counter counter-md counter-inverse text-left">\
-    //             <div class="counter-number-group">\
-    //               <span class="counter-number-related text-capitalize">' + data[i]['account_name'] + '</span><br>\
-    //               </span>\
-    //             </div>\
-    //           </div>\
-    //         </div>\
-    //       </div>\
-    //       <!-- End Widget -->\
-    //     </div>';
-    //     main_data_temp.push(_data);
-    //     // });
-    // }
-    // $('#main_data').html(main_data_temp);
+    $('#main_data').html(main_data_temp);
 }
 
 function alertify(message, type, refresh = true) {

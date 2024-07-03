@@ -68,28 +68,95 @@
 ///// =============================
 self.addEventListener('install', (event) => {
     console.log('Installed');
-    aaaa();
+    // aaaa('Installed');
 
 });
 
 self.addEventListener('activate', (event) => {
     console.log('Activated');
-    aaaa();
+    // aaaa('Activated');
 });
 
 self.addEventListener('fetch', (event) => {
     console.log('Fetch request');
-    aaaa();
+    // pushNotificationSend('Fetch request', 'body');
+    // let data = {
+    //     'switch_form': 'checkPushNotification',
+    // };
+    // (async () => {
+    //     let finalResult = JSON.parse(await postAjax(data));
+    //     // console.log(' MMM : '+ finalResult.message);
+    //     if (finalResult.status) {
+    //         pushNotificationSend(finalResult.title, finalResult.message);
+    //     }
+    //
+    // })()
 });
 
 
-async function aaaa(title) {
+self.addEventListener('push', (e) => {
+    const body = e.data.text() || 'Push message has no payload';
+
+    const options = {
+        body,
+        icon: 'images/checkmark.png',
+        vibrate: [100, 50, 100],
+        data: {
+            dateOfArrival: Date.now(),
+            primaryKey: 1,
+        },
+        actions: [
+            {
+                action: 'explore',
+                title: 'Explore this new world',
+                icon: 'images/checkmark.png',
+            },
+            {
+                action: 'close',
+                title: "I don't want any of this",
+                icon: 'images/xmark.png',
+            },
+        ],
+    };
+    e.waitUntil(self.registration.showNotification('Notification via Server and Push API', options));
+});
+
+
+self.addEventListener('sync', event => {
+    if (event.tag === 'persistToDatabase') {
+        event.waitUntil(persistLocalChanges()
+            .then(() => {
+                self.registration.showNotification("Markdowns synced to server");
+            })
+            .catch(() => {
+                console.log("Error syncing markdowns to server");
+            })
+        );
+    }
+});
+
+function persistLocalChanges() {
+    let data = {
+        'switch_form': 'checkPushNotification'
+    };
+        return $.ajax({
+            url: "database.php",
+            method: "POST",
+            data: data,
+            success: function (dataReturn) {
+                return dataReturn
+            }
+        });
+
+}
+
+
+async function pushNotificationSend(title, body) {
     navigator.serviceWorker.ready.then(async registration => {
         await registration.showNotification(title, {
             body: title
         });
     });
-
 
     const registration = await navigator.serviceWorker.getRegistration();
     if ('showNotification' in registration) {
