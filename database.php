@@ -32,9 +32,9 @@
 //ob_start();
 ini_set("max_execution_time", 10000);
 set_time_limit(10000);
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+// error_reporting(E_ALL);
 
 
 global $var, $conn, $servername, $username, $password;
@@ -83,6 +83,7 @@ try {
 //    echo 'error established!';
 //    return false;
 //}
+
 switch (@$_REQUEST['switch_form']) {
     case 'show_account':
         $result = show_all_account(json_encode($_POST));
@@ -139,7 +140,14 @@ switch (@$_REQUEST['switch_form']) {
         echo json_encode($result);
         break;
 
+    case 'user_list':
+        $result = userList(json_encode($_POST));
+        echo json_encode($result);
+        break;
+
     default:
+        echo json_encode(['status' => false]);
+        break;
 }
 
 
@@ -148,17 +156,20 @@ function show_all_account($dataServer)
     global $conn, $sumMoney, $sumAdd, $sumMinus;;
 
     $formData = json_decode($dataServer);
+//    $id =126;
 
     $sthandler = $conn->prepare("SELECT * FROM account WHERE user_id = :user_id AND status=1");
     $sthandler->bindParam(':user_id', $formData->current_user_id);
+//    $sthandler->bindParam(':user_id', $id);
 
     if ($sthandler->execute()) {
 //        $userAccount = $sthandler->fetchAll(PDO::FETCH_OBJ);
         $userAccount = $sthandler->fetchAll(PDO::FETCH_ASSOC);
-        $arraySubAccountValue = null;
-        $sumMoneyFinal = 0;
-        $countArraySubAccountValue = 0;
+//        $arraySubAccountValue = null;
+//        $sumMoneyFinal = 0;
+//        $countArraySubAccountValue = 0;
 
+        $index = 0;
         if (count($userAccount) <= 0) {
             $finalResult['status'] = true;
             $finalResult['message'] = ['account_item' => '',
@@ -166,13 +177,14 @@ function show_all_account($dataServer)
                 'account_sum_add' => 0,
                 'account_sum_minus' => 0,
                 'account_sum_money' => 0];
+            $finalResult['existCount'] = $index;
             return $finalResult;
         }
 //        $finalResult['status'] = true;
 //        $finalResult['message'] = $userAccount;
 //        return $finalResult;
 
-        $index = 0;
+
         foreach ($userAccount as $key => $itemSub) {
             $obj = $itemSub;
 //            $finalResult['status'] = true;
@@ -185,6 +197,7 @@ function show_all_account($dataServer)
 //            return $finalResult;
 
             $sumMoney = array();
+            $countArraySubAccountValue = 0;
             if (is_countable($arraySubAccountValue)) {
                 $countArraySubAccountValue = count($arraySubAccountValue);
 
@@ -254,11 +267,44 @@ function show_all_account($dataServer)
 
 }
 
+function userList($dataServer)
+{
+//    $finalResult['status'] = true;
+//    $finalResult['message'] = $dataServer;
+//    return $finalResult;
+    global $conn;
+
+    $sthandler = $conn->prepare("SELECT * FROM users");
+    if ($sthandler->execute()) {
+        $userAccount = $sthandler->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($userAccount) <= 0) {
+            $finalResult['status'] = false;
+            $finalResult['message'] = [];
+            return $finalResult;
+        }
+        $finalResult['status'] = true;
+        $userTemp = array();
+        $userTemp[] = '<option value="all">all</option>';
+        foreach ($userAccount as $itemSub) {
+            $userTemp[] = '<option value=' . $itemSub['id'] . '>' . $itemSub['username'] . '</option>';
+        }
+        $finalResult['usersList'] = $userTemp;
+    } else {
+        $finalResult['status'] = false;
+        $finalResult['message'] = 'خطایی رخ داده است';
+    }
+    return $finalResult;
+
+}
+
 function checkPushNotification($dataServer)
 {
-    global $conn, $sumMoney, $finalResult;
+    global $conn, $finalResult;
     $formData = json_decode($dataServer);
-    $sthandler = $conn->prepare("SELECT * FROM push_notification WHERE send_status=0");
+    $userId = $formData->userId;
+
+    $sthandler = $conn->prepare("SELECT * FROM push_notification WHERE send_status=0 AND user_id=" . $userId);
     if ($sthandler->execute()) {
 //        $finalResult['status'] = false;
 //        $finalResult['message'] = $sthandler->rowCount();
@@ -270,13 +316,13 @@ function checkPushNotification($dataServer)
             $finalResult['message'] = $dataRow['message'];
         } else {
             $finalResult['status'] = false;
-            $finalResult['message'] = 'پیغام جدیدی وجود ندارد!';
+//            $finalResult['message'] = 'پیغام جدیدی وجود ندارد!';
         }
         return $finalResult;
     }
 }
 
-function show_all_account_sub_items($dataServer)
+function show_all_account_sub_items($dataServer): array
 {
     global $conn, $sumMoney, $sumAdd, $sumMinus;;
     $sumMoney = array();
@@ -343,7 +389,7 @@ function deleteSubAccountItem($dataServer)
 
     if ($conn->prepare($sql)->execute([$newSubAccountArray, $formData->current_account_id])) {
         $finalResult['status'] = true;
-        $finalResult['message'] = ' عملیات به درستی انجام شد ';
+        $finalResult['message'] = ' انجام شد ';
     } else {
         $finalResult['status'] = false;
         $finalResult['message'] = 'خطایی رخ داده است در حذف !';
@@ -361,7 +407,7 @@ function deleteAccountWithSubs($dataServer)
 
     if ($conn->prepare($sql)->execute([0, $formData->current_account_id])) {
         $finalResult['status'] = true;
-        $finalResult['message'] = ' عملیات به درستی انجام شد ';
+        $finalResult['message'] = ' انجام شد ';
     } else {
         $finalResult['status'] = false;
         $finalResult['message'] = 'خطایی رخ داده است در حذف حساب !';
@@ -397,7 +443,7 @@ function insert_user($dataServer): array
     if ($conn->prepare($sql)->execute($data)) {
         $finalResult['status'] = true;
         $finalResult['userId'] = $conn->lastInsertId();;
-        $finalResult['message'] = ' اطلاعات کاربر ورودی به درستی در سایت ثبت شد';
+        $finalResult['message'] = ' انجام شد ';
     } else {
         $finalResult['status'] = false;
         $finalResult['message'] = 'خطایی رخ داده است';
@@ -416,7 +462,7 @@ function insert_account($dataServer)
 
     if ($sthandler->rowCount() <= 0) {
         $finalResult['status'] = false;
-        $finalResult['message'] = ' ابتدا در برنامه ثبت نام نمایید.';
+        $finalResult['message'] = ' ابتدا در برنامه ثبت نام نمایید ';
         return $finalResult;
     }
     $userId = $sthandler->fetch(PDO::FETCH_ASSOC);
@@ -435,7 +481,7 @@ function insert_account($dataServer)
 
     if ($conn->prepare($sql)->execute($data)) {
         $finalResult['status'] = true;
-        $finalResult['message'] = ' حساب جدید ساخته شد ';
+        $finalResult['message'] = ' انجام شد ';
     } else {
         $finalResult['status'] = false;
         $finalResult['message'] = 'خطایی رخ داده است';
@@ -446,22 +492,92 @@ function insert_account($dataServer)
 function insertNotification($dataServer)
 {
     global $conn;
+//    $finalResult = array();
     $formData = json_decode($dataServer);
+
+//    $finalResult['status'] = true;
+//    $finalResult['message'] = $formData;
+//    return $finalResult;
+
     $data = [
+        'user_id' => $formData->user_id,
         'title' => $formData->txt_notification_title,
         'message' => $formData->txt_notification_message,
     ];
-//    insert new user
-    $sql = "INSERT INTO push_notification (title,message) 
-                        VALUES (:title,:message)";
+//    $sql = '';
+    if (isset($data['user_id'])) {
+        if ($data['user_id'] === 'all') {
+            // send for all user
+            $sql0 = "SELECT * FROM users";
+            $users = $conn->query($sql0);
+            $allUsersList = $users->fetchAll(PDO::FETCH_ASSOC);
+//            $finalResult['status'] = true;
+//            $finalResult['message'] = $allUsersList;
+//            return $finalResult;
 
-    if ($conn->prepare($sql)->execute($data)) {
-        $finalResult['status'] = true;
-        $finalResult['message'] = ' نوتیف جدید ثبت شد ';
-    } else {
-        $finalResult['status'] = false;
-        $finalResult['message'] = 'خطایی در ثبت نوتیف رخ داده است';
+            $sql = 'INSERT INTO push_notification (title,message,user_id) VALUES ';
+            $insertQuery = [];
+            $insertData = [];
+            $n = 0;
+//            $finalResult['status'] = true;
+//            $finalResult['message'] = $allUsersList;
+//            return $finalResult;
+
+            foreach ($allUsersList as $key => $value) {
+//                $insertQuery[] = $value['id'];
+                $insertQuery[] = '(:title' . $n . ', :message' . $n . ', :user_id' . $n . ')';
+                $insertData['title' . $n] = $formData->txt_notification_title;
+                $insertData['message' . $n] = $formData->txt_notification_message;
+                $insertData['user_id' . $n] = $value['id'];
+                $n++;
+            }
+
+//            $finalResult['status'] = true;
+//            $finalResult['message'] = $insertQuery;
+//            return $finalResult;
+
+
+            if (!empty($insertQuery)) {
+                $sql .= implode(', ', $insertQuery);
+                $stmt = $conn->prepare($sql);
+//                $stmt = $conn->query($sql);
+
+                $stmt->execute($insertData);
+                $finalResult['status'] = true;
+                $finalResult['message'] = ' انجام شد ';
+                return $finalResult;
+            }
+
+        } else {
+            //insert notif for selected users
+            $sql = 'INSERT INTO push_notification (title,message,user_id) VALUES ';
+            $insertQuery = [];
+            $insertData = [];
+            $n = 0;
+
+            foreach ($formData->usersSelected as $key => $value) {
+                $insertQuery[] = '(:title' . $n . ', :message' . $n . ', :user_id' . $n . ')';
+                $insertData['title' . $n] = $formData->txt_notification_title;
+                $insertData['message' . $n] = $formData->txt_notification_message;
+                $insertData['user_id' . $n] = $value;
+                $n++;
+            }
+
+            if (!empty($insertQuery)) {
+                $sql .= implode(', ', $insertQuery);
+                $stmt = $conn->prepare($sql);
+//                $stmt = $conn->query($sql);
+
+                $stmt->execute($insertData);
+                $finalResult['status'] = true;
+                $finalResult['message'] = ' انجام شد ';
+                return $finalResult;
+            }
+
+        }
     }
+    $finalResult['status'] = false;
+    $finalResult['message'] = 'error';
     return $finalResult;
 }
 
@@ -529,7 +645,7 @@ function insertSubAccount($dataServer)
 
     if ($conn->prepare($sql)->execute([$FinalNewArrayData, $id])) {
         $finalResult['status'] = true;
-        $finalResult['message'] = ' عملیات به درستی انجام شد ';
+        $finalResult['message'] = ' انجام شد ';
     } else {
         $finalResult['status'] = false;
         $finalResult['message'] = 'خطایی رخ داده است';
@@ -540,10 +656,12 @@ function insertSubAccount($dataServer)
 function setPushNotificationToRead($dataServer): array
 {
     global $conn;
+    $formData = json_decode($dataServer);
+    $user_id = $formData->user_id;
 //    $sql = "UPDATE push_notification SET send_status=1";
-    $sql = "UPDATE push_notification SET send_status=?";
+    $sql = "UPDATE push_notification SET send_status=? WHERE user_id=?";
 
-    if ($conn->prepare($sql)->execute([1])) {
+    if ($conn->prepare($sql)->execute([1, $user_id])) {
         $finalResult['status'] = true;
         $finalResult['message'] = ' نوتیف صفر شد ';
     } else {
@@ -565,7 +683,7 @@ function checkedLogin($dataServer): array
 
     if ($sthandler->rowCount() <= 0) {
         $finalResult['status'] = false;
-        $finalResult['message'] = 'اطلاعات وارد شده صحیح نمی باشد';
+        $finalResult['message'] = 'اطلاعات صحیح نمی باشد';
         return $finalResult;
     }
     $userData = $sthandler->fetch(PDO::FETCH_ASSOC);
@@ -579,7 +697,7 @@ function checkedLogin($dataServer): array
     ];
     $finalResult['status'] = true;
     $finalResult['data'] = $data;
-    $finalResult['message'] = 'ورود انجام شد';
+    $finalResult['message'] = 'خوش آمدید';
     return $finalResult;
 }
 

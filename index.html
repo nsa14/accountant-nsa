@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html class="no-js before-run" lang="en">
+<html class="no-js before-run" lang="en" data-theme="">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
     <meta name="description" content="bootstrap">
-    <meta name="author" content="">
+    <meta name="author" content="naser zare - ناصر زارع - مهندس نرم افزار کامپیوتر">
 
     <title>Accountant Nsa | مدیریت حساب</title>
 
@@ -18,9 +18,11 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images_manifest/icons/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="167x167" href="assets/images_manifest/icons/apple-touch-icon.png">
 
-    <meta name="apple-mobile-web-app-status-bar" content="#fff"/>
-    <meta name="theme-color" content="#fff"/>
+    <!--    <meta name="apple-mobile-web-app-status-bar" content="#fcba03"/>-->
+    <!--    <meta name="theme-color" content="#fcba03"/>-->
+    <!--    <meta name="msapplication-TileColor" content="#0ed3cf">-->
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#f96868">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -49,7 +51,9 @@
 
     <!-- Plugin -->
     <link rel="stylesheet" href="assets/vendor/footable/footable.core.css">
-
+    <!-- bootstrap select -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap-select/bootstrap-select.css">
+    <link rel="stylesheet" href="assets/vendor/multi-select/multi-select.css">
 
     <link rel="stylesheet" href="assets/fonts/vazir/ffa/font-face.css">
     <link rel="stylesheet" href="assets/farsi-date/persian-datepicker.css">
@@ -57,8 +61,9 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/brand-icons/brand-icons.min.css">
-    <!--    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>-->
+
 
     <!-- Inline -->
     <style>
@@ -206,17 +211,16 @@
 
         <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
             <a href="#">
-                <img class="navbar-brand-logo" src="assets/images/logo.png" title="Remark">
+                <img class="navbar-brand-logo" src="assets/images/apple-touch-icon.png" title="Remark">
             </a>
-<!--            <span class="navbar-brand-text"> nsa</span>-->
+            <!--            <span class="navbar-brand-text"> nsa</span>-->
         </div>
 
         <!--        <button type="button" id="ref" class="btn btn-lg btn-default">-->
         <!--            <i class="icon wb-refresh" aria-hidden="true"></i>-->
         <!--        </button>-->
         <div style="float: left; padding: 18px 18px;">
-            <button type="button" id="btn_refresh" class="btn_refresh btn btn-sm btn-icon btn-inverse btn-round"
-                    style="font-size: 0.8em!important;">بروزرسانی
+            <button type="button" id="btn_refresh" class="btn_refresh btn btn-sm btn-icon btn-round">بروزرسانی
                 <i class="icon wb-refresh" aria-hidden="true"></i>
             </button>
         </div>
@@ -227,12 +231,21 @@
     <div class="navbar-container container-fluid">
         <!-- Navbar Collapse -->
         <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse"
-             style="background-color: rgba(5,5,5,0.77);">
+             style="background-color: #62a8ea;">
             <!-- Navbar Toolbar -->
 
-
             <!-- Navbar Toolbar Right -->
-            <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+            <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right position-relative">
+
+                <div class="switcherLD">
+                    <input type="checkbox" class="checkbox" id="checkbox" data-theme-toggle>
+                    <label for="checkbox" class="checkbox-label">
+                        <i id="moon" class="icon fa-moon-o"></i>
+                        <i id="sun" class="icon fa-sun-o"></i>
+                        <span class="ball"></span>
+                    </label>
+                </div>
+
                 <li class="dropdown">
                     <a href="javascript:void(0)" role="button">
                         <button class="btn btn-sm btn-round btn-outline btn-default" id="send">فعال سازی
@@ -243,7 +256,7 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)" role="button">
                         <button type="button" id="btn_exit"
-                                class="btn_delete_data btn btn-round btn-outline btn-danger btn-sm"> خروج
+                                class="btn_delete_data btn btn-round btn-outline btn-default btn-sm"> خروج
                         </button>
                     </a>
                 </li>
@@ -289,9 +302,8 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)"
                        data-animation="slide-bottom" role="button">
-                        <button type="button" id="btn_add_account" class="btn btn-round btn-outline btn-success btn-sm"
-                                data-target="#exampleNiftyFadeScale"
-                                data-toggle="modal">ایجاد حساب
+                        <button type="button" id="btn_add_account" class="btn btn-round btn-outline btn-default btn-sm"
+                        >ایجاد حساب
                         </button>
                     </a>
                 </li>
@@ -322,13 +334,32 @@
         <!--            </button>-->
         <!--        </div>-->
 
-        <div class="h6" style="text-align: center">
-            <span style="float: left" class="btn btn-round btn-outline btn-default btn-xs" id="dateTime"></span>
-            <span style="direction:rtl;float: right"><span
-                    id="showusername"></span> وب اپ مدیریت دخل و خرچ(ٰنسخه 0.1)</span>
+        <div class="h6" style="text-align: center;padding: 5px 10px 0px 10px;">
+            <span style="float: left;" id="dateTime"></span>
+            <span style="direction:rtl;float: right"><i class="icon fa-user"></i> <span
+                    id="showusername"></span></span>
+            <div class="text-right margin-bottom-3">به وب اپ مدیریت دخل و خرچ خوش
+                آمدید<span style="font-size: 0.6em;">(ٰنسخه 0.1)</span></div>
         </div>
         <!-- Panel General Button -->
         <div class="panel">
+
+            <div class="area">
+                <ul class="circles">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+
+
             <div class="panel-heading" style="padding: 0px 20px 0px 20px;">
                 <div class="col-lg-12">
                     <div class="example example-buttons">
@@ -340,10 +371,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
-                                                data-dismiss="modal" aria-label="Close">
-                                            بستن
-                                        </button>
+
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
@@ -371,10 +399,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
-                                                data-dismiss="modal" aria-label="Close">
-                                            بستن
-                                        </button>
+
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
@@ -384,9 +409,8 @@
                                             <div class="col-xs-4"><span id="show_group_name" style="float: right;"
                                             ></span></div>
                                             <div class="col-xs-8"><span
-                                                    class="label label-outline label-default"
                                                     id="show_taraz_group"
-                                                    style="float: left;"
+                                                    style="float: left;font-size: 0.8em"
                                             ></span></div>
                                         </div>
 
@@ -473,10 +497,10 @@
             </div>
 
             <div class="popover-install-pwa" style="display: none!important;">
-                <button type="button" class="btn btn-round
-                 close-popover-install-pwa">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <!--                <button type="button" class="btn btn-round-->
+                <!--                 close-popover-install-pwa">-->
+                <!--                    <span aria-hidden="true">×</span>-->
+                <!--                </button>-->
                 <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive">
             </div>
 
@@ -492,10 +516,7 @@
         <div class="modal-dialog">
             <div class="modal-content" style="max-width: 100%;">
                 <div class="modal-header" style="margin-bottom: 15%;">
-                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm" data-dismiss="modal"
-                            aria-label="Close">
-                        بستن
-                    </button>
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -565,10 +586,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
-                            data-dismiss="modal" aria-label="Close">
-                        بستن
-                    </button>
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -595,29 +613,7 @@
     </div>
     <!-- End Modal -->
 
-    <!-- Modal PWA help-->
-    <div class="modal fade modal-fill-in" id="exampleNiftyFadeScaleHelpPwaInstall" aria-hidden="true"
-         aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn_close btn btn-round btn-outline btn-default btn-sm"
-                            data-dismiss="modal"
-                            aria-label="Close">
-                        بستن
-                    </button>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <img src="assets/pwa-help-ios.png" style="width: 80%;margin: 0 auto;"
-                         class="img-responsive img-rounded">
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Modal -->
+
 
     <!-- Modal add message notifocation-->
     <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleNotif" aria-hidden="true"
@@ -625,10 +621,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
-                            data-dismiss="modal" aria-label="Close">
-                        بستن
-                    </button>
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -640,7 +633,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default margin-0" data-dismiss="modal">
-                        بستن
+                        بستن<span aria-hidden="true">×</span>
                     </button>
                     <button type="button" id="btn_save_notif" class="btn btn-primary"> ذخیره
                     </button>
@@ -657,10 +650,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2></h2>
-                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
-                            data-dismiss="modal" aria-label="Close">
-                        بستن
-                    </button>
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -684,11 +674,7 @@
                         </button>
                     </form>
                 </div>
-                <!--                <div class="modal-footer">-->
-                <!--                    <button type="button" class="btn btn-default margin-0" data-dismiss="modal">-->
-                <!--                        بستن-->
-                <!--                    </button>-->
-                <!--                </div>-->
+
             </div>
         </div>
     </div>
@@ -701,10 +687,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2></h2>
-                    <button type="button" class="btn btn-round btn-outline btn-default btn-sm"
-                            data-dismiss="modal" aria-label="Close">
-                        بستن
-                    </button>
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -718,6 +701,13 @@
                         <h4 class="example-title">متن نوتیفیکیشن </h4>
                         <input class="form-control round" type="text" id="txt_notification_message" required
                                name="txt_notification_message" value="" placeholder="">
+                        <h4 class="example-title"> کاربر مقصد </h4>
+<!--                            <select  id="user_list" multiple data-plugin="selectpicker" data-max-options="200">-->
+                            <select name="user_id"  id="user_list" multiple style="color:blue; ">
+
+                            </select>
+
+
                         <br>
                         <button type="submit" class="btn btn-success"> ثبت نوتیفیکیشن جدید
                         </button>
@@ -728,7 +718,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default margin-0" data-dismiss="modal">
-                        بستن
+                        بستن<span aria-hidden="true">×</span>
                     </button>
                 </div>
             </div>
@@ -774,6 +764,8 @@
 <script src="assets/vendor/c3/c3.min.js"></script>
 
 <script src="assets/vendor/footable/footable.all.min.js"></script>
+<script src="assets/vendor/bootstrap-select/bootstrap-select.js"></script>
+<script src="assets/vendor/multi-select/jquery.multi-select.js"></script>
 
 
 <!-- Scripts -->
@@ -791,30 +783,27 @@
 <script src="assets/js/components/animsition.js"></script>
 <script src="assets/js/components/slidepanel.js"></script>
 <script src="assets/js/components/switchery.js"></script>
-<!--<script src="assets/js/components/matchheight.js"></script>-->
-<!--<script src="assets/js/components/buttons.js"></script>-->
+<script src="assets/js/components/matchheight.js"></script>
+<script src="assets/js/components/buttons.js"></script>
 <script src="assets/js/components/ladda-bootstrap.js"></script>
+<script src="assets/js/components/bootstrap-select.js"></script>
 
 <script src="assets/js/components/alertify-js.js"></script>
 <script src="assets/js/components/toastr.js"></script>
 <script src="assets/js/components/bootbox.js"></script>
 <script src="assets/js/components/bootstrap-sweetalert.js"></script>
+<script src="assets/js/components/multi-select.js"></script>
 
 
 <script src="assets/farsi-date/persian-date-min.js"></script>
 <script src="assets/farsi-date/persian-datepicker.js"></script>
-
-
 <script src="mainJs.js"></script>
 <script src="ajax-post.js"></script>
-<!--<script src="app.js"></script>-->
-
 <script type="text/javascript">
+
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('app.js');
     }
-
-
 
 
     // navigator.serviceWorker.register('app.js').then(function (registration) {
@@ -822,8 +811,6 @@
     // }, function (err) {
     //     console.log('ServiceWorker registration failed: ', err);
     // });
-
-
 
 
     // document.addEventListener("visibilitychange", () => {
@@ -911,7 +898,6 @@
         data-target="#exampleNiftyFadeScaleAdd"
         data-toggle="modal" type="button">add new pay
 </button>
-
 </body>
 
 </html>

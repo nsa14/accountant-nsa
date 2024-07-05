@@ -2,9 +2,9 @@
     $(window).load(function () {
         show_account();
         // 10 secaound check push notification from database server
-        setInterval(function () {
-            checkPushNotification();
-        }, 20000);
+        // setInterval(function () {
+        //     checkPushNotification();
+        // }, 0000);
         checkPushNotification();
     });
 })(jQuery);
@@ -168,16 +168,32 @@ $("#form_notification").submit(function (event) {
     /* Get from elements values */
     let values = $(this).serializeArray();
     let data = {};
+    var options = $('#user_list :selected');
+    var user_selected = $.map(options, function (option) {
+        return option.value;
+    });
+    if (user_selected.length > 0) {
+        data['usersSelected'] = user_selected;
+    } else {
+        return false;
+    }
+
+
     $(values).each(function (index, obj) {
         data[obj.name] = obj.value;
     });
+
 
     if (data.txt_notification_message.length <= 5) {
         alert('متن را وارد نمایید', 'error');
         return false;
     }
+    // console.log(data)
+    // return false;
+
     (async () => {
         let finalResult = JSON.parse(await postAjax(data));
+        // console.log('from php : '+JSON.stringify(finalResult));
         if (finalResult.status) {
             alertify(finalResult.message, 'success',);
         } else {
@@ -315,6 +331,20 @@ $(document).on('click', '.btn_delete_group', function () {
     }
 });
 
+$(document).on('click', '#btn_add_account', function () {
+    $('#exampleNiftyFadeScale').modal({
+        show: 'true'
+    });
+
+    $('#xexampleNiftyFadeScale').find("input[name='txt_account_name']").each(function () {
+        $("input[name='txt_account_name']").focus();
+    })
+
+    // $('#txt_account_name').focus();
+    // $('#txt_account_name').select();
+    // $('#txt_account_name').trigger('click');
+});
+
 $(document).on('click', '#btn_del_sel', function () {
     let accountId = $(this).data('account_id');
     let itemId = $(this).data('id');
@@ -375,7 +405,9 @@ function show_account() {
             // return false;
             // console.log('**** ' +  JSON.stringify(finalResult));
             // console.log('**** ' +  JSON.stringify(finalResult));
-            if (parseInt(finalResult.existCount) <= 0 || finalResult.listItems[0].listSubAccount.length <=0) {
+            // alert(JSON.stringify(finalResult.message.account_item));
+
+            if (parseInt(finalResult.existCount) <= 0 || finalResult.listItems[0].listSubAccount.length <= 0) {
                 $('#main_data').html('<div data-target="#exampleNiftyFadeScale" data-toggle="modal" class="alert' +
                     ' alert-warning text-center' +
                     ' alert-dismissible" role="alert">\n' +
@@ -454,7 +486,7 @@ function generate_chart(title, data1N, data1V, data2N, data2V) {
     });
 }
 
-async function showPushNotification(title, message) {
+async function showPushNotification(title, message, userid) {
     const registration = await navigator.serviceWorker.getRegistration();
 
     if ('showNotification' in registration) {
@@ -470,6 +502,7 @@ async function showPushNotification(title, message) {
     // set push notification db to send
     let data = {
         'switch_form': 'setPushNotificationToRead',
+        'user_id': userid,
     };
     let finalResult = JSON.parse(await postAjax(data));
     // if (finalResult.status) {
@@ -481,30 +514,38 @@ async function showPushNotification(title, message) {
 }
 
 function checkPushNotification() {
+    let userName;
+    if (localStorage.getItem("nsa_register") !== null) {
+        userName = JSON.parse(localStorage.getItem("nsa_register"));
+    }
+    // alert(userName.userid);
+    if (userName.length <= 0) {
+        return false;
+    }
     let data = {
         'switch_form': 'checkPushNotification',
+        'userId': userName.userid,
     };
     (async () => {
         let finalResult = JSON.parse(await postAjax(data));
         // console.log(' MMM : '+ finalResult.message);
         if (finalResult.status) {
-            try{
-                await showPushNotification(finalResult.title, finalResult.message);
-            }
-            catch(err){
+            try {
+                await showPushNotification(finalResult.title, finalResult.message, userName.userid);
+            } catch (err) {
                 // handle rejection
                 console.error(err)
             }
-
         }
-
     })()
 }
 
 function calculateFinalMoneyGroupTypes(sumAddFinal, sumMinusFinal) {
-    return ('تراز ' + '<span class="badge badge-success">' + (sumAddFinal.toLocaleString()) + '</span> ' + ' <span' +
-        ' class="badge' +
-        ' badge-danger">' + (sumMinusFinal.toLocaleString()) + '</span>' + '  تومان ');
+    return ('تراز ' + '<span class="text-success">' + (sumAddFinal.toLocaleString()) + '</span> ' + ' <span' +
+        ' class="text-danger">' + (sumMinusFinal.toLocaleString()) + '</span>' + '  تومان ');
+    // return ('تراز ' + '<span class="badge badge-success">' + (sumAddFinal.toLocaleString()) + '</span> ' + ' <span' +
+    //     ' class="badge' +
+    //     ' badge-danger">' + (sumMinusFinal.toLocaleString()) + '</span>' + '  تومان ');
 }
 
 
@@ -522,7 +563,7 @@ function drawListItem(dataMain) {
     let main_data_temp = [];
     // alert(data.account_item);
     let ListItems = (dataMain);
-    // // console.log(' ////drawListItem////// ' + ListItems);
+    // console.log(' ////drawListItem////// ' + JSON.stringify(ListItems));
     // let accountSubCount = dataMain.account_item_value_count;
     // let accountSumMoney = dataMain.account_sum_money;
     // let sum_add_type = dataMain.account_sum_add;
@@ -537,7 +578,7 @@ function drawListItem(dataMain) {
         // console.log(' ::each 1:: ' + JSON.stringify(val));
         // console.log(' ::each 2:: ' + JSON.stringify(val.listSubAccount));
         let _data = '<div class="col-sm-12 item_account animation-slide-top" data-plugin="appear"' +
-            ' data-animate="slide-top" data-sum_add_type="'+val.account_sum_add+'" data-sum_minus_type="'+val.account_sum_minus+'" data-item_name="' + val.listSubAccount.account_name + '"' +
+            ' data-animate="slide-top" data-sum_add_type="' + val.account_sum_add + '" data-sum_minus_type="' + val.account_sum_minus + '" data-item_name="' + val.listSubAccount.account_name + '"' +
             ' data-item_name_id="' + val.listSubAccount.id + '">\
       <!-- Widget -->\
       <div class="widget">\

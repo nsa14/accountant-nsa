@@ -43,6 +43,89 @@
 //     })
 //
 // }
+/**
+ * Utility function to calculate the current theme setting.
+ * Look for a local storage value.
+ * Fall back to system setting.
+ * Fall back to light mode.
+ */
+function calculateSettingAsThemeString({
+                                           localStorageTheme,
+                                           systemSettingDark
+                                       }) {
+    if (localStorageTheme !== null) {
+        return localStorageTheme;
+    }
+
+    if (systemSettingDark.matches) {
+        return "dark";
+    }
+
+    return "light";
+}
+
+/**
+ * Utility function to update the button text and aria-label.
+ */
+function updateButton({buttonEl, isDark}) {
+    const newCta = isDark ? "Change to light theme" : "Change to dark theme";
+    // use an aria-label if you are omitting text on the button
+    // and using a sun/moon icon, for example
+    buttonEl.setAttribute("aria-label", newCta);
+    buttonEl.innerText = newCta;
+}
+
+/**
+ * Utility function to update the theme setting on the html tag
+ */
+function updateThemeOnHtmlEl({theme}) {
+    document.querySelector("html").setAttribute("data-theme", theme);
+    if (theme === 'light') {
+        $('meta[name=theme-color]').attr('content', '#ffffff');
+    } else {
+        $('meta[name=theme-color]').attr('content', '#1a202c');
+    }
+}
+
+/**
+ * On page load:
+ */
+
+/**
+ * 1. Grab what we need from the DOM and system settings on page load
+ */
+const button = document.querySelector("[data-theme-toggle]");
+const localStorageTheme = localStorage.getItem("theme");
+const systemSettingDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+/**
+ * 2. Work out the current site settings
+ */
+let currentThemeSetting = calculateSettingAsThemeString({
+    localStorageTheme,
+    systemSettingDark
+});
+
+/**
+ * 3. Update the theme setting and button text accoridng to current settings
+ */
+updateButton({buttonEl: button, isDark: currentThemeSetting === "dark"});
+updateThemeOnHtmlEl({theme: currentThemeSetting});
+
+/**
+ * 4. Add an event listener to toggle the theme
+ */
+button.addEventListener("click", (event) => {
+    const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
+
+    localStorage.setItem("theme", newTheme);
+    updateButton({buttonEl: button, isDark: newTheme === "dark"});
+    updateThemeOnHtmlEl({theme: newTheme});
+
+    currentThemeSetting = newTheme;
+});
+
+
 localStorage.setItem("clickCounter", "0");
 (async function (document, window, $) {
     'use strict';
@@ -139,7 +222,7 @@ localStorage.setItem("clickCounter", "0");
                 if (status === 'granted') {
                     showNotification('نوتیفیکیشن با موفقیت فعال شد ');
                     localStorage.setItem('nsa_notification_status', 'enabled');
-                    $('#send').css('display','none').slideUp('slow');
+                    $('#send').css('display', 'none');
                 }
             });
         }
@@ -421,6 +504,21 @@ localStorage.setItem("clickCounter", "0");
             $('#exampleNiftyNotification').modal({
                 show: 'true'
             });
+
+            let data = {
+                'switch_form': 'user_list'
+            };
+            (async () => {
+                let finalResult = JSON.parse(await postAjax(data));
+                // console.log(' $$ '+JSON.stringify(finalResult));
+                // console.log(' $$ '+(finalResult.status));
+                // console.log(' $$ '+JSON.stringify(finalResult.usersList));
+                if (finalResult.status) {
+                    $('#user_list').html(finalResult.usersList);
+                } else {
+                    alertify(finalResult.message, 'error', false);
+                }
+            })()
         }
 
         //Write the value back to local storage
@@ -846,7 +944,7 @@ localStorage.setItem("clickCounter", "0");
         });
 
 
-        // console.log(' tt : ' + JSON.stringify(responseGet));
+        console.log(' tt : ' + JSON.stringify(responseGet));
 
         // return ajaxRequest.promise();
 
@@ -887,6 +985,14 @@ localStorage.setItem("clickCounter", "0");
 
 function getOS() {
 
+    let isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
+    if (isMobile) {
+
+    } else {
+        alert('نسخه مخصوص موبایل می باشد.آنرا نصب نمایید');
+        $('.popover-install-pwa').css('display', 'flex').fadeIn();
+    }
+
     if (window.matchMedia('(display-mode: standalone)').matches) {
         console.log("This is running as standalone.");
         // alert("This is running as standalone.");
@@ -895,14 +1001,11 @@ function getOS() {
         //     show: 'false'
         // });
     } else {
-        $('.popover-install-pwa').css('display', 'flex').fadeIn();
 
-        // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
-        //     show: 'true'
-        // });
+        // $('.popover-install-pwa').css('display', 'flex').fadeIn();
 
         // var uA = navigator.userAgent || navigator.vendor || window.opera;
-        // if ((/iPad|iPhone|iPod/.test(uA) && !window.MSStream) || (uA.includes('Mac') && 'ontouchend' in document)){
+        // if ((/iPad|iPhone|iPod/.test(uA) && !window.MSStream) || (uA.includes('Mac') && 'ontouchend' in document)) {
         //     // $('#sticky').trigger('click');
         //     // return ('ios');
         //     // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
@@ -911,14 +1014,17 @@ function getOS() {
         // }
         //
         // var i, os = ['Windows', 'Android', 'Unix', 'Mac', 'Linux', 'BlackBerry'];
-        // for (i = 0; i < os.length; i++) if (new RegExp(os[i],'i').test(uA)){
+        // for (i = 0; i < os.length; i++) if (new RegExp(os[i], 'i').test(uA)) {
         //     // return os[i]
-        //     if (os[i] == 'Android'){
-        //         // $('#sticky').trigger('click');
-        //     }
+        //     // alert(os[i]);
+        //     // if (os[i] == 'Android') {
+        //     //     // $('#sticky').trigger('click');
+        //     //
+        //     // }
         // }
-    }
 
+
+    }
 }
 
 // var mouseY = 0;
@@ -964,20 +1070,12 @@ function getOS() {
 
 
 window.onclick = function (event) {
-    $(document).on('click', '.close-popover-install-pwa', function () {
-        $(".popover-install-pwa").css("display", "none").fadeOut();
-    });
-    // alert(event.target.id);
     if (event.target.id === 'btn_refresh') {
         // $("#loading").show();
         $(".spinner-container").css("display", "block");
         // alert('loading ...');
         $().refresh_pwa();
     }
-
-    // if (event.target.id === 'tap10Bar') {
-    //
-    // }
 }
 
 
