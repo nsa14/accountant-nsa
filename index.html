@@ -238,7 +238,7 @@
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right position-relative">
 
                 <div class="switcherLD">
-                    <input type="checkbox" class="checkbox" id="checkbox" data-theme-toggle>
+                    <input type="checkbox" name="checkbox" class="checkbox" id="checkbox" data-theme-toggle>
                     <label for="checkbox" class="checkbox-label">
                         <i id="moon" class="icon fa-moon-o"></i>
                         <i id="sun" class="icon fa-sun-o"></i>
@@ -359,11 +359,11 @@
                 </ul>
             </div>
 
-
             <div class="panel-heading" style="padding: 0px 20px 0px 20px;">
                 <div class="col-lg-12">
                     <div class="example example-buttons">
                         <br>
+                    
 
                         <!-- Modal add new group -->
                         <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScale" aria-hidden="true"
@@ -811,47 +811,78 @@
     // }, function (err) {
     //     console.log('ServiceWorker registration failed: ', err);
     // });
+    // 
+    function yourFunction(){
+    navigator.serviceWorker.ready.then(async registration => {
+                //      let data = {
+                //     'switch_form': 'checkPushNotification',
+                // };
+                //     let finalResult = JSON.parse(await postAjax(data));
+                //     // console.log(' MMM : '+ finalResult.message);
+                //     if (finalResult.status) {
+                //         await registration.showNotification(finalResult.title, {
+                //             body: finalResult.message,
+                //             silent: true,
+                //             tag: "come-back", // required if silent is set to "true"
+                //         });
+                //     }
+    
+                // registration.addEventListener('click', (e) => {
+                //     e.preventDefault();
+                //     window.parent.focus();
+                // });
+            });
+
+    setTimeout(yourFunction, 5000);
+}
+
+yourFunction();
 
 
-    // document.addEventListener("visibilitychange", () => {
-    //     if (document.visibilityState === "hidden") {
-    //         navigator.serviceWorker.ready.then(async registration => {
-    //             // await registration.showNotification("به من سر بزن!", {
-    //             //     body: `کلیک کن! خوشحال میشم باز به من سر بزنی`,
-    //             //     silent: true,
-    //             //     tag: "come-back", // required if silent is set to "true"
-    //             // });
-    //             let data = {
-    //                 'switch_form': 'checkPushNotification',
-    //             };
-    //                 let finalResult = JSON.parse(await postAjax(data));
-    //                 // console.log(' MMM : '+ finalResult.message);
-    //                 if (finalResult.status) {
-    //                     await registration.showNotification(finalResult.title, {
-    //                         body: finalResult.message,
-    //                         silent: true,
-    //                         tag: "come-back", // required if silent is set to "true"
-    //                     });
-    //                 }
-    //
-    //
-    //             registration.addEventListener('click', (e) => {
-    //                 e.preventDefault();
-    //                 window.parent.focus();
-    //             });
-    //         });
-    //     } else {
-    //         navigator.serviceWorker.ready.then(registration => {
-    //             registration.getNotifications({
-    //                 tag: 'come-back'
-    //             }).then((notifications) => {
-    //                 notifications.forEach(n => {
-    //                     n.close();
-    //                 })
-    //             });
-    //         })
-    //     }
-    // });
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") {
+            yourFunction();
+            // navigator.serviceWorker.ready.then(async registration => {
+                
+
+            //     //  registration.showNotification("به من سر بزن!", {
+            //     //     body: `کلیک کن! خوشحال میشم باز به من سر بزنی`,
+            //     //     silent: true,
+            //     //     tag: "come-back", // required if silent is set to "true"
+            //     // });
+
+                
+            //     // let data = {
+            //     //     'switch_form': 'checkPushNotification',
+            //     // };
+            //     //     let finalResult = JSON.parse(await postAjax(data));
+            //     //     // console.log(' MMM : '+ finalResult.message);
+            //     //     if (finalResult.status) {
+            //     //         await registration.showNotification(finalResult.title, {
+            //     //             body: finalResult.message,
+            //     //             silent: true,
+            //     //             tag: "come-back", // required if silent is set to "true"
+            //     //         });
+            //     //     }
+    
+    
+            //     registration.addEventListener('click', (e) => {
+            //         e.preventDefault();
+            //         window.parent.focus();
+            //     });
+            // });
+        } else {
+            navigator.serviceWorker.ready.then(registration => {
+                registration.getNotifications({
+                    tag: 'come-back'
+                }).then((notifications) => {
+                    notifications.forEach(n => {
+                        n.close();
+                    })
+                });
+            })
+        }
+    });
 
 
 </script>

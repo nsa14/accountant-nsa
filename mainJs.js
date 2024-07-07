@@ -1,54 +1,4 @@
-// function generate_chart(title, data1N, data1V, data2N, data2V) {
-//     var donut_chart = c3.generate({
-//         bindto: '#exampleC3Donut',
-//         data: {
-//             columns: [
-//                 [data1N, data1V],
-//                 [data2N, data2V],
-//             ],
-//             type: 'donut'
-//         },
-//         color: {
-//             pattern: [$.colors("primary",
-//                 500), $.colors("red", 400)]
-//         },
-//         legend: {
-//             position: 'center'
-//         },
-//         donut: {
-//             label: {
-//                 show: true
-//             },
-//             width: 50,
-//             title: title,
-//             onclick: function (d, i) {
-//             },
-//             onmouseover: function (d, i) {
-//             },
-//             onmouseout: function (d, i) {
-//             }
-//         }
-//     });
-//
-//     Chart.resize({
-//         height: $("#election-stat-chart-05").height(),
-//         width: $("#election-stat-chart-05").width()
-//     });
-//     Chart.zoom({
-//         extent: [1, 100] // enable more zooming
-//     })
-//     Chart.point({
-//
-//         r: 500
-//     })
-//
-// }
-/**
- * Utility function to calculate the current theme setting.
- * Look for a local storage value.
- * Fall back to system setting.
- * Fall back to light mode.
- */
+
 function calculateSettingAsThemeString({
                                            localStorageTheme,
                                            systemSettingDark
@@ -82,8 +32,12 @@ function updateThemeOnHtmlEl({theme}) {
     document.querySelector("html").setAttribute("data-theme", theme);
     if (theme === 'light') {
         $('meta[name=theme-color]').attr('content', '#ffffff');
+        // const chk = document.querySelector('#checked');
+        // chk.prop("checked", 'on');
     } else {
         $('meta[name=theme-color]').attr('content', '#1a202c');
+        // const chk = document.querySelector('#checked');
+        // chk.prop("checked", 'on');
     }
 }
 
@@ -146,6 +100,8 @@ localStorage.setItem("clickCounter", "0");
         let t = $('#exampleTableAdd').DataTable(defaults);
 
     });
+
+
 
 
     // $(document).on('click', '.page-content', function (){
@@ -994,15 +950,10 @@ function getOS() {
     }
 
     if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log("This is running as standalone.");
-        // alert("This is running as standalone.");
-        // $('.btn_close').trigger('click');
-        // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
-        //     show: 'false'
-        // });
+        // console.log("This is running as standalone.");
     } else {
 
-        // $('.popover-install-pwa').css('display', 'flex').fadeIn();
+        $('.popover-install-pwa').css('display', 'flex').fadeIn();
 
         // var uA = navigator.userAgent || navigator.vendor || window.opera;
         // if ((/iPad|iPhone|iPod/.test(uA) && !window.MSStream) || (uA.includes('Mac') && 'ontouchend' in document)) {
@@ -1082,6 +1033,9 @@ window.onclick = function (event) {
 function doMagic() {
 
     showUserName();
+    setDayLightCheckBox();
+
+
 
     function showUserName() {
         if (localStorage.getItem("nsa_register") !== null) {
@@ -1096,6 +1050,15 @@ function doMagic() {
             $('#send').css('display', 'block');
         }
 
+    }
+    function setDayLightCheckBox(){
+        const theme = document.querySelector("html").getAttribute("data-theme");
+    if (theme === 'light') {
+    $('input:checkbox').prop('checked', true);
+        
+    } else {
+        $('input:checkbox:checked').prop('checked', false);
+    }
     }
 
     async function showNotification2(title) {

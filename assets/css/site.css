@@ -9994,7 +9994,8 @@ div.h6{
 }
 
 .checkbox-label {
-  background-color: #3487d5;
+  /*background-color: #3487d5;*/
+  background-color: var(--color-bg)!important;
   width: 50px;
   height: 26px;
   border-radius: 50px;
@@ -10007,16 +10008,18 @@ div.h6{
 }
 
 .fa-moon {
-  color: #f1c40f;
+  /*color: #f1c40f;*/
+  color: var(--color-bg)!important;
 }
 
 .fa-sun {
-  color: #f39c12;
+  /*color: #f39c12;*/
+  var(--color-bg)!important;
 }
 
 .checkbox-label .ball {
   /*background-color: #fff;*/
-  background-color: var(--color-bg);
+  background-color: var(--color-fg);
   width: 22px;
   height: 22px;
   position: absolute;
