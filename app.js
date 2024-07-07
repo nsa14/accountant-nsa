@@ -66,6 +66,9 @@
 
 
 ///// =============================
+
+
+
 self.addEventListener('install', (event) => {
     console.log('Installed');
     // aaaa('Installed');
@@ -79,22 +82,12 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
     console.log('Fetch request');
-    // pushNotificationSend('Fetch request', 'body');
-    // let data = {
-    //     'switch_form': 'checkPushNotification',
-    // };
-    // (async () => {
-    //     let finalResult = JSON.parse(await postAjax(data));
-    //     // console.log(' MMM : '+ finalResult.message);
-    //     if (finalResult.status) {
-    //         pushNotificationSend(finalResult.title, finalResult.message);
-    //     }
-    //
-    // })()
+        // alert(userName.userid);
 });
 
 
 self.addEventListener('push', (e) => {
+    console.log('push');
     const body = e.data.text() || 'Push message has no payload';
 
     const options = {
@@ -123,6 +116,7 @@ self.addEventListener('push', (e) => {
 
 
 self.addEventListener('sync', event => {
+    console.log('sync');
     if (event.tag === 'persistToDatabase') {
         event.waitUntil(persistLocalChanges()
             .then(() => {
@@ -135,20 +129,6 @@ self.addEventListener('sync', event => {
     }
 });
 
-function persistLocalChanges() {
-    let data = {
-        'switch_form': 'checkPushNotification'
-    };
-        return $.ajax({
-            url: "database.php",
-            method: "POST",
-            data: data,
-            success: function (dataReturn) {
-                return dataReturn
-            }
-        });
-
-}
 
 
 async function pushNotificationSend(title, body) {

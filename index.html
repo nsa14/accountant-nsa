@@ -363,7 +363,7 @@
                 <div class="col-lg-12">
                     <div class="example example-buttons">
                         <br>
-                    
+
 
                         <!-- Modal add new group -->
                         <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScale" aria-hidden="true"
@@ -496,12 +496,11 @@
                 </svg>
             </div>
 
-            <div class="popover-install-pwa" style="display: none!important;">
-                <!--                <button type="button" class="btn btn-round-->
-                <!--                 close-popover-install-pwa">-->
-                <!--                    <span aria-hidden="true">×</span>-->
-                <!--                </button>-->
-                <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive">
+            <div id="popover-install-pwa-android" class="popover-install-pwa" style="display: none">
+                <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive" alt="">
+            </div>
+            <div id="popover-install-pwa-ios" class="popover-install-pwa" style="display: none">
+                <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive" alt="">
             </div>
 
         </div>
@@ -614,7 +613,6 @@
     <!-- End Modal -->
 
 
-
     <!-- Modal add message notifocation-->
     <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScaleNotif" aria-hidden="true"
          aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
@@ -702,10 +700,10 @@
                         <input class="form-control round" type="text" id="txt_notification_message" required
                                name="txt_notification_message" value="" placeholder="">
                         <h4 class="example-title"> کاربر مقصد </h4>
-<!--                            <select  id="user_list" multiple data-plugin="selectpicker" data-max-options="200">-->
-                            <select name="user_id"  id="user_list" multiple style="color:blue; ">
+                        <!--                            <select  id="user_list" multiple data-plugin="selectpicker" data-max-options="200">-->
+                        <select name="user_id" id="user_list" multiple style="color:blue; ">
 
-                            </select>
+                        </select>
 
 
                         <br>
@@ -806,44 +804,33 @@
     }
 
 
+
+
+
+
     // navigator.serviceWorker.register('app.js').then(function (registration) {
     //     console.log('ServiceWorker registration successful with scope: ', registration.scope);
     // }, function (err) {
     //     console.log('ServiceWorker registration failed: ', err);
     // });
     // 
-    function yourFunction(){
-    navigator.serviceWorker.ready.then(async registration => {
-                //      let data = {
-                //     'switch_form': 'checkPushNotification',
-                // };
-                //     let finalResult = JSON.parse(await postAjax(data));
-                //     // console.log(' MMM : '+ finalResult.message);
-                //     if (finalResult.status) {
-                //         await registration.showNotification(finalResult.title, {
-                //             body: finalResult.message,
-                //             silent: true,
-                //             tag: "come-back", // required if silent is set to "true"
-                //         });
-                //     }
-    
-                // registration.addEventListener('click', (e) => {
-                //     e.preventDefault();
-                //     window.parent.focus();
-                // });
-            });
+    function yourFunction() {
+        navigator.serviceWorker.ready.then(async registration => {
+            checkPushNotification();
+            // registration.addEventListener('click', (e) => {
+            //     e.preventDefault();
+            //     window.parent.focus();
+            // });
+        });
 
-    setTimeout(yourFunction, 5000);
-}
-
-yourFunction();
-
+        setTimeout(yourFunction, 10000);
+    }
 
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "hidden") {
             yourFunction();
             // navigator.serviceWorker.ready.then(async registration => {
-                
+
 
             //     //  registration.showNotification("به من سر بزن!", {
             //     //     body: `کلیک کن! خوشحال میشم باز به من سر بزنی`,
@@ -851,7 +838,7 @@ yourFunction();
             //     //     tag: "come-back", // required if silent is set to "true"
             //     // });
 
-                
+
             //     // let data = {
             //     //     'switch_form': 'checkPushNotification',
             //     // };
@@ -864,8 +851,8 @@ yourFunction();
             //     //             tag: "come-back", // required if silent is set to "true"
             //     //         });
             //     //     }
-    
-    
+
+
             //     registration.addEventListener('click', (e) => {
             //         e.preventDefault();
             //         window.parent.focus();

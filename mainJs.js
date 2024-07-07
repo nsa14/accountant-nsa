@@ -1,4 +1,3 @@
-
 function calculateSettingAsThemeString({
                                            localStorageTheme,
                                            systemSettingDark
@@ -100,8 +99,6 @@ localStorage.setItem("clickCounter", "0");
         let t = $('#exampleTableAdd').DataTable(defaults);
 
     });
-
-
 
 
     // $(document).on('click', '.page-content', function (){
@@ -941,38 +938,42 @@ localStorage.setItem("clickCounter", "0");
 
 function getOS() {
 
-    let isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
-    if (isMobile) {
-
-    } else {
-        alert('نسخه مخصوص موبایل می باشد.آنرا نصب نمایید');
-        $('.popover-install-pwa').css('display', 'flex').fadeIn();
-    }
+    // let isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
+    // if (!isMobile) {
+    //     // alert('نسخه مخصوص موبایل می باشد.آنرا نصب نمایید');
+    //     $('.popover-install-pwa').css('display', 'flex').fadeIn();
+    // }
 
     if (window.matchMedia('(display-mode: standalone)').matches) {
         // console.log("This is running as standalone.");
     } else {
 
-        $('.popover-install-pwa').css('display', 'flex').fadeIn();
+        // $('.popover-install-pwa').css('display', 'flex').fadeIn();
 
-        // var uA = navigator.userAgent || navigator.vendor || window.opera;
-        // if ((/iPad|iPhone|iPod/.test(uA) && !window.MSStream) || (uA.includes('Mac') && 'ontouchend' in document)) {
-        //     // $('#sticky').trigger('click');
-        //     // return ('ios');
-        //     // $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
-        //     //     show: 'true'
-        //     // });
-        // }
-        //
-        // var i, os = ['Windows', 'Android', 'Unix', 'Mac', 'Linux', 'BlackBerry'];
-        // for (i = 0; i < os.length; i++) if (new RegExp(os[i], 'i').test(uA)) {
-        //     // return os[i]
-        //     // alert(os[i]);
-        //     // if (os[i] == 'Android') {
-        //     //     // $('#sticky').trigger('click');
-        //     //
-        //     // }
-        // }
+        const userAgent = window.navigator.userAgent,
+            platform = window.navigator?.userAgentData?.platform || window.navigator.platform,
+            macosPlatforms = ['macOS', 'Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+            windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+            iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+        let os = null;
+
+        if (macosPlatforms.indexOf(platform) !== -1) {
+            os = 'Mac OS';
+        } else if (iosPlatforms.indexOf(platform) !== -1) {
+            os = 'iOS';
+        } else if (windowsPlatforms.indexOf(platform) !== -1) {
+            os = 'Windows';
+        } else if (/Android/.test(userAgent)) {
+            os = 'Android';
+        } else if (/Linux/.test(platform)) {
+            os = 'Linux';
+        }
+        // alert(os);
+        if (os == 'Android') {
+            $('#popover-install-pwa-android').css('display', 'flex');
+        } else if (os == 'iOS') {
+            $('#popover-install-pwa-ios').css('display', 'flex');
+        }
 
 
     }
@@ -1030,11 +1031,10 @@ window.onclick = function (event) {
 }
 
 
-function doMagic() {
+function doMagicStartup() {
 
     showUserName();
     setDayLightCheckBox();
-
 
 
     function showUserName() {
@@ -1051,58 +1051,59 @@ function doMagic() {
         }
 
     }
-    function setDayLightCheckBox(){
+
+    function setDayLightCheckBox() {
         const theme = document.querySelector("html").getAttribute("data-theme");
-    if (theme === 'light') {
-    $('input:checkbox').prop('checked', true);
-        
-    } else {
-        $('input:checkbox:checked').prop('checked', false);
-    }
-    }
+        if (theme === 'light') {
+            $('input:checkbox').prop('checked', true);
 
-    async function showNotification2(title) {
-        // const title = 'سلام دوست عزیز';
-
-        const registration = await navigator.serviceWorker.getRegistration();
-
-        if ('showNotification' in registration) {
-            await registration.showNotification("پیغام جدید", {
-                body: title,
-            });
         } else {
-            // new Notification(title);
-            new Notification("پیغام جدید", {
-                body: title,
-            });
-        }
-        localStorage.removeItem('nsa_notification');
-    }
-
-    function sendNotification(title) {
-        if (Notification.permission === 'granted') {
-            showNotification2(title);
+            $('input:checkbox:checked').prop('checked', false);
         }
     }
 
-    var magic = function () {
-        // alert('test');
-        if (!localStorage.hasOwnProperty('nsa_notification')) {
-            return false;
-        }
-        if (localStorage.getItem('nsa_notification').length <= 0) {
-            return false;
-        }
-        let loadLocal = localStorage.getItem('nsa_notification');
-        // alert('title : '+loadLocal);
-        sendNotification(loadLocal);
-    };
+    // async function showNotification2(title) {
+    //     // const title = 'سلام دوست عزیز';
+    //
+    //     const registration = await navigator.serviceWorker.getRegistration();
+    //
+    //     if ('showNotification' in registration) {
+    //         await registration.showNotification("پیغام جدید", {
+    //             body: title,
+    //         });
+    //     } else {
+    //         // new Notification(title);
+    //         new Notification("پیغام جدید", {
+    //             body: title,
+    //         });
+    //     }
+    //     localStorage.removeItem('nsa_notification');
+    // }
+    //
+    // function sendNotification(title) {
+    //     if (Notification.permission === 'granted') {
+    //         showNotification2(title);
+    //     }
+    // }
 
-    setInterval(magic, 10000);
-    magic();
+    // var magic = function () {
+    //     // alert('test');
+    //     if (!localStorage.hasOwnProperty('nsa_notification')) {
+    //         return false;
+    //     }
+    //     if (localStorage.getItem('nsa_notification').length <= 0) {
+    //         return false;
+    //     }
+    //     let loadLocal = localStorage.getItem('nsa_notification');
+    //     // alert('title : '+loadLocal);
+    //     sendNotification(loadLocal);
+    // };
+    //
+    // setInterval(magic, 10000);
+    // magic();
 }
 
-doMagic();
+doMagicStartup();
 
 
 
