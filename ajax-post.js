@@ -382,7 +382,7 @@ function show_account() {
         $('#btn_register').css('display', 'none');
     } else {
         $('#main_data').html('<div data-target="#exampleNiftyFadeScaleRegister" data-toggle="modal" class="alert' +
-            ' alert-danger text-center alert-dismissible" role="alert">\n' +
+            'well well-sm well-danger text-center alert-dismissible" role="alert">\n' +
             '   لطفا ابتدا ثبت نام نمایید \n' +
             ' </div>');
         $('#btn_add_account').css('display', 'none');
@@ -409,7 +409,7 @@ function show_account() {
 
             if (parseInt(finalResult.existCount) <= 0 || finalResult.listItems[0].listSubAccount.length <= 0) {
                 $('#main_data').html('<div data-target="#exampleNiftyFadeScale" data-toggle="modal" class="alert' +
-                    ' alert-warning text-center' +
+                    ' well well-sm well-danger text-center' +
                     ' alert-dismissible" role="alert">\n' +
                     '   هنوز حسابی تعریف نکرده اید! \n' +
                     ' </div>');
@@ -514,14 +514,18 @@ async function showPushNotification(title, message, userid) {
 }
 
 function checkPushNotification() {
-    let userName;
+    let userName='';
     if (localStorage.getItem("nsa_register") !== null) {
         userName = JSON.parse(localStorage.getItem("nsa_register"));
     }
     // alert(userName.userid);
-    if (userName.length <= 0) {
+    if (typeof userName == 'undefined' || userName.length <= 0) {
+        // the variable is defined return false;
         return false;
     }
+    // if (userName.length <= 0) {
+    //     return false;
+    // }
     let data = {
         'switch_form': 'checkPushNotification',
         'userId': userName.userid,

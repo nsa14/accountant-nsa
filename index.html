@@ -356,6 +356,11 @@
                     <li></li>
                     <li></li>
                     <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
                 </ul>
             </div>
 
@@ -363,7 +368,6 @@
                 <div class="col-lg-12">
                     <div class="example example-buttons">
                         <br>
-
 
                         <!-- Modal add new group -->
                         <div class="modal fade modal-fade-in-scale-up" id="exampleNiftyFadeScale" aria-hidden="true"
@@ -488,7 +492,7 @@
             </div>
             <!-- End Panel General Button -->
 
-            <div class="wrapper_anim" style="opacity: 0.6;">
+            <div class="wrapper_anim">
                 <svg id="text-anim">
                     <text x="50%" y="50%" dy=".35em" text-anchor="middle">
                         PWA
@@ -497,10 +501,12 @@
             </div>
 
             <div id="popover-install-pwa-android" class="popover-install-pwa" style="display: none">
-                <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive" alt="">
+                <img src="assets/pwa-help-android.jpg" style="margin: 0 auto;" alt="">
+                <button class="btn width-full btn-primary btn-popover-install-pwa"> متوجه شدم </button>
             </div>
             <div id="popover-install-pwa-ios" class="popover-install-pwa" style="display: none">
-                <img src="assets/pwa-help-ios.png" style="margin: 0 auto;" class="img-responsive" alt="">
+                <img src="assets/pwa-help-ios.jpg" style="margin: 0 auto;" alt="">
+                <button class="btn width-full btn-primary btn-popover-install-pwa"> متوجه شدم </button>
             </div>
 
         </div>
@@ -724,10 +730,34 @@
     </div>
     <!-- End Modal -->
 
+
+    <!-- Modal add Notification form -->
+    <div class="modal modal-fade-in-scale-up" id="modalIframe" aria-hidden="true"
+         aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="info">
+                    ارتباط با من
+                        <br>
+                        تلگرام <i class="fa fa-telegram"></i>@rainycloudy2017
+
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal -->
+
     <!-- Footer -->
     <footer class="site-footer" style="height: 70px;position:sticky; bottom: 0; background-color: #eceff0">
         <span class="site-footer-legal" id="tap10Bar">© 2024 Nsa</span>
-        <div class="site-footer-right">
+        <div id="popup-site" class="site-footer-right">
             طراح و برنامه نویس <i class="red-600 wb wb-heart"></i> <a href="http://naser-zare.ir">ناصرزارع</a>
         </div>
     </footer>

@@ -65,7 +65,7 @@
 
 #main_data{
     /* Copy code to element you want to animate */
-    animation: widget-animation 2s ease 0s 2 normal none;
+    animation: widget-animation 1s ease 0s 1 normal none;
 }
 
 /* Copy this code after the above code */
@@ -103,7 +103,6 @@
     width: 100%;
     /*height: 60vh;*/
     height: 100vh;
-    opacity: 1!important;
     bottom: 0;
     left: 0;
     z-index: 99999998;
@@ -116,19 +115,23 @@
     /*-moz-border-radius: 26px 26px 0px 0px;*/
     /*border: 2px solid #b0acaca1;*/
     /*border-bottom: 0;*/
+    margin: 0 auto;
 }
-.close-popover-install-pwa{
-    height: 40px;
-    width: 40px;
+.btn-popover-install-pwa{
     position: absolute;
-    right: 30px;
-    list-style: none;
+    bottom: 0;
 }
 
 
 
 .wrapper_anim{
-    padding-top: 50%;
+    /*padding-top: 40%;*/
+    opacity: 0.8;
+    background: transparent;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    height: 30vh;
+
 }
 svg#text-anim {
     font-family: initial;
@@ -1001,7 +1004,7 @@ body {
   padding: 0 30px;
 }
 .page-content {
-  padding: 5px 10px;
+  padding: 5px 12px;
 }
 .page-content-actions {
   padding: 0 30px 20px;
@@ -10183,5 +10186,32 @@ padding-bottom: 0.6em!important;
 text-align: right!important;
 padding-bottom: 0.5em!important;
 padding-right: 20px!important;
+}
+.navbar {
+     margin-bottom: 0!important;
+}
+.navbar-default .navbar-collapse,.navbar-default .navbar-form{
+    border: none!important;
+}
+.panel {
+     margin-top: 5px!important;
+    min-height: 74vh!important;
+}
 
+button#btn_refresh {
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: shake 1s ease-out;
+    animation-delay: 3s;
+
+    /* When the animation is finished, start again */
+    animation-iteration-count: 2;
+}
+
+.well{
+    direction: rtl;!important;
+}
+.modalIframe{
+    min-height: 40vh!important;
+    direction: rtl!important;
+    text-align: right!important;
 }

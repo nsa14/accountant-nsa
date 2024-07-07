@@ -221,6 +221,12 @@ localStorage.setItem("clickCounter", "0");
 
     });
 
+    $(document).on('click', '#popup-site', function () {
+        $('#modalIframe').modal({
+            show: 'true'
+        });
+    });
+
     $(document).on('click', '.btn_backup', function () {
 
         let finalBck = [];
@@ -428,6 +434,10 @@ localStorage.setItem("clickCounter", "0");
     // $(document).on('click', '.btn_refresh', function () {
     //     location.reload();
     // });
+
+    $(document).on('click', '.btn-popover-install-pwa', function () {
+        $('.popover-install-pwa').css('display','none');
+    });
 
     $(document).on('click', '.btn_delete_data', function () {
         if (confirm("آیا از خارج شدن اکانت خود اطمینان دارید?")) {
@@ -866,12 +876,6 @@ localStorage.setItem("clickCounter", "0");
 
     });
 
-    function btn_close() {
-        $('#exampleNiftyFadeScaleHelpPwaInstall').modal({
-            show: 'false'
-        });
-    }
-
     async function sendAjaxDataForm2Server(data) {
         let responseGet;
         let ajaxRequest = $.ajax({
@@ -938,17 +942,16 @@ localStorage.setItem("clickCounter", "0");
 
 function getOS() {
 
-    // let isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
-    // if (!isMobile) {
-    //     // alert('نسخه مخصوص موبایل می باشد.آنرا نصب نمایید');
-    //     $('.popover-install-pwa').css('display', 'flex').fadeIn();
-    // }
+    let isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
+    if (!isMobile) {
+        // alert('نسخه مخصوص موبایل می باشد.آنرا نصب نمایید');
+    $('#popover-install-pwa-ios').css('display', 'flex');
+    }
 
     if (window.matchMedia('(display-mode: standalone)').matches) {
         // console.log("This is running as standalone.");
     } else {
-
-        // $('.popover-install-pwa').css('display', 'flex').fadeIn();
+        // $('#popover-install-pwa-android').css('display', 'flex');
 
         const userAgent = window.navigator.userAgent,
             platform = window.navigator?.userAgentData?.platform || window.navigator.platform,
